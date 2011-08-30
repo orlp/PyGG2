@@ -1,4 +1,5 @@
 import pygame
+from os.path import join
 
 #define draw image
 def load_image(name):
