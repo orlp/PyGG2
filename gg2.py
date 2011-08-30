@@ -10,57 +10,57 @@ class GG2:
     """
     
     # This is to replace the gmk "all" and also to update everything.
-    globalGameObjectList = []
+    GameObjectList = []
     
-    globalXview = 0
-    globalYview = 0
+    Xview = 0
+    Yview = 0
     
     def __init__(self):
         pygame.init()
         
-        # All drawing should be done on the globalSurface object
-        self.globalWindow = pygame.display.set_mode((1280, 1024))
-        self.globalSurface = pygame.display.get_surface()
+        # All drawing should be done on the Surface object
+        self.Window = pygame.display.set_mode((1280, 1024))
+        self.Surface = pygame.display.get_surface()
         
-        self.globalWview = self.globalWindow.get_width()
-        self.globalHview = self.globalWindow.get_height()
+        self.Wview = self.Window.get_width()
+        self.Hview = self.Window.get_height()
         
-        self.globalCollisionRectList = importMapRects()
+        self.CollisionRectList = importMapRects()
         
         self.gameMap = MapObject(self)
         
-        self.globalPlayerControl = PlayerControl(self)
+        self.PlayerControl = PlayerControl(self)
         
-        self.globalMyself = Character(self)
+        self.Myself = Character(self)
         
     def step(self):
         """
         'Steps' the engine. Twisted will step this at some point.
         """
         
-        for a in range(len(self.globalGameObjectList)):
+        for a in range(len(self.GameObjectList)):
 
-                self.globalGameObjectList[a].BeginStep()
+                self.GameObjectList[a].BeginStep()
 
-        for a in range(len(self.globalGameObjectList)):
+        for a in range(len(self.GameObjectList)):
 
-                self.globalGameObjectList[a].Step()
+                self.GameObjectList[a].Step()
 
-        for a in range(len(self.globalGameObjectList)):
+        for a in range(len(self.GameObjectList)):
 
-                self.globalGameObjectList[a].EndStep()
+                self.GameObjectList[a].EndStep()
 
-        self.globalXview = self.globalMyself.x-self.globalWview/2
-        self.lobalYview = self.globalMyself.y-self.globalHview/2
+        self.Xview = self.Myself.x-self.Wview/2
+        self.Yview = self.Myself.y-self.Hview/2
 
-        self.globalSurface.fill((255, 255, 255))
+        self.Surface.fill((255, 255, 255))
 
-        for a in range(len(self.globalGameObjectList)):
+        for a in range(len(self.GameObjectList)):
 
-                self.globalGameObjectList[a].Draw()
+                self.GameObjectList[a].Draw()
 
-        for a in range(len(self.globalGameObjectList)):
+        for a in range(len(self.GameObjectList)):
 
-                self.globalGameObjectList[a].Collide()
+                self.GameObjectList[a].Collide()
 
         pygame.display.flip()

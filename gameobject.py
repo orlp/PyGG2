@@ -23,7 +23,7 @@ class GameObject(pygame.sprite.Sprite):
 		self.xImageOffset = 0
 		self.yImageOffset = 0
 
-		self.root.globalGameObjectList.append(self)
+		self.root.GameObjectList.append(self)
 
 
 	def BeginStep(self):
@@ -56,7 +56,7 @@ class GameObject(pygame.sprite.Sprite):
 	def Draw(self):
 
 		if self.sprite != -1:
-			self.root.globalSurface.blit(self.sprite, ((self.x+self.xImageOffset)-self.root.globalXview, (self.rect.top+self.yImageOffset)-self.root.globalYview))
+			self.root.Surface.blit(self.sprite, ((self.x+self.xImageOffset)-self.root.Xview, (self.rect.top+self.yImageOffset)-self.root.Yview))
 			
 class MapObject(GameObject):
 
@@ -71,7 +71,7 @@ class MapObject(GameObject):
 
 	def Draw(self):
 
-		self.root.globalSurface.blit(pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6)), (0-self.root.globalXview, 0-self.root.globalYview))
+		self.root.Surface.blit(pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6)), (0-self.root.Xview, 0-self.root.Yview))
 
 
 class Character(GameObject):
@@ -122,10 +122,10 @@ class Character(GameObject):
 
 	def Collide(self):
 
-		check = objectCheckCollision(self, self.root.globalCollisionRectList)
+		check = objectCheckCollision(self, self.root.CollisionRectList)
 
 		if check:
-			characterHitObstacle(self, self.root.globalCollisionRectList)
+			characterHitObstacle(self, self.root.CollisionRectList)
 
 class PlayerControl(GameObject):
 
@@ -159,8 +159,8 @@ class PlayerControl(GameObject):
 
 		# Send keybyte
 
-		self.root.globalMyself.up = up
-		self.root.globalMyself.left = left
-		self.root.globalMyself.right = right
-		self.root.globalMyself.LMB = LMB
-		self.root.globalMyself.RMB = RMB
+		self.root.Myself.up = up
+		self.root.Myself.left = left
+		self.root.Myself.right = right
+		self.root.Myself.LMB = LMB
+		self.root.Myself.RMB = RMB

@@ -1,4 +1,4 @@
-import functions
+from functions import place_free, lengthdir, sign
 import pygame
 
 def objectCheckCollision(character, wallmask):
@@ -25,6 +25,109 @@ def objectCheckCollision(character, wallmask):
 
 
 def characterHitObstacle(character, wallmask):
+
+
+
+	newX = character.x
+	newY = character.y
+
+	oldX = character.x-character.hspeed
+	oldY = character.y-character.vspeed
+
+	hspeed = character.hspeed
+	vspeed = character.vspeed
+
+
+	length = lengthdir(hspeed, vspeed)
+
+	if length == 0:# You haven't moved; if this happens something went wrong
+
+		character.x = oldX
+		character.y = oldY
+		return False
+
+
+	# hs and vs is the normalized vector of hspeed and vspeed.
+	hs = character.hspeed/length
+	vs = character.vspeed/length
+
+	i = 0
+	while objectCheckCollision(character, wallmask) and i < length:
+
+		character.x = newX-(hs*i)
+		character.y = newY-(vs*i)
+		i += 1
+
+
+	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
+
+	character.x += sign(character.hspeed)
+
+	if not objectCheckCollision(character, wallmask):
+
+		# There's empty space on the left/right
+
+		# Kill all vertical movement
+		character.vspeed = 0
+
+		i = 0
+		while i <= hspeed:
+
+			character.x = newX+(sign(character.hspeed)*i)
+
+			# If the new position has met a wall too:
+			if objectCheckCollision(character, wallmask):
+				character.x = newX+(sign(character.hspeed)*(i-1))
+				break
+
+	else:
+		character.x -= sign(character.hspeed)
+		character.y += sign(character.vspeed)
+
+		if not objectCheckCollision(character, wallmask):
+
+			# There's empty space on the left/right
+
+			# Kill all vertical movement
+			character.hspeed = 0
+
+			i = 0
+			while i <= vspeed:
+
+				character.y = newY+(sign(character.vspeed)*i)
+
+				# If the new position has met a wall too:
+				if objectCheckCollision(character, wallmask):
+					character.y = newY+(sign(character.vspeed)*(i-1))
+					break
+
+		character.y -= sign(character.vspeed)
+	
+
+#	character.hspeed = 0
+#	character.vspeed = 0
+
+#	character.hspeed = oldX-character.x
+#	character.vspeed = oldY-character.y
+
+	return True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	# The Character has collided; Push him back out:
 
