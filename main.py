@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys, os, time, random, pygame, math, socket
 from pygame.locals import *
 from load_image import load_image
