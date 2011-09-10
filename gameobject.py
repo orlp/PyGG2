@@ -14,6 +14,9 @@ class GameObject(pygame.sprite.Sprite):
 		self.x = xpos
 		self.y = ypos
 
+		self.oldX = xpos
+		self.oldY = ypos
+
 		self.hspeed = 0
 		self.vspeed = 0
 
@@ -23,20 +26,23 @@ class GameObject(pygame.sprite.Sprite):
 		self.xImageOffset = 0
 		self.yImageOffset = 0
 
+		self.xRectOffset = 0
+		self.yRectOffset = 0
+
 		self.root.GameObjectList.append(self)
 
 
-	def BeginStep(self):
+	def beginStep(self):
 
 		pass
 
 
-	def Step(self):
+	def step(self):
 
 		pass
 
 
-	def EndStep(self):
+	def endStep(self):
 
 		if self.x < 0.0:
 			self.x = 0.0
@@ -44,16 +50,19 @@ class GameObject(pygame.sprite.Sprite):
 		if self.y < 0.0:
 			self.y = 0.0
 
+		self.oldX = self.x
+		self.oldY = self.y
+
 		self.x += self.hspeed
 		self.y += self.vspeed
 		if self.rect != -1:
-			self.rect.topleft = (self.x, self.y)
+			self.rect.topleft = (self.x-self.xRectOffset, self.y-self.yRectOffset)
 
 
-	def Collide(self):
+	def collide(self):
 		pass
 
-	def Draw(self):
+	def draw(self):
 
 		if self.sprite != -1:
 			self.root.Surface.blit(self.sprite, ((self.x+self.xImageOffset)-self.root.Xview, (self.rect.top+self.yImageOffset)-self.root.Yview))
@@ -65,14 +74,25 @@ class MapObject(GameObject):
 		GameObject.__init__(self, root, 0, 0)
 
 		self.sprite = pygame.image.load("Maps/MapTesting.png")
-		pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6))
-		self.rect = pygame.Rect(0, 0, self.sprite.get_width(), self.sprite.get_height()) 
+		self.sprite.convert_alpha()
+		self.sprite.convert()
+		self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6))
 
 
-	def Draw(self):
+		self.rect = pygame.Rect(0, 0, self.sprite.get_width(), self.sprite.get_height())
 
-		self.root.Surface.blit(pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6)), (0-self.root.Xview, 0-self.root.Yview))
+		self.root.Surface.blit(self.sprite, (0, 0))
 
+		self.mask = pygame.mask.from_surface(self.sprite)
+
+		print self.mask.count()
+
+
+		self.root.map = self
+
+	def draw(self):
+
+		self.root.Surface.blit(self.sprite, (0-self.root.Xview, 0-self.root.Yview))
 
 class Character(GameObject):
 
@@ -85,13 +105,16 @@ class Character(GameObject):
 		# The Scout hitbox: left = -6; right = 6; top = -10; bottom = 23
 		self.rect = pygame.Rect(self.x-6, self.y-10, 12, 33)
 
+		self.xRectOffset = self.x-self.rect.centerx
+		self.yRectOffset = self.y-self.rect.centery
+
 		self.xImageOffset = -30
-		self.yImageOffset = -30
+		self.yImageOffset = -40
 
 		self.up, self.left, self.right, self.LMB, self.RMB = 0, 0, 0, 0, 0
 
 
-	def Step(self):
+	def step(self):
 
 		if self.up:
 			self.vspeed -= 2
@@ -114,18 +137,13 @@ class Character(GameObject):
 			self.hspeed = -5
 
 
-	def EndStep(self):
+	def collide(self):
 
-		GameObject.EndStep(self)
-		self.rect.topleft = (self.x-6, self.y-10)
-
-
-	def Collide(self):
-
-		check = objectCheckCollision(self, self.root.CollisionRectList)
+		check = objectCheckCollision(self)
 
 		if check:
-			characterHitObstacle(self, self.root.CollisionRectList)
+			print "Collision detected"
+			characterHitObstacle(self)
 
 class PlayerControl(GameObject):
 
@@ -134,7 +152,7 @@ class PlayerControl(GameObject):
 		GameObject.__init__(self, root, 0, 0)
 
 
-	def BeginStep(self):
+	def beginStep(self):
 
 		up = 0
 		left = 0

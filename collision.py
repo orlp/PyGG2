@@ -1,22 +1,28 @@
 from functions import place_free, lengthdir, sign
 import pygame
 
-def objectCheckCollision(character, wallmask):
+def objectCheckCollision(character):
 
 # Check if a the Character has hit the wall:
 
 	hasCollided = False
 
-	for index in range(len(wallmask)):
+	character.rect.centerx = character.x-character.xRectOffset
+	character.rect.centery = character.y-character.yRectOffset
 
-		if abs(wallmask[index].centerx-character.rect.centerx) < 50:
-			if abs(wallmask[index].centery-character.rect.centery) < 50:
-				if character.rect.colliderect(wallmask[index]):
-					# Hit detected Flag as hit and break out.
+	clip = character.rect.clip(character.root.map.rect)
 
-					hasCollided = True
-					break
-	
+	#find where clip's top-left point is in both rectangles
+	x1 = clip.left - character.root.map.rect.left
+	y1 = clip.top  - character.root.map.rect.top
+ 
+	#cycle through clip's area of the hitmasks
+	for x in range(clip.width):
+		for y in range(clip.height):
+			#returns True if neither pixel is blank
+			if character.root.map.mask.get_at((x1+x, y1+y)) == 1:
+				hasCollided = True
+
 	if hasCollided:
 		return True
 	else:
@@ -24,15 +30,14 @@ def objectCheckCollision(character, wallmask):
 
 
 
-def characterHitObstacle(character, wallmask):
+def characterHitObstacle(character):
 
+
+# THIS IS THE NEW VERSION; STILL WITH x/y
 
 
 	newX = character.x
 	newY = character.y
-
-	oldX = character.x-character.hspeed
-	oldY = character.y-character.vspeed
 
 	hspeed = character.hspeed
 	vspeed = character.vspeed
@@ -42,8 +47,7 @@ def characterHitObstacle(character, wallmask):
 
 	if length == 0:# You haven't moved; if this happens something went wrong
 
-		character.x = oldX
-		character.y = oldY
+		print "You haven't moved, yet managed to collide with something."
 		return False
 
 
@@ -51,19 +55,21 @@ def characterHitObstacle(character, wallmask):
 	hs = character.hspeed/length
 	vs = character.vspeed/length
 
-	i = 0
-	while objectCheckCollision(character, wallmask) and i < length:
+	while True:
+		if not objectCheckCollision(character):
+			break
 
-		character.x = newX-(hs*i)
-		character.y = newY-(vs*i)
-		i += 1
+		character.x -= hs
+		character.y -= vs
+		print character.x, character.y, hs, vs
 
 
+	return True
 	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
 	character.x += sign(character.hspeed)
 
-	if not objectCheckCollision(character, wallmask):
+	if not objectCheckCollision(character):
 
 		# There's empty space on the left/right
 
@@ -73,18 +79,21 @@ def characterHitObstacle(character, wallmask):
 		i = 0
 		while i <= hspeed:
 
-			character.x = newX+(sign(character.hspeed)*i)
+			character.x += sign(hspeed)
 
 			# If the new position has met a wall too:
-			if objectCheckCollision(character, wallmask):
-				character.x = newX+(sign(character.hspeed)*(i-1))
+			if objectCheckCollision(character):
+				character.x -= sign(hspeed)
 				break
 
-	else:
-		character.x -= sign(character.hspeed)
-		character.y += sign(character.vspeed)
 
-		if not objectCheckCollision(character, wallmask):
+			i += 1
+
+	else:
+		character.x += sign(hspeed)
+		character.y += sign(vspeed)
+
+		if not objectCheckCollision(character):
 
 			# There's empty space on the left/right
 
@@ -94,12 +103,14 @@ def characterHitObstacle(character, wallmask):
 			i = 0
 			while i <= vspeed:
 
-				character.y = newY+(sign(character.vspeed)*i)
+				character.y += sign(vspeed)
 
 				# If the new position has met a wall too:
-				if objectCheckCollision(character, wallmask):
-					character.y = newY+(sign(character.vspeed)*(i-1))
+				if objectCheckCollision(character):
+					character.y -= sign(vspeed)
 					break
+
+				i += 1
 
 		character.y -= sign(character.vspeed)
 	
@@ -107,8 +118,8 @@ def characterHitObstacle(character, wallmask):
 #	character.hspeed = 0
 #	character.vspeed = 0
 
-#	character.hspeed = oldX-character.x
-#	character.vspeed = oldY-character.y
+	character.hspeed = character.oldX-character.x
+	character.vspeed = character.oldY-character.y
 
 	return True
 
@@ -128,6 +139,21 @@ def characterHitObstacle(character, wallmask):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# THIS IS THE ORIGNAL GG2 COLLISION CODE, PORTED FRESH FROM GMK
 
 	# The Character has collided; Push him back out:
 

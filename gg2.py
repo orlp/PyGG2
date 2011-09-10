@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-from importMapRects import importMapRects
 from gameobject import MapObject, PlayerControl, Character
 from collision import objectCheckCollision, characterHitObstacle
 
@@ -25,8 +24,6 @@ class GG2:
         self.Wview = self.Window.get_width()
         self.Hview = self.Window.get_height()
         
-        self.CollisionRectList = importMapRects()
-        
         self.gameMap = MapObject(self)
         
         self.PlayerControl = PlayerControl(self)
@@ -40,15 +37,15 @@ class GG2:
         
         for a in range(len(self.GameObjectList)):
 
-                self.GameObjectList[a].BeginStep()
+                self.GameObjectList[a].beginStep()
 
         for a in range(len(self.GameObjectList)):
 
-                self.GameObjectList[a].Step()
+                self.GameObjectList[a].step()
 
         for a in range(len(self.GameObjectList)):
 
-                self.GameObjectList[a].EndStep()
+                self.GameObjectList[a].endStep()
 
         self.Xview = self.Myself.x-self.Wview/2
         self.Yview = self.Myself.y-self.Hview/2
@@ -57,10 +54,10 @@ class GG2:
 
         for a in range(len(self.GameObjectList)):
 
-                self.GameObjectList[a].Draw()
+                self.GameObjectList[a].draw()
 
         for a in range(len(self.GameObjectList)):
 
-                self.GameObjectList[a].Collide()
+                self.GameObjectList[a].collide()
 
         pygame.display.flip()
