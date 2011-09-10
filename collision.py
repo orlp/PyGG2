@@ -61,10 +61,10 @@ def characterHitObstacle(character):
 
 		character.x -= hs
 		character.y -= vs
-		print character.x, character.y, hs, vs
+
+#	return True
 
 
-	return True
 	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
 	character.x += sign(character.hspeed)
@@ -118,8 +118,8 @@ def characterHitObstacle(character):
 #	character.hspeed = 0
 #	character.vspeed = 0
 
-	character.hspeed = character.oldX-character.x
-	character.vspeed = character.oldY-character.y
+#	character.hspeed = character.oldX-character.x
+#	character.vspeed = character.oldY-character.y
 
 	return True
 

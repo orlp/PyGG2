@@ -50,9 +50,6 @@ class GameObject(pygame.sprite.Sprite):
 		if self.y < 0.0:
 			self.y = 0.0
 
-		self.oldX = self.x
-		self.oldY = self.y
-
 		self.x += self.hspeed
 		self.y += self.vspeed
 		if self.rect != -1:
@@ -60,7 +57,8 @@ class GameObject(pygame.sprite.Sprite):
 
 
 	def collide(self):
-		pass
+		self.oldX = self.x
+		self.oldY = self.y
 
 	def draw(self):
 
@@ -109,7 +107,7 @@ class Character(GameObject):
 		self.yRectOffset = self.y-self.rect.centery
 
 		self.xImageOffset = -30
-		self.yImageOffset = -40
+		self.yImageOffset = -30
 
 		self.up, self.left, self.right, self.LMB, self.RMB = 0, 0, 0, 0, 0
 
@@ -142,8 +140,9 @@ class Character(GameObject):
 		check = objectCheckCollision(self)
 
 		if check:
-			print "Collision detected"
 			characterHitObstacle(self)
+
+		GameObject.collide(self)
 
 class PlayerControl(GameObject):
 

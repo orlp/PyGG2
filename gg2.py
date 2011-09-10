@@ -31,9 +31,9 @@ class GG2:
         self.Myself = Character(self)
         
     def step(self):
-        """
-        'Steps' the engine. Twisted will step this at some point.
-        """
+
+        #'Steps' the engine. Twisted will step this at some point.
+
         
         for a in range(len(self.GameObjectList)):
 
@@ -50,14 +50,14 @@ class GG2:
         self.Xview = self.Myself.x-self.Wview/2
         self.Yview = self.Myself.y-self.Hview/2
 
+        for a in range(len(self.GameObjectList)):
+
+                self.GameObjectList[a].collide()
+
         self.Surface.fill((255, 255, 255))
 
         for a in range(len(self.GameObjectList)):
 
                 self.GameObjectList[a].draw()
-
-        for a in range(len(self.GameObjectList)):
-
-                self.GameObjectList[a].collide()
 
         pygame.display.flip()
