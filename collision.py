@@ -42,6 +42,22 @@ def characterHitObstacle(character):
     hspeed = character.hspeed
     vspeed = character.vspeed
 
+    for i in range(8):
+
+        if objectCheckCollision(character):
+            character.x -= 1
+
+    for i in range(16):
+
+        if objectCheckCollision(character):
+            character.x += 1
+
+    for i in range(8):
+
+        if objectCheckCollision(character):
+            character.x -= 1
+
+
 
     length = lengthdir(hspeed, vspeed)
 
@@ -65,57 +81,60 @@ def characterHitObstacle(character):
 #	return True
 
     # This is the left-over velocity.
-    hs = hspeed-(newX-character.x)
-    vs = vspeed-(newY-character.y)
+    hs = hspeed#-(newX-character.x)
+    vs = vspeed#-(newY-character.y)
 
 	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
 
-    character.x += sign(hspeed)
+    character.x += sign(hs)
 
-    if not objectCheckCollision(character) and hs > 0:
+    if not objectCheckCollision(character) and abs(hs) > 0:
 
         # There's still room to move on the left/right
-
-        # Stop vertical movement
-        character.vspeed = 0
-        character.vs = 0
 
         i = 1
-        while i <= hs and not objectCheckCollision(character):
+        while i <= abs(hs) and not objectCheckCollision(character):
 
-            character.x += sign(hspeed)
+            character.x += sign(hs)
             i += 1
-
-
-    if objectCheckCollision(character):
-        character.x -= sign(hspeed)
-
-    character.y += sign(vspeed)
-
-    if not objectCheckCollision(character) and vs > 0:
-
-        # There's still room to move on the left/right
+    else:
 
         # Stop horizontal movement
         character.hspeed = 0
         character.hs = 0
 
-        i = 1
-        while i <= vs and not objectCheckCollision(character):
-
-            character.y += sign(vspeed)
-            i += 1
 
     if objectCheckCollision(character):
-        character.y -= sign(vspeed)
+        character.x -= sign(hs)
+
+    character.y += sign(vs)
+
+    if not objectCheckCollision(character) and abs(vs) > 0:
+
+        # There's still room to move on the left/right
+
+
+        i = 1
+        while i <= abs(vs) and not objectCheckCollision(character):
+
+            character.y += sign(vs)
+            i += 1
+
+    else:
+        # Stop vertical movement
+        character.vspeed = 0
+        character.vs = 0
+
+    if objectCheckCollision(character):
+        character.y -= sign(vs)
 
 
 #	character.hspeed = 0
 #	character.vspeed = 0
 
-#	character.hspeed = character.oldX-character.x
-#	character.vspeed = character.oldY-character.y
+#	character.hspeed = character.x-character.oldX
+#	character.vspeed = character.y-character.oldY
 
     return True
 
