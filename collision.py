@@ -36,84 +36,80 @@ def characterHitObstacle(character):
 # THIS IS THE NEW VERSION; STILL WITH x/y
 
 
-	newX = character.x
-	newY = character.y
+    newX = character.x
+    newY = character.y
 
-	hspeed = character.hspeed
-	vspeed = character.vspeed
-
-
-	length = lengthdir(hspeed, vspeed)
-
-	if length == 0:# You haven't moved; if this happens something went wrong
-
-		print "You haven't moved, yet managed to collide with something."
-		return False
+    hspeed = character.hspeed
+    vspeed = character.vspeed
 
 
-	# hs and vs is the normalized vector of hspeed and vspeed.
-	hs = character.hspeed/length
-	vs = character.vspeed/length
+    length = lengthdir(hspeed, vspeed)
 
-	while True:
-		if not objectCheckCollision(character):
-			break
+    if length == 0:# You haven't moved; if this happens something went wrong
 
-		character.x -= hs
-		character.y -= vs
+        print "You haven't moved, yet managed to collide with something."
+        return False
+
+
+    # hs and vs is the normalized vector of hspeed and vspeed.
+    hs = character.hspeed/length
+    vs = character.vspeed/length
+
+    while True:
+        if not objectCheckCollision(character):
+            break
+
+        character.x -= hs
+        character.y -= vs
 
 #	return True
 
+    # This is the left-over velocity.
+    hs = hspeed-(newX-character.x)
+    vs = vspeed-(newY-character.y)
 
 	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
-	character.x += sign(character.hspeed)
 
-	if not objectCheckCollision(character):
+    character.x += sign(hspeed)
 
-		# There's empty space on the left/right
+    if not objectCheckCollision(character) and hs > 0:
 
-		# Kill all vertical movement
-		character.vspeed = 0
+        # There's still room to move on the left/right
 
-		i = 0
-		while i <= hspeed:
+        # Stop vertical movement
+        character.vspeed = 0
+        character.vs = 0
 
-			character.x += sign(hspeed)
+        i = 1
+        while i <= hs and not objectCheckCollision(character):
 
-			# If the new position has met a wall too:
-			if objectCheckCollision(character):
-				character.x -= sign(hspeed)
-				break
+            character.x += sign(hspeed)
+            i += 1
 
 
-			i += 1
+    if objectCheckCollision(character):
+        character.x -= sign(hspeed)
 
-	else:
-		character.x += sign(hspeed)
-		character.y += sign(vspeed)
+    character.y += sign(vspeed)
 
-		if not objectCheckCollision(character):
+    if not objectCheckCollision(character) and vs > 0:
 
-			# There's empty space on the left/right
+        # There's still room to move on the left/right
 
-			# Kill all vertical movement
-			character.hspeed = 0
+        # Stop horizontal movement
+        character.hspeed = 0
+        character.hs = 0
 
-			i = 0
-			while i <= vspeed:
+        i = 1
+        while i <= vs and not objectCheckCollision(character):
 
-				character.y += sign(vspeed)
+            character.y += sign(vspeed)
+            i += 1
 
-				# If the new position has met a wall too:
-				if objectCheckCollision(character):
-					character.y -= sign(vspeed)
-					break
+    if objectCheckCollision(character):
+        character.y -= sign(vspeed)
 
-				i += 1
-
-		character.y -= sign(character.vspeed)
-	
 
 #	character.hspeed = 0
 #	character.vspeed = 0
@@ -121,7 +117,7 @@ def characterHitObstacle(character):
 #	character.hspeed = character.oldX-character.x
 #	character.vspeed = character.oldY-character.y
 
-	return True
+    return True
 
 
 
@@ -149,7 +145,7 @@ def characterHitObstacle(character):
 
 
 
-
+'''
 
 
 
@@ -240,4 +236,4 @@ def characterHitObstacle(character):
 	if(not collisionRectified and (abs(hleft) >= 1 or abs(vleft) >= 1)):
 		# uh-oh, no collisions fixed, try stopping all vertical movement and see what happens
 		charactervspeed = 0
-		vleft = 0
+		vleft = 0'''

@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
-from gameobject import MapObject, PlayerControl, Character
+from gameobject import MapObject, PlayerControl
+from Character import Scout
 from collision import objectCheckCollision, characterHitObstacle
 
 class GG2:
@@ -28,7 +29,7 @@ class GG2:
         
         self.PlayerControl = PlayerControl(self)
         
-        self.Myself = Character(self)
+        self.Myself = Scout(self)
         
     def step(self):
 
