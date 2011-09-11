@@ -42,23 +42,6 @@ def characterHitObstacle(character):
     hspeed = character.hspeed
     vspeed = character.vspeed
 
-    for i in range(8):
-
-        if objectCheckCollision(character):
-            character.x -= 1
-
-    for i in range(16):
-
-        if objectCheckCollision(character):
-            character.x += 1
-
-    for i in range(8):
-
-        if objectCheckCollision(character):
-            character.x -= 1
-
-
-
     length = lengthdir(hspeed, vspeed)
 
     if length == 0:# You haven't moved; if this happens something went wrong
@@ -81,8 +64,8 @@ def characterHitObstacle(character):
 #	return True
 
     # This is the left-over velocity.
-    hs = hspeed#-(newX-character.x)
-    vs = vspeed#-(newY-character.y)
+    hs = hspeed
+    vs = vspeed
 
 	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
@@ -129,13 +112,6 @@ def characterHitObstacle(character):
     if objectCheckCollision(character):
         character.y -= sign(vs)
 
-
-#	character.hspeed = 0
-#	character.vspeed = 0
-
-#	character.hspeed = character.x-character.oldX
-#	character.vspeed = character.y-character.oldY
-
     return True
 
 
@@ -168,7 +144,7 @@ def characterHitObstacle(character):
 
 
 
-# THIS IS THE ORIGNAL GG2 COLLISION CODE, PORTED FRESH FROM GMK
+# THIS IS THE ORIGNAL GG2 COLLISION CODE, PORTED FRESH FROM GMK. Not needed.
 
 	# The Character has collided; Push him back out:
 
