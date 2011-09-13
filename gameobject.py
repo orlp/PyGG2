@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from load_image import load_image
 from collision import characterHitObstacle, objectCheckCollision
+from functions import sign, place_free, lengthdir, point_direction
 
 class GameObject(pygame.sprite.Sprite):
 

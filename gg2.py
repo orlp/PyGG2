@@ -3,6 +3,7 @@ from pygame.locals import *
 from gameobject import MapObject, PlayerControl
 from Character import Scout
 from collision import objectCheckCollision, characterHitObstacle
+from functions import sign, place_free, lengthdir, point_direction
 
 class GG2:
     """

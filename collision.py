@@ -1,32 +1,32 @@
-from functions import place_free, lengthdir, sign
+from functions import place_free, lengthdir, sign, point_direction
 import pygame
 
 def objectCheckCollision(character):
 
-# Check if a the Character has hit the wall:
+    # Check if a the Character has hit the wall:
 
-	hasCollided = False
+    hasCollided = False
 
-	character.rect.centerx = character.x-character.xRectOffset
-	character.rect.centery = character.y-character.yRectOffset
+    character.rect.centerx = character.x-character.xRectOffset
+    character.rect.centery = character.y-character.yRectOffset
 
-	clip = character.rect.clip(character.root.map.rect)
+    clip = character.rect.clip(character.root.map.rect)
 
-	#find where clip's top-left point is in both rectangles
-	x1 = clip.left - character.root.map.rect.left
-	y1 = clip.top  - character.root.map.rect.top
+    # find where clip's top-left point is in both rectangles
+    x1 = clip.left - character.root.map.rect.left
+    y1 = clip.top  - character.root.map.rect.top
  
-	#cycle through clip's area of the hitmasks
-	for x in range(clip.width):
-		for y in range(clip.height):
-			#returns True if neither pixel is blank
-			if character.root.map.mask.get_at((x1+x, y1+y)) == 1:
-				hasCollided = True
+    # cycle through clip's area of the hitmasks
+    for x in range(clip.width):
+        for y in range(clip.height):
+            # returns True if neither pixel is blank
+            if character.root.map.mask.get_at((x1+x, y1+y)) == 1:
+                hasCollided = True
 
-	if hasCollided:
-		return True
-	else:
-		return False
+    if hasCollided:
+        return True
+    else:
+        return False
 
 
 
@@ -60,14 +60,15 @@ def characterHitObstacle(character):
 
         character.x -= hs
         character.y -= vs
-
-#	return True
+   
+    if hspeed == 0 or vspeed == 0:
+    	return True
 
     # This is the left-over velocity.
     hs = hspeed
     vs = vspeed
 
-	# The character got pushed out, but now we need to let him move in the directions he's allowed to move.
+    # The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
 
     character.x += sign(hs)
@@ -81,15 +82,20 @@ def characterHitObstacle(character):
 
             character.x += sign(hs)
             i += 1
+
+
+        if objectCheckCollision(character):
+            character.x -= sign(hs)
+
+        return True
+
     else:
 
         # Stop horizontal movement
         character.hspeed = 0
         character.hs = 0
-
-
-    if objectCheckCollision(character):
         character.x -= sign(hs)
+
 
     character.y += sign(vs)
 
@@ -104,12 +110,15 @@ def characterHitObstacle(character):
             character.y += sign(vs)
             i += 1
 
+        if objectCheckCollision(character):
+            character.y -= sign(vs)
+
+        return True
+
     else:
         # Stop vertical movement
         character.vspeed = 0
         character.vs = 0
-
-    if objectCheckCollision(character):
         character.y -= sign(vs)
 
     return True
