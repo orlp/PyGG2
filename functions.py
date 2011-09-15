@@ -67,6 +67,6 @@ def point_direction(x1, y1, x2, y2):
 
     answer *= 360/(2*math.pi)# Convert it to degrees because math.a* uses radians.
 
-    print answer
+#    print answer
 
     return answer

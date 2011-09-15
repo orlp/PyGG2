@@ -6,65 +6,72 @@ from functions import sign, place_free, lengthdir, point_direction
 
 class GameObject(pygame.sprite.Sprite):
 
-	def __init__(self, root, xpos, ypos):
+    def __init__(self, root, xpos, ypos):
 
-		pygame.sprite.Sprite.__init__(self)
+        pygame.sprite.Sprite.__init__(self)
 
-		self.root = root
+        self.root = root
 
-		self.x = xpos
-		self.y = ypos
+        self.x = xpos
+        self.y = ypos
 
-		self.oldX = xpos
-		self.oldY = ypos
+        self.oldX = xpos
+        self.oldY = ypos
 
-		self.hspeed = 0
-		self.vspeed = 0
+        self.hspeed = 0
+        self.vspeed = 0
 
-		self.sprite = -1
-		self.rect = -1
+        self.sprite = -1
+        self.rect = -1
 
-		self.xImageOffset = 0
-		self.yImageOffset = 0
+        self.xImageOffset = 0
+        self.yImageOffset = 0
 
-		self.xRectOffset = 0
-		self.yRectOffset = 0
+        self.xRectOffset = 0
+        self.yRectOffset = 0
 
-		self.root.GameObjectList.append(self)
+        self.root.GameObjectList.append(self)
 
-
-	def beginStep(self):
-
-		pass
+        self.destroyInstance = False
 
 
-	def step(self):
+    def beginStep(self):
 
-		pass
-
-
-	def endStep(self):
-
-		if self.x < 0.0:
-			self.x = 0.0
-
-		if self.y < 0.0:
-			self.y = 0.0
-
-		self.x += self.hspeed
-		self.y += self.vspeed
-		if self.rect != -1:
-			self.rect.topleft = (self.x-self.xRectOffset, self.y-self.yRectOffset)
+        pass
 
 
-	def collide(self):
-		self.oldX = self.x
-		self.oldY = self.y
+    def step(self):
 
-	def draw(self):
+        pass
 
-		if self.sprite != -1:
-			self.root.Surface.blit(self.sprite, ((self.x+self.xImageOffset)-self.root.Xview, (self.rect.top+self.yImageOffset)-self.root.Yview))
+
+    def endStep(self):
+
+        if self.x < 0.0:
+            self.x = 0.0
+
+        if self.y < 0.0:
+            self.y = 0.0
+
+        self.x += self.hspeed
+        self.y += self.vspeed
+        if self.rect != -1:
+            self.rect.topleft = (self.x-self.xRectOffset, self.y-self.yRectOffset)
+
+
+    def collide(self):
+        self.oldX = self.x
+        self.oldY = self.y
+
+    def draw(self):
+
+        if self.sprite != -1:
+            self.root.Surface.blit(self.sprite, ((self.x+self.xImageOffset)-self.root.Xview, (self.rect.top+self.yImageOffset)-self.root.Yview))
+
+    def destroy(self):
+
+        self.root.GameObjectList.remove(self)
+
 			
 class MapObject(GameObject):
 
@@ -83,8 +90,6 @@ class MapObject(GameObject):
 		self.root.Surface.blit(self.sprite, (0, 0))
 
 		self.mask = pygame.mask.from_surface(self.sprite)
-
-		print self.mask.count()
 
 
 		self.root.map = self

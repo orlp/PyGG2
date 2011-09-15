@@ -56,6 +56,15 @@ class GG2:
 
                 self.GameObjectList[a].collide()
 
+
+        a = 0
+        while a < len(self.GameObjectList):
+
+            if self.GameObjectList[a].destroyInstance:
+                self.GameObjectList[a].destroy()
+
+            a += 1
+
         self.Surface.fill((255, 255, 255))
 
         for a in range(len(self.GameObjectList)):
