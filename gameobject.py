@@ -30,18 +30,18 @@ class GameObject(pygame.sprite.Sprite):
         self.root.GameObjectList.append(self)
         self.destroyInstance = False
 
-    def beginStep(self):
+    def beginStep(self, frametime):
         pass
 
-    def step(self):
+    def step(self, frametime):
         pass
 
-    def endStep(self):
+    def endStep(self, frametime):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
-        self.x += self.hspeed
-        self.y += self.vspeed
+        self.x += self.hspeed * (frametime / 1000.0)
+        self.y += self.vspeed * (frametime / 1000.0)
         
         if self.rect:
             self.rect.topleft = (self.x - self.xRectOffset, self.y - self.yRectOffset)
@@ -81,7 +81,7 @@ class PlayerControl(GameObject):
     def __init__(self, root):
         GameObject.__init__(self, root, 0, 0)
 
-    def beginStep(self):
+    def beginStep(self, frametime):
         up = 0
         left = 0
         right = 0

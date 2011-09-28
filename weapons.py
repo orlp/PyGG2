@@ -19,12 +19,12 @@ class Weapon(GameObject):
 
         self.direction = 0
 
-    def step(self):
+    def step(self, frametime):
         if self.refireAlarm <= 0:
             self.refireAlarm = 0
             self.readyToShoot = True
         else:
-            self.refireAlarm -= 1
+            self.refireAlarm -= 1 * (frametime / 1000.0)
 
         if self.owner.LMB and self.refireAlarm == 0:
             self.FirePrimary()
@@ -33,7 +33,7 @@ class Weapon(GameObject):
             self.FireSecondary()
 
 
-    def endStep(self):
+    def endStep(self, frametime):
         self.rect.topleft = (self.x - self.xRectOffset, self.y - self.yRectOffset)
 
 

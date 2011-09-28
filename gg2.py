@@ -29,9 +29,9 @@ class GG2:
     
         
     def update(self, frametime):        
-        for obj in self.GameObjectList: obj.beginStep()
-        for obj in self.GameObjectList: obj.step()
-        for obj in self.GameObjectList: obj.endStep()
+        for obj in self.GameObjectList: obj.beginStep(frametime)
+        for obj in self.GameObjectList: obj.step(frametime)
+        for obj in self.GameObjectList: obj.endStep(frametime)
 
         self.Xview = self.Myself.x - self.Wview/2
         self.Yview = self.Myself.y - self.Hview/2
