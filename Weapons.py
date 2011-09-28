@@ -69,15 +69,19 @@ class Weapon(GameObject):
         if self.sprite == -1:
             return False
 
+        tempSprite = self.sprite.copy()
+
         if self.justShot:
-            tempSprite = self.firingSprite.copy()
-        else:
-            tempSprite = self.sprite.copy()
+            self.sprite = self.firingSprite.copy()
 
-#        self.sprite = pygame.transform.rotate(self.sprite, self.direction)
+        if self.owner.flip:
+            self.sprite = pygame.transform.flip(self.sprite, 0, 1)
+
+        self.sprite = pygame.transform.rotate(self.sprite, self.direction)
+
         GameObject.draw(self)
-        self.sprite = tempSprite
 
+        self.sprite = tempSprite
 
 
 
@@ -119,7 +123,5 @@ class ScatterGun(Weapon):
             shot.vspeed = math.sin(radDirection)*-1*shot.speed
 
             shot.speed = lengthdir(shot.hspeed, shot.vspeed)
-
-            print shot.hspeed, shot.vspeed
 
             self.refireAlarm = self.refireTime

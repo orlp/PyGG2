@@ -24,21 +24,24 @@ class Character(GameObject):
 
     def step(self):
 
-        if self.up:
-            self.vspeed -= 2
-
         if self.left:
-            self.hspeed -= 1
-        elif self.right:
-            self.hspeed += 1
+            self.hspeed -= 4
+
+        if self.right:
+            self.hspeed += 4
+
+        if self.up:
+
+#            if place_free((self.rect.centerx, self.rect.bottom+1), self.root.map.mask):
+
+#                self.vspeed -= 12
+            self.vspeed -= 4
 
 
         self.vspeed += 0.2
 
         if self.vspeed > 5:
             self.vspeed = 5
-        elif self.vspeed < -5:
-            self.vspeed = -5
 
         if self.hspeed > 5:
             self.hspeed = 5

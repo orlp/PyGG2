@@ -116,6 +116,9 @@ def characterHitObstacle(character):
         return True
 
     else:
+
+        # INSERT STAIR CODE; SEE BELOW
+
         # Stop vertical movement
         character.vspeed = 0
         character.vs = 0
@@ -131,7 +134,29 @@ def characterHitObstacle(character):
 
 
 
+# STAIRS CODE; INSERT IN "STAIR CODE" ONCE FIXED
+'''
 
+        character.y -= 6
+
+        if not objectCheckCollision(character):
+
+            character.y += 6# This is to compensate for the loop.
+            character.x -= sign(character.hspeed)*6
+
+            while hs*sign(character.hspeed) > 0:
+
+                character.y -= 6
+                character.x += sign(character.hspeed)*6
+                hs -= sign(character.hspeed)*6
+
+                if objectCheckCollision(character):
+
+                    character.y += 6
+                    character.x -= sign(character.hspeed)*6
+                    break
+
+        else:'''
 
 
 

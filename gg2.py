@@ -31,11 +31,14 @@ class GG2:
         self.PlayerControl = PlayerControl(self)
         
         self.Myself = Scout(self)
+
+        self.clock = pygame.time.Clock()
         
     def step(self):
 
         #'Steps' the engine. Twisted will step this at some point.
 
+        self.clock.tick(30)
         
         for a in range(len(self.GameObjectList)):
 

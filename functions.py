@@ -23,7 +23,7 @@ def lengthdir(x, y):
 
 def place_free((x, y), wallmask):
 
-    return wallmask.get_at(x, y)
+    return wallmask.get_at((x, y))
 
 
 def point_direction(x1, y1, x2, y2):
