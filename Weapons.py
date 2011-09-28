@@ -41,7 +41,7 @@ class Weapon(GameObject):
     def posUpdate(self):
         self.x = self.owner.x
         self.y = self.owner.y
-
+        
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         self.direction = point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview)
@@ -65,6 +65,8 @@ class Weapon(GameObject):
             self.sprite = pygame.transform.flip(self.sprite, 0, 1)
 
         self.sprite = pygame.transform.rotate(self.sprite, self.direction)
+        
+        
         GameObject.draw(self)
         self.sprite = tempSprite
 
