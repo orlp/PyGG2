@@ -3,7 +3,7 @@ from pygame.locals import *
 from collision import characterHitObstacle, objectCheckCollision
 from gameobject import GameObject
 from functions import sign, place_free, point_direction, load_image
-from Weapons import Weapon, ScatterGun
+from weapons import Weapon, ScatterGun
 
 class Character(GameObject):
     def __init__(self, root):
