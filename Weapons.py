@@ -1,8 +1,7 @@
 import pygame, math, random
 from pygame.locals import *
-from load_image import load_image
 from gameobject import GameObject
-from functions import sign, place_free, point_direction
+from functions import sign, place_free, point_direction, load_image
 from Shot import Shot
 
 class Weapon(GameObject):

@@ -45,7 +45,6 @@ def characterHitObstacle(character):
     length = math.hypot(hspeed, vspeed)
 
     if length == 0:# You haven't moved; if this happens something went wrong
-
         print "You haven't moved, yet managed to collide with something."
         return False
 

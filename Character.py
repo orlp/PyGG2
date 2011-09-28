@@ -1,9 +1,8 @@
 import pygame
 from pygame.locals import *
-from load_image import load_image
 from collision import characterHitObstacle, objectCheckCollision
 from gameobject import GameObject
-from functions import sign, place_free, point_direction
+from functions import sign, place_free, point_direction, load_image
 from Weapons import Weapon, ScatterGun
 
 class Character(GameObject):

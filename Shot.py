@@ -1,9 +1,8 @@
 import pygame
 from pygame.locals import *
-from load_image import load_image
 from gameobject import GameObject
 from collision import objectCheckCollision
-from functions import sign, place_free, point_direction
+from functions import load_image, point_direction
 
 class Shot(GameObject):
     def __init__(self, root, x, y):

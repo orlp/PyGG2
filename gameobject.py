@@ -1,6 +1,5 @@
 import pygame
 from pygame.locals import *
-from load_image import load_image
 from collision import characterHitObstacle, objectCheckCollision
 from functions import sign, place_free, point_direction
 
@@ -89,8 +88,8 @@ class PlayerControl(GameObject):
         LMB = 0
         RMB = 0
 
-        for event in pygame.event.get():
-            pass
+        # for event in pygame.event.get():
+            # pass
 
         key = pygame.key.get_pressed()
         if key[K_w]: up = 1

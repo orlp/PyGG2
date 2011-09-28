@@ -15,9 +15,7 @@ class GG2:
     Xview = 0
     Yview = 0
     
-    def __init__(self):
-        pygame.init()
-        
+    def __init__(self):        
         # All drawing should be done on the Surface object
         self.Window = pygame.display.set_mode((800, 600))
         self.Surface = pygame.display.get_surface()
@@ -28,14 +26,9 @@ class GG2:
         self.gameMap = MapObject(self)
         self.PlayerControl = PlayerControl(self)
         self.Myself = Scout(self)
-
-        self.clock = pygame.time.Clock()
+    
         
-    def step(self):
-        #'Steps' the engine. Twisted will step this at some point.
-
-        self.clock.tick(30)
-        
+    def update(self, tslu):        
         for obj in self.GameObjectList: obj.beginStep()
         for obj in self.GameObjectList: obj.step()
         for obj in self.GameObjectList: obj.endStep()
@@ -49,6 +42,7 @@ class GG2:
             if obj.destroyInstance:
                 obj.destroy()
 
+    def render(self):
         self.Surface.fill((255, 255, 255))
 
         for obj in self.GameObjectList: obj.draw()
