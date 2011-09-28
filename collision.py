@@ -4,7 +4,6 @@ import math
 
 def objectCheckCollision(character):
     # Check if a the Character has hit the wall:
-
     hasCollided = False
 
     character.rect.centerx = character.x-character.xRectOffset

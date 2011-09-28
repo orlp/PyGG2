@@ -8,8 +8,8 @@ class Weapon(GameObject):
     def __init__(self, root, x, y):
         GameObject.__init__(self, root, x, y)
 
-        self.owner = -1
-        self.firingSprite = -1
+        self.owner = None
+        self.firingSprite = None
 
         self.ammo = 0
         self.maxAmmo = 0
@@ -53,7 +53,7 @@ class Weapon(GameObject):
 
 
     def draw(self):
-        if self.sprite == -1: return False
+        if not self.sprite: return
 
         tempSprite = self.sprite.copy()
 

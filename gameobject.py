@@ -18,8 +18,8 @@ class GameObject(pygame.sprite.Sprite):
         self.hspeed = 0
         self.vspeed = 0
 
-        self.sprite = -1
-        self.rect = -1
+        self.sprite = None
+        self.rect = None
 
         self.xImageOffset = 0
         self.yImageOffset = 0
@@ -43,7 +43,7 @@ class GameObject(pygame.sprite.Sprite):
         self.x += self.hspeed
         self.y += self.vspeed
         
-        if self.rect != -1:
+        if self.rect:
             self.rect.topleft = (self.x - self.xRectOffset, self.y - self.yRectOffset)
 
     def collide(self):
@@ -51,7 +51,7 @@ class GameObject(pygame.sprite.Sprite):
         self.oldY = self.y
 
     def draw(self):
-        if self.sprite != -1:
+        if self.sprite:
             self.root.Surface.blit(self.sprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))
 
     def destroy(self):
@@ -87,9 +87,6 @@ class PlayerControl(GameObject):
         right = 0
         LMB = 0
         RMB = 0
-
-        # for event in pygame.event.get():
-            # pass
 
         key = pygame.key.get_pressed()
         if key[K_w]: up = 1

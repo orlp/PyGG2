@@ -28,7 +28,7 @@ class GG2:
         self.Myself = Scout(self)
     
         
-    def update(self, tslu):        
+    def update(self, frametime):        
         for obj in self.GameObjectList: obj.beginStep()
         for obj in self.GameObjectList: obj.step()
         for obj in self.GameObjectList: obj.endStep()

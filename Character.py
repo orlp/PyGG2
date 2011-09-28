@@ -9,14 +9,7 @@ class Character(GameObject):
     def __init__(self, root):
         GameObject.__init__(self, root, 400, 400)
         self.up, self.left, self.right, self.LMB, self.RMB = 0, 0, 0, 0, 0
-        self.hp = 0
         self.flip = 0
-
-
-    def lateInit(self):
-        # This is called -after- the child's init event, so it can set things that are known only later.
-        self.maxHp = self.hp
-
 
     def step(self):
         if self.left: self.hspeed -= 3
@@ -79,11 +72,10 @@ class Scout(Character):
         self.yImageOffset = -30
 
         self.hp = 100
+        self.maxHp = 100
 
         self.weapon = ScatterGun(self.root, self.x, self.y)
         self.weapon.owner = self
 
         self.xRectOffset = self.x-self.rect.centerx
         self.yRectOffset = self.y-self.rect.centery
-
-        Character.lateInit(self)
