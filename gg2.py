@@ -3,7 +3,7 @@ from pygame.locals import *
 from gameobject import MapObject, PlayerControl
 from Character import Scout
 from collision import objectCheckCollision, characterHitObstacle
-from functions import sign, place_free, lengthdir, point_direction
+from functions import sign, place_free, point_direction
 
 class GG2:
     """
@@ -20,58 +20,38 @@ class GG2:
         pygame.init()
         
         # All drawing should be done on the Surface object
-        self.Window = pygame.display.set_mode((1280, 1024))
+        self.Window = pygame.display.set_mode((800, 600))
         self.Surface = pygame.display.get_surface()
         
         self.Wview = self.Window.get_width()
         self.Hview = self.Window.get_height()
         
         self.gameMap = MapObject(self)
-        
         self.PlayerControl = PlayerControl(self)
-        
         self.Myself = Scout(self)
 
         self.clock = pygame.time.Clock()
         
     def step(self):
-
         #'Steps' the engine. Twisted will step this at some point.
 
         self.clock.tick(30)
         
-        for a in range(len(self.GameObjectList)):
+        for obj in self.GameObjectList:    obj.beginStep()
+        for obj in self.GameObjectList:    obj.step()
+        for obj in self.GameObjectList:    obj.endStep()
 
-                self.GameObjectList[a].beginStep()
+        self.Xview = self.Myself.x - self.Wview/2
+        self.Yview = self.Myself.y - self.Hview/2
 
-        for a in range(len(self.GameObjectList)):
+        for obj in self.GameObjectList:    obj.collide()
 
-                self.GameObjectList[a].step()
-
-        for a in range(len(self.GameObjectList)):
-
-                self.GameObjectList[a].endStep()
-
-        self.Xview = self.Myself.x-self.Wview/2
-        self.Yview = self.Myself.y-self.Hview/2
-
-        for a in range(len(self.GameObjectList)):
-
-                self.GameObjectList[a].collide()
-
-
-        a = 0
-        while a < len(self.GameObjectList):
-
-            if self.GameObjectList[a].destroyInstance:
-                self.GameObjectList[a].destroy()
-
-            a += 1
+        for obj in self.GameObjectList:
+            if obj.destroyInstance:
+                obj.destroy()
 
         self.Surface.fill((255, 255, 255))
 
-        for a in range(len(self.GameObjectList)):
-
-                self.GameObjectList[a].draw()
+        for obj in self.GameObjectList: obj.draw()
 
         pygame.display.flip()

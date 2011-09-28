@@ -1,7 +1,6 @@
 import math, pygame
 
 def sign(x):
-
     # Returns the sign of the number given
     if x > 0:
         return 1
@@ -10,19 +9,18 @@ def sign(x):
     else:
         return 0
 
+# nightcracker - DEPRECATED, this is math.hypot
+# def lengthdir(x, y):
 
-def lengthdir(x, y):
+    # # Returns the length of a line described by the x and y components given
 
-    # Returns the length of a line described by the x and y components given
+    # x = x**2
+    # y = y**2
 
-    x = x**2
-    y = y**2
-
-    return math.sqrt(x+y)
+    # return math.sqrt(x+y)
 
 
 def place_free((x, y), wallmask):
-
     return wallmask.get_at((x, y))
 
 
@@ -33,7 +31,7 @@ def point_direction(x1, y1, x2, y2):
     xDiff = x2-x1
     yDiff = y1-y2
 
-    length = lengthdir(xDiff, yDiff)
+    length = math.hypot(xDiff, yDiff)
 
     if length == 0:
         return 0
