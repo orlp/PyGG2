@@ -1,3 +1,5 @@
+from __future__ import division
+
 import pygame
 from pygame.locals import *
 from gameobject import GameObject
@@ -14,7 +16,7 @@ class Shot(GameObject):
         self.sprite, self.rect = load_image("Sprites/Projectiles/Shot.png")
 
     def step(self, frametime):
-        self.vspeed += 0.1 * (frametime / 1000.0)
+        self.vspeed += 100 * (frametime / 1000.0)
 
     def collide(self):
         GameObject.collide(self)

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+from __future__ import division
+
 from gg2 import GG2
 import pygame
 from pygame.locals import *

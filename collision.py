@@ -1,3 +1,5 @@
+from __future__ import division
+
 from functions import place_free, sign, point_direction
 import pygame
 import math

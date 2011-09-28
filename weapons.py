@@ -1,3 +1,5 @@
+from __future__ import division
+
 import pygame, math, random
 from pygame.locals import *
 from gameobject import GameObject
@@ -24,7 +26,7 @@ class Weapon(GameObject):
             self.refireAlarm = 0
             self.readyToShoot = True
         else:
-            self.refireAlarm -= 1 * (frametime / 1000.0)
+            self.refireAlarm -= frametime / 1000.0
 
         if self.owner.LMB and self.refireAlarm == 0:
             self.FirePrimary()
@@ -81,8 +83,8 @@ class ScatterGun(Weapon):
         self.maxAmmo = 6
         self.ammo = self.maxAmmo
 
-        self.refireTime = 20
-        self.reloadTime = 15
+        self.refireTime = 2
+        self.reloadTime = 1.5
 
         self.xImageOffset = -6
         self.yImageOffset = -6
