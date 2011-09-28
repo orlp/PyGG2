@@ -3,7 +3,6 @@ from pygame.locals import *
 from gameobject import MapObject, PlayerControl
 from Character import Scout
 from collision import objectCheckCollision, characterHitObstacle
-from functions import sign, place_free, point_direction
 
 class GG2:
     """
@@ -37,14 +36,14 @@ class GG2:
 
         self.clock.tick(30)
         
-        for obj in self.GameObjectList:    obj.beginStep()
-        for obj in self.GameObjectList:    obj.step()
-        for obj in self.GameObjectList:    obj.endStep()
+        for obj in self.GameObjectList: obj.beginStep()
+        for obj in self.GameObjectList: obj.step()
+        for obj in self.GameObjectList: obj.endStep()
 
         self.Xview = self.Myself.x - self.Wview/2
         self.Yview = self.Myself.y - self.Hview/2
 
-        for obj in self.GameObjectList:    obj.collide()
+        for obj in self.GameObjectList: obj.collide()
 
         for obj in self.GameObjectList:
             if obj.destroyInstance:

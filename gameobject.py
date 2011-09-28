@@ -38,11 +38,8 @@ class GameObject(pygame.sprite.Sprite):
         pass
 
     def endStep(self):
-        if self.x < 0.0:
-            self.x = 0.0
-
-        if self.y < 0.0:
-            self.y = 0.0
+        self.x = max(self.x, 0)
+        self.y = max(self.y, 0)
 
         self.x += self.hspeed
         self.y += self.vspeed
@@ -56,7 +53,7 @@ class GameObject(pygame.sprite.Sprite):
 
     def draw(self):
         if self.sprite != -1:
-            self.root.Surface.blit(self.sprite, (self.x + self.xImageOffset - self.root.Xview, self.rect.top + self.yImageOffset - self.root.Yview))
+            self.root.Surface.blit(self.sprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))
 
     def destroy(self):
         self.root.GameObjectList.remove(self)
