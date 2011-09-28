@@ -42,13 +42,13 @@ class GameObject(pygame.sprite.Sprite):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
-        self.x += self.hspeed * (frametime / 1000.0)
-        self.y += self.vspeed * (frametime / 1000.0)
+        self.x += self.hspeed * frametime
+        self.y += self.vspeed * frametime
         
         if self.rect:
             self.rect.topleft = (self.x - self.xRectOffset, self.y - self.yRectOffset)
 
-    def collide(self):
+    def collide(self, frametime):
         self.oldX = self.x
         self.oldY = self.y
 

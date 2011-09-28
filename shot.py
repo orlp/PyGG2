@@ -16,10 +16,10 @@ class Shot(GameObject):
         self.sprite, self.rect = load_image("Sprites/Projectiles/Shot.png")
 
     def step(self, frametime):
-        self.vspeed += 100 * (frametime / 1000.0)
+        self.vspeed += 50 * frametime
 
-    def collide(self):
-        GameObject.collide(self)
+    def collide(self, frametime):
+        GameObject.collide(self, frametime)
 
         if objectCheckCollision(self):
             self.destroyInstance = True

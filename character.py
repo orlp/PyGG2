@@ -14,35 +14,35 @@ class Character(GameObject):
         self.flip = 0
 
     def step(self, frametime):
-        if self.left: self.hspeed -= 3  * (frametime / 1000.0)
-        if self.right: self.hspeed += 3 * (frametime / 1000.0)
+        if self.left: self.hspeed -= 80 * frametime
+        if self.right: self.hspeed += 80 * frametime
         if not (self.left or self.right):
             if abs(self.hspeed) < .5: self.hspeed = 0
-            else: self.hspeed /= 2.0  * (frametime / 1000.0)
+            else: self.hspeed /= 2 * frametime
         if self.up:
             #TODO if onground:
-            self.vspeed = -8
+            self.vspeed = -80
         
         # gravitational force
-        self.vspeed += 0.5  * (frametime / 1000.0)
+        self.vspeed += 100  * frametime
 
         # TODO: air resistance, not hard limit
-        self.vspeed = min(8, self.vspeed)
+        self.vspeed = min(100, self.vspeed)
         
         # TODO: speed limit based on class
-        self.hspeed = min(5, max(-5, self.hspeed))
+        self.hspeed = min(80, max(-80, self.hspeed))
 
 
     def endStep(self, frametime):
         GameObject.endStep(self, frametime)
         self.weapon.posUpdate()
 
-    def collide(self):
+    def collide(self, frametime):
         check = objectCheckCollision(self)
         
-        if check: characterHitObstacle(self)
+        if check: characterHitObstacle(self, frametime)
 
-        GameObject.collide(self)
+        GameObject.collide(self, frametime)
 
 
     def draw(self):

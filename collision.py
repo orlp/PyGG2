@@ -24,14 +24,11 @@ def objectCheckCollision(character):
             if character.root.map.mask.get_at((x1+x, y1+y)) == 1:
                 hasCollided = True
 
-    if hasCollided:
-        return True
-    else:
-        return False
+    return hasCollided
 
 
 
-def characterHitObstacle(character):
+def characterHitObstacle(character, frametime):
 
 
 # THIS IS THE NEW VERSION; STILL WITH x/y
@@ -58,8 +55,8 @@ def characterHitObstacle(character):
         if not objectCheckCollision(character):
             break
 
-        character.x -= hs
-        character.y -= vs
+        character.x -= hs * frametime
+        character.y -= vs * frametime
    
     if hspeed == 0 or vspeed == 0:
     	return True
@@ -71,7 +68,7 @@ def characterHitObstacle(character):
     # The character got pushed out, but now we need to let him move in the directions he's allowed to move.
 
 
-    character.x += sign(hs)
+    character.x += sign(hs)  * frametime
 
     if not objectCheckCollision(character) and abs(hs) > 0:
 
@@ -80,12 +77,12 @@ def characterHitObstacle(character):
         i = 1
         while i <= abs(hs) and not objectCheckCollision(character):
 
-            character.x += sign(hs)
+            character.x += sign(hs)  * frametime
             i += 1
 
 
         if objectCheckCollision(character):
-            character.x -= sign(hs)
+            character.x -= sign(hs)  * frametime
 
         return True
 
@@ -94,10 +91,10 @@ def characterHitObstacle(character):
         # Stop horizontal movement
         character.hspeed = 0
         character.hs = 0
-        character.x -= sign(hs)
+        character.x -= sign(hs)  * frametime
 
 
-    character.y += sign(vs)
+    character.y += sign(vs)  * frametime
 
     if not objectCheckCollision(character) and abs(vs) > 0:
 
@@ -107,11 +104,11 @@ def characterHitObstacle(character):
         i = 1
         while i <= abs(vs) and not objectCheckCollision(character):
 
-            character.y += sign(vs)
+            character.y += sign(vs)  * frametime
             i += 1
 
         if objectCheckCollision(character):
-            character.y -= sign(vs)
+            character.y -= sign(vs)  * frametime
 
         return True
 
@@ -122,7 +119,7 @@ def characterHitObstacle(character):
         # Stop vertical movement
         character.vspeed = 0
         character.vs = 0
-        character.y -= sign(vs)
+        character.y -= sign(vs)  * frametime
 
     return True
 

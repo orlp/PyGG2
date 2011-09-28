@@ -23,7 +23,7 @@ while True:
         break
     
     # update the game and render
-    game.update(clock.get_time())
+    game.update(clock.get_time() / 1000)
     game.render()
 
     # wait to get steady frame rate

@@ -38,7 +38,7 @@ class GG2:
         self.Xview = self.Myself.x - self.Wview/2
         self.Yview = self.Myself.y - self.Hview/2
 
-        for obj in self.GameObjectList: obj.collide()
+        for obj in self.GameObjectList: obj.collide(frametime)
 
         for obj in self.GameObjectList:
             if obj.destroyInstance:

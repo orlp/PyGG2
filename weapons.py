@@ -26,7 +26,7 @@ class Weapon(GameObject):
             self.refireAlarm = 0
             self.readyToShoot = True
         else:
-            self.refireAlarm -= frametime / 1000.0
+            self.refireAlarm -= frametime
 
         if self.owner.LMB and self.refireAlarm == 0:
             self.FirePrimary()
@@ -83,8 +83,8 @@ class ScatterGun(Weapon):
         self.maxAmmo = 6
         self.ammo = self.maxAmmo
 
-        self.refireTime = 2
-        self.reloadTime = 1.5
+        self.refireTime = 1
+        self.reloadTime = 0.5
 
         self.xImageOffset = -6
         self.yImageOffset = -6
