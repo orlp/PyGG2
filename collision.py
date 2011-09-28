@@ -1,8 +1,8 @@
-from functions import place_free, lengthdir, sign, point_direction
+from functions import place_free, sign, point_direction
 import pygame
+import math
 
 def objectCheckCollision(character):
-
     # Check if a the Character has hit the wall:
 
     hasCollided = False
@@ -42,7 +42,7 @@ def characterHitObstacle(character):
     hspeed = character.hspeed
     vspeed = character.vspeed
 
-    length = lengthdir(hspeed, vspeed)
+    length = math.hypot(hspeed, vspeed)
 
     if length == 0:# You haven't moved; if this happens something went wrong
 
