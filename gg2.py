@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 from gameobject import MapObject, PlayerControl
 from character import Scout
-from collision import objectCheckCollision, characterHitObstacle
+import math
 
 class GG2:
     """
@@ -20,7 +20,7 @@ class GG2:
     def __init__(self):        
         # All drawing should be done on the Surface object
         self.Window = pygame.display.set_mode((800, 600))
-        self.Surface = pygame.display.get_surface()
+        self.Surface = pygame.Surface(self.Window.get_size())
         
         self.Wview = self.Window.get_width()
         self.Hview = self.Window.get_height()
@@ -28,7 +28,8 @@ class GG2:
         self.gameMap = MapObject(self)
         self.PlayerControl = PlayerControl(self)
         self.Myself = Scout(self)
-    
+        
+        self.clock = pygame.time.Clock()
         
     def update(self, frametime):        
         for obj in self.GameObjectList: obj.beginStep(frametime)
@@ -38,15 +39,18 @@ class GG2:
         self.Xview = self.Myself.x - self.Wview/2
         self.Yview = self.Myself.y - self.Hview/2
 
-        for obj in self.GameObjectList: obj.collide(frametime)
-
         for obj in self.GameObjectList:
             if obj.destroyInstance:
                 obj.destroy()
 
     def render(self):
-        self.Surface.fill((255, 255, 255))
+        self.Surface.fill((245, 245, 235))
 
-        for obj in self.GameObjectList: obj.draw()
-
-        pygame.display.flip()
+        for obj in self.GameObjectList:
+            obj.draw()
+        
+        font = pygame.font.SysFont("None", 30)
+        self.Surface.blit(font.render("%d FPS" % int(self.clock.get_fps()), 0, (130, 130, 130)), (10, 10))
+        
+        self.Window.blit(self.Surface, (0, 0))
+        pygame.display.update()

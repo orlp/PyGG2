@@ -14,11 +14,11 @@ class Character(GameObject):
         self.flip = 0
 
     def step(self, frametime):
-        if self.left: self.hspeed -= 80 * frametime
-        if self.right: self.hspeed += 80 * frametime
+        if self.left: self.hspeed -= 1000 * frametime
+        if self.right: self.hspeed += 1000 * frametime
         if not (self.left or self.right):
             if abs(self.hspeed) < .5: self.hspeed = 0
-            else: self.hspeed /= 2 * frametime
+            else: self.hspeed /= 10 * frametime
         if self.up:
             #TODO if onground:
             self.vspeed = -80
@@ -30,7 +30,7 @@ class Character(GameObject):
         self.vspeed = min(100, self.vspeed)
         
         # TODO: speed limit based on class
-        self.hspeed = min(80, max(-80, self.hspeed))
+        self.hspeed = min(120, max(-120, self.hspeed))
 
 
     def endStep(self, frametime):
@@ -79,5 +79,5 @@ class Scout(Character):
         self.weapon = ScatterGun(self.root, self.x, self.y)
         self.weapon.owner = self
 
-        self.xRectOffset = self.x-self.rect.centerx
-        self.yRectOffset = self.y-self.rect.centery
+        self.xRectOffset = self.x - self.rect.centerx
+        self.yRectOffset = self.y - self.rect.centery
