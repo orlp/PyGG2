@@ -4,19 +4,24 @@ import pygame
 from pygame.locals import *
 from gameobject import GameObject
 from collision import objectCheckCollision
-from functions import load_image, point_direction
+from functions import point_direction
 
 class Shot(GameObject):
+    sprite = None
+
     def __init__(self, root, x, y):
+        if not Shot.sprite:
+            Shot.sprite = pygame.image.load("Sprites/Projectiles/Shot.png").convert()
+    
         GameObject.__init__(self, root, x, y)
 
         self.lifeAlarm = 0
         self.direction = 0
 
-        self.sprite, self.rect = load_image("Sprites/Projectiles/Shot.png")
+        self.sprite, self.rect = Shot.sprite, Shot.sprite.get_rect()
 
     def step(self, frametime):
-        self.vspeed += 5 * frametime
+        self.vspeed += 50 * frametime
 
     def collide(self, frametime):
         GameObject.collide(self, frametime)

@@ -3,7 +3,7 @@ from __future__ import division
 import pygame, math, random
 from pygame.locals import *
 from gameobject import GameObject
-from functions import sign, place_free, point_direction, load_image
+from functions import sign, place_free, point_direction
 from shot import Shot
 
 class Weapon(GameObject):
@@ -70,6 +70,7 @@ class Weapon(GameObject):
         
         GameObject.draw(self)
         self.sprite = tempSprite
+        pass
 
 
 
@@ -77,14 +78,15 @@ class ScatterGun(Weapon):
     def __init__(self, root, x, y):
         Weapon.__init__(self, root, x, y)
 
-        self.sprite, self.rect = load_image("Sprites/Weapons/Scattergun/ScatterGunS.png")
-        self.firingSprite, unusedRect = load_image("Sprites/Weapons/Scattergun/ScatterGunS-firing.png")
+        self.sprite = pygame.image.load("Sprites/Weapons/Scattergun/ScatterGunS.png").convert()
+        self.rect = self.sprite.get_rect()
+        self.firingSprite = pygame.image.load("Sprites/Weapons/Scattergun/ScatterGunS-firing.png").convert()
 
         self.maxAmmo = 6
         self.ammo = self.maxAmmo
 
-        self.refireTime = 1
-        self.reloadTime = 0.5
+        self.refireTime = 0.5
+        self.reloadTime = 1
 
         self.xImageOffset = -6
         self.yImageOffset = -6
