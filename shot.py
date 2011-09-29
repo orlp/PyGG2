@@ -11,7 +11,7 @@ class Shot(GameObject):
 
     def __init__(self, root, x, y):
         if not Shot.sprite:
-            Shot.sprite = pygame.image.load("Sprites/Projectiles/Shot.png").convert()
+            Shot.sprite = load_image("Sprites/Projectiles/Shot.png")
     
         GameObject.__init__(self, root, x, y)
 

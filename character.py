@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 from collision import characterHitObstacle, objectCheckCollision
 from gameobject import GameObject
-from functions import sign, place_free, point_direction
+from functions import sign, place_free, point_direction, load_image
 from weapons import Weapon, ScatterGun
 
 class Character(GameObject):
@@ -65,7 +65,7 @@ class Scout(Character):
     def __init__(self, root):
         Character.__init__(self, root)
 
-        self.sprite = pygame.image.load("Sprites/Characters/Scout/Red/ScoutRedS_fr1.png").convert()
+        self.sprite = load_image("Sprites/Characters/Scout/Red/ScoutRedS_fr1.png")
 
         # The Scout hitbox: left = -6; right = 6; top = -10; bottom = 23
         self.rect = pygame.Rect(self.x - 6, self.y - 10, 12, 33)
