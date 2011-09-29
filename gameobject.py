@@ -61,7 +61,7 @@ class MapObject(GameObject):
     def __init__(self, root):
         GameObject.__init__(self, root, 0, 0)
 
-        self.sprite = pygame.image.load("Maps/MapTesting.png")
+        self.sprite = pygame.image.load("Maps/MapTesting.png").convert()
         self.sprite.convert()
         self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6))
 

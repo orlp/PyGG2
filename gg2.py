@@ -47,6 +47,7 @@ class GG2:
                 obj.destroy()
 
     def render(self):
+        # draw background
         self.Surface.fill((245, 245, 235))
 
         for obj in self.GameObjectList:
