@@ -14,9 +14,6 @@ class GameObject(pygame.sprite.Sprite):
         self.x = xpos
         self.y = ypos
 
-        self.oldX = xpos
-        self.oldY = ypos
-
         self.hspeed = 0
         self.vspeed = 0
 
@@ -44,10 +41,6 @@ class GameObject(pygame.sprite.Sprite):
 
         self.x += self.hspeed * frametime
         self.y += self.vspeed * frametime
-
-    def collide(self, frametime):
-        self.oldX = self.x
-        self.oldY = self.y
 
     def draw(self):
         if self.sprite:

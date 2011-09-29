@@ -9,16 +9,15 @@ from weapons import Weapon, ScatterGun
 
 class Character(GameObject):
     def __init__(self, root):
-        GameObject.__init__(self, root, 400, 400)
-        self.up, self.left, self.right, self.LMB, self.RMB = 0, 0, 0, 0, 0
+        GameObject.__init__(self, root, 0, 0)
         self.flip = 0
 
     def step(self, frametime):
         if self.root.left: self.hspeed -= 1000 * frametime
         if self.root.right: self.hspeed += 1000 * frametime
         if not (self.root.left or self.root.right):
-            if abs(self.hspeed) < .5: self.hspeed = 0
-            else: self.hspeed /= 10 * frametime
+            if abs(self.hspeed) < 10: self.hspeed = 0
+            else: self.hspeed -= sign(self.hspeed) * min(abs(self.hspeed), 1000 * frametime)
         if self.root.up:
             #TODO if onground:
             self.vspeed = -80

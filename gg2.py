@@ -40,20 +40,21 @@ class GG2:
         for obj in self.GameObjectList: obj.step(frametime)
         for obj in self.GameObjectList: obj.endStep(frametime)
 
-        self.Xview = self.Myself.x - self.Wview/2
-        self.Yview = self.Myself.y - self.Hview/2
 
         for obj in self.GameObjectList:
             if obj.destroyInstance:
                 obj.destroy()
 
     def render(self):
+        # get info
+        self.Xview = self.Myself.x - self.Wview/2
+        self.Yview = self.Myself.y - self.Hview/2
+    
         # draw background
         self.Surface.fill((245, 245, 235))
         self.gameMap.draw()
 
-        for obj in self.GameObjectList:
-            obj.draw()
+        for obj in self.GameObjectList: obj.draw()
         
         # text drawing is quite expensive, save it
         newfps = int(self.clock.get_fps())
