@@ -23,6 +23,16 @@ def GG2main():
         if QUIT in {event.type for event in pygame.event.get()}:
             break
         
+        # handle input
+        key = pygame.key.get_pressed()
+        game.up = key[K_w]
+        game.left = key[K_a]
+        game.right = key[K_d]
+
+        LMB, MMB, RMB = pygame.mouse.get_pressed()
+        game.LMB = LMB
+        game.RMB = RMB
+        
         # update the game and render
         game.update(game.clock.get_time() / 1000)
         game.render()

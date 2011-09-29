@@ -14,12 +14,12 @@ class Character(GameObject):
         self.flip = 0
 
     def step(self, frametime):
-        if self.left: self.hspeed -= 1000 * frametime
-        if self.right: self.hspeed += 1000 * frametime
-        if not (self.left or self.right):
+        if self.root.left: self.hspeed -= 1000 * frametime
+        if self.root.right: self.hspeed += 1000 * frametime
+        if not (self.root.left or self.root.right):
             if abs(self.hspeed) < .5: self.hspeed = 0
             else: self.hspeed /= 10 * frametime
-        if self.up:
+        if self.root.up:
             #TODO if onground:
             self.vspeed = -80
         

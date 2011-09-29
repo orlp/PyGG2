@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 from gameobject import GameObject
 from collision import objectCheckCollision
-from functions import point_direction
+from functions import point_direction, load_image
 
 class Shot(GameObject):
     sprite = None
@@ -34,4 +34,4 @@ class Shot(GameObject):
 
         tempSprite = self.sprite.copy()
         tempSprite = pygame.transform.rotate(self.sprite, self.direction)
-        self.root.Surface.blit(tempSprite, (self.x + self.xImageOffset - self.root.Xview, self.rect.top + self.yImageOffset - self.root.Yview))
+        self.root.Surface.blit(tempSprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))

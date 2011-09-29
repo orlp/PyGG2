@@ -2,7 +2,7 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from gameobject import MapObject, PlayerControl
+from gameobject import MapObject
 from character import Scout
 import math
 
@@ -26,7 +26,6 @@ class GG2:
         self.Hview = self.Window.get_height()
         
         self.gameMap = MapObject(self)
-        self.PlayerControl = PlayerControl(self)
         self.Myself = Scout(self)
         
         self.clock = pygame.time.Clock()

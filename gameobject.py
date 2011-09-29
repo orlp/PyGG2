@@ -44,9 +44,6 @@ class GameObject(pygame.sprite.Sprite):
 
         self.x += self.hspeed * frametime
         self.y += self.vspeed * frametime
-        
-        if self.rect:
-            self.rect.topleft = (self.x - self.xRectOffset, self.y - self.yRectOffset)
 
     def collide(self, frametime):
         self.oldX = self.x
@@ -75,29 +72,3 @@ class MapObject(GameObject):
 
     def draw(self):
         self.root.Surface.blit(self.sprite, (0, 0), (self.root.Xview, self.root.Yview, self.root.Wview, self.root.Hview))
-
-
-class PlayerControl(GameObject):
-    def __init__(self, root):
-        GameObject.__init__(self, root, 0, 0)
-
-    def beginStep(self, frametime):
-        up = 0
-        left = 0
-        right = 0
-        LMB = 0
-        RMB = 0
-
-        key = pygame.key.get_pressed()
-        if key[K_w]: up = 1
-        if key[K_a]: left = 1
-        elif key[K_d]: right = 1
-
-        LMB, middleMouseButton, RMB = pygame.mouse.get_pressed()
-
-        # Send keybyte
-        self.root.Myself.up = up
-        self.root.Myself.left = left
-        self.root.Myself.right = right
-        self.root.Myself.LMB = LMB
-        self.root.Myself.RMB = RMB

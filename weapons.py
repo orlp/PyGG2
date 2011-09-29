@@ -28,10 +28,10 @@ class Weapon(GameObject):
         else:
             self.refireAlarm -= frametime
 
-        if self.owner.LMB and self.refireAlarm == 0:
+        if self.root.LMB and self.refireAlarm == 0:
             self.FirePrimary()
 
-        if self.owner.RMB and self.refireAlarm == 0:
+        if self.root.RMB and self.refireAlarm == 0:
             self.FireSecondary()
 
 
@@ -88,8 +88,8 @@ class ScatterGun(Weapon):
         self.refireTime = 0.5
         self.reloadTime = 1
 
-        self.xImageOffset = -6
-        self.yImageOffset = -6
+        self.xImageOffset = 0
+        self.yImageOffset = 0
 
     def FirePrimary(self):
         for i in range(6):
@@ -105,3 +105,4 @@ class ScatterGun(Weapon):
 
             shot.speed = math.hypot(shot.hspeed, shot.vspeed)
             self.refireAlarm = self.refireTime
+            
