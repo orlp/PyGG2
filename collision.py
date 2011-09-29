@@ -6,6 +6,17 @@ import math
 
 def objectCheckCollision(character): pass
 def characterHitObstacle(character, frametime): pass
+
+
+
+
+
+
+
+
+
+
+
 """
 def objectCheckCollision(character):
     # Check if a the Character has hit the wall:

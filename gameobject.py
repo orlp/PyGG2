@@ -55,20 +55,3 @@ class GameObject(pygame.sprite.Sprite):
 
     def destroy(self):
         self.root.GameObjectList.remove(self)
-
-            
-class MapObject(GameObject):
-    def __init__(self, root):
-        GameObject.__init__(self, root, 0, 0)
-
-        self.sprite = pygame.image.load("Maps/MapTesting.png").convert()
-        self.sprite.convert()
-        self.sprite = pygame.transform.scale(self.sprite, (self.sprite.get_width()*6, self.sprite.get_height()*6))
-
-        self.rect = pygame.Rect(0, 0, self.sprite.get_width(), self.sprite.get_height())
-        self.mask = pygame.mask.from_surface(self.sprite)
-        
-        self.root.map = self
-
-    def draw(self):
-        self.root.Surface.blit(self.sprite, (0, 0), (self.root.Xview, self.root.Yview, self.root.Wview, self.root.Hview))

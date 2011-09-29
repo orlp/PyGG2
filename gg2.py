@@ -2,8 +2,9 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from gameobject import MapObject
-from character import Scout
+
+import map
+import character
 import math
 
 class GG2:
@@ -25,8 +26,8 @@ class GG2:
         self.Wview = self.Window.get_width()
         self.Hview = self.Window.get_height()
         
-        self.gameMap = MapObject(self)
-        self.Myself = Scout(self)
+        self.gameMap = map.Map(self)
+        self.Myself = character.Scout(self)
         
         self.clock = pygame.time.Clock()
         
@@ -49,6 +50,7 @@ class GG2:
     def render(self):
         # draw background
         self.Surface.fill((245, 245, 235))
+        self.gameMap.draw()
 
         for obj in self.GameObjectList:
             obj.draw()
