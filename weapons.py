@@ -78,9 +78,9 @@ class ScatterGun(Weapon):
     def __init__(self, root, x, y):
         Weapon.__init__(self, root, x, y)
 
-        self.sprite = load_image("Sprites/Weapons/Scattergun/ScatterGunS.png")
+        self.sprite = load_image("Sprites/Weapons/ScattergunS/0.png")
         self.rect = self.sprite.get_rect()
-        self.firingSprite = load_image("Sprites/Weapons/Scattergun/ScatterGunS-firing.png")
+        self.firingSprite = load_image("Sprites/Weapons/ScattergunS/2.png")
 
         self.maxAmmo = 6
         self.ammo = self.maxAmmo

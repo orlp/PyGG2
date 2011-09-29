@@ -1,6 +1,7 @@
 from __future__ import division
 
 import math, pygame
+from pygame.locals import *
 
 def sign(x):
     # Returns the sign of the number given
@@ -15,4 +16,7 @@ def point_direction(x1, y1, x2, y2):
     return angle
 
 def load_image(filename):
-    return pygame.image.load(filename).convert_alpha()
+    image = pygame.image.load(filename).convert()
+    image.set_colorkey((255, 0, 255), RLEACCEL)
+    return image
+    

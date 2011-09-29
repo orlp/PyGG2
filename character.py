@@ -65,7 +65,7 @@ class Scout(Character):
     def __init__(self, root):
         Character.__init__(self, root)
 
-        self.sprite = load_image("Sprites/Characters/Scout/Red/ScoutRedS_fr1.png")
+        self.sprite = load_image("Sprites/Characters/ScoutRedS/0.png")
 
         # The Scout hitbox: left = -6; right = 6; top = -10; bottom = 23
         self.rect = pygame.Rect(self.x - 6, self.y - 10, 12, 33)

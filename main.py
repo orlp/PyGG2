@@ -9,7 +9,7 @@ from pygame.locals import *
 import cProfile
 
 # global settings
-framerate = 120
+framerate = 60
 
 # the main function
 def GG2main():
