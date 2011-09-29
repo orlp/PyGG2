@@ -68,8 +68,10 @@ class Weapon(GameObject):
         self.sprite = pygame.transform.rotate(self.sprite, self.direction)
         
         
-        GameObject.draw(self)
+        self.root.Surface.blit(self.sprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))
+        
         self.sprite = tempSprite
+        
         pass
 
 
@@ -88,8 +90,8 @@ class ScatterGun(Weapon):
         self.refireTime = 0.5
         self.reloadTime = 1
 
-        self.xImageOffset = 0
-        self.yImageOffset = 0
+        self.xImageOffset = -8
+        self.yImageOffset = -8
 
     def FirePrimary(self):
         for i in range(6):

@@ -44,7 +44,7 @@ class GameObject(pygame.sprite.Sprite):
 
     def draw(self):
         if self.sprite:
-            self.root.Surface.blit(self.sprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))
+            self.root.Surface.blit(self.sprite, (self.x - self.xImageOffset - self.root.Xview, self.y -  self.yImageOffset - self.root.Yview))
 
     def destroy(self):
         self.root.GameObjectList.remove(self)

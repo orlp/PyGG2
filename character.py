@@ -69,8 +69,8 @@ class Scout(Character):
         # The Scout hitbox: left = -6; right = 6; top = -10; bottom = 23
         self.rect = pygame.Rect(self.x - 6, self.y - 10, 12, 33)
 
-        self.xImageOffset = -30
-        self.yImageOffset = -30
+        self.xImageOffset = 30
+        self.yImageOffset = 40
 
         self.hp = 100
         self.maxHp = 100
