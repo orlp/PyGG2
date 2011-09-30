@@ -4,6 +4,7 @@ import pygame
 from pygame.locals import *
 from collision import characterHitObstacle, objectCheckCollision
 from functions import sign, place_free, point_direction
+import math
 
 class GameObject(pygame.sprite.Sprite):
     def __init__(self, root, xpos, ypos):
@@ -18,13 +19,7 @@ class GameObject(pygame.sprite.Sprite):
         self.vspeed = 0
 
         self.sprite = None
-        self.rect = None
-
-        self.xImageOffset = 0
-        self.yImageOffset = 0
-
-        self.xRectOffset = 0
-        self.yRectOffset = 0
+        self.rect = (0, 0, 0, 0)
 
         self.root.GameObjectList.append(self)
         self.destroyInstance = False
@@ -36,15 +31,21 @@ class GameObject(pygame.sprite.Sprite):
         pass
 
     def endStep(self, frametime):
+        self.x += self.hspeed * frametime
+        self.y += self.vspeed * frametime
+        
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
-        self.x += self.hspeed * frametime
-        self.y += self.vspeed * frametime
-
     def draw(self):
         if self.sprite:
-            self.root.Surface.blit(self.sprite, (self.x - self.xImageOffset - self.root.Xview, self.y -  self.yImageOffset - self.root.Yview))
+            x, y = int(self.x), int(self.y)
+            xoff, yoff = self.rect[0:2]
+            xview, yview = int(self.root.Xview), int(self.root.Yview)
+            
+            # range checking - TODO consider sprite heigth/width
+            if x >= xview and x < xview + self.root.Wview and y >= yview and y < yview + self.root.Hview:
+                self.root.Surface.blit(self.sprite, (x - xoff - xview, y - yoff - yview))
 
     def destroy(self):
         self.root.GameObjectList.remove(self)

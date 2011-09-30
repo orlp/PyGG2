@@ -9,3 +9,9 @@ class Map():
 
     def draw(self):
         self.root.Surface.blit(self.sprite, (0, 0), (self.root.Xview, self.root.Yview, self.root.Wview, self.root.Hview))
+
+class CollisionMap():
+    def __init__(self, root):
+        self.root = root
+        
+        

@@ -28,6 +28,11 @@ class Shot(GameObject):
             self.destroyInstance = True
 
     def draw(self):
-        tmpsprite = pygame.transform.rotate(self.sprite, self.direction)
-        self.rect = tmpsprite.get_rect()
-        self.root.Surface.blit(tmpsprite, (self.x + self.xImageOffset - self.root.Xview, self.y + self.yImageOffset - self.root.Yview))
+        origsprite, origrect = self.sprite, self.rect
+    
+        self.sprite = pygame.transform.rotate(self.sprite, self.direction)
+        self.rect = self.sprite.get_rect()
+        
+        GameObject.draw(self)
+        
+        self.sprite, self.rect = origsprite, origrect

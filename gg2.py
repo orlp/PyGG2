@@ -27,6 +27,7 @@ class GG2:
         self.Hview = self.Window.get_height()
         
         self.gameMap = map.Map(self)
+        self.collissionMap = map.CollisionMap(self)
         self.Myself = character.Scout(self)
         
         self.clock = pygame.time.Clock()

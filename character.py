@@ -66,17 +66,11 @@ class Scout(Character):
 
         self.sprite = load_image("sprites/characters/scoutreds/0.png")
 
-        # The Scout hitbox: left = -6; right = 6; top = -10; bottom = 23
-        self.rect = pygame.Rect(self.x - 6, self.y - 10, 12, 33)
-
-        self.xImageOffset = 30
-        self.yImageOffset = 40
+        # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
+        self.rect = pygame.Rect(24, 30, 12, 33)
 
         self.hp = 100
         self.maxHp = 100
 
         self.weapon = ScatterGun(self.root, self.x, self.y)
         self.weapon.owner = self
-
-        self.xRectOffset = self.x - self.rect.centerx
-        self.yRectOffset = self.y - self.rect.centery
