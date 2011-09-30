@@ -43,4 +43,6 @@ def GG2main():
     # clean up
     pygame.quit()
 
-cProfile.run("GG2main()")
+# when profiling:
+# cProfile.run("GG2main()")
+GG2main()
