@@ -13,7 +13,7 @@ class Shot(GameObject):
         self.lifeAlarm = 0
         self.direction = 0
 
-        self.sprite = load_image("Sprites/Projectiles/ShotS/0.png")
+        self.sprite = load_image("sprites/projectiles/shots/0.png")
         self.rect = self.sprite.get_rect()
 
     def step(self, frametime):
