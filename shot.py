@@ -3,7 +3,6 @@ from __future__ import division
 import pygame
 from pygame.locals import *
 from gameobject import GameObject
-from collision import objectCheckCollision
 from functions import point_direction, load_image
 
 class Shot(GameObject):

@@ -2,7 +2,6 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from collision import characterHitObstacle, objectCheckCollision
 from functions import sign, place_free, point_direction
 import math
 
