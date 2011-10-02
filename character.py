@@ -47,11 +47,11 @@ class Character(GameObject):
                 while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                     self.y -= 1
             else:
-                self.x -= min(6, self.hspeed * frametime) # move back one pixel (6 units is one pixel)
+                self.x = float(int(self.x)) # move back to a whole pixel
                 
                 # and if one pixel wasn't enough
                 while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
-                    self.x -= min(6, self.hspeed * frametime)
+                    self.x -= sign(self.hspeed)
                 
                 self.hspeed = 0
         
@@ -59,10 +59,10 @@ class Character(GameObject):
         self.y += self.vspeed * frametime
         
         if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
-            self.y -= min(6, self.vspeed * frametime)
+            self.y = float(int(self.y))
             
             while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
-                self.y -= min(6, self.vspeed * frametime)
+                self.y -= sign(self.vspeed)
         
             self.vspeed = 0
         
