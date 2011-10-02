@@ -8,7 +8,7 @@ from weapons import Weapon, ScatterGun
 
 class Character(GameObject):
     def __init__(self, root):
-        GameObject.__init__(self, root, 50, 50)
+        GameObject.__init__(self, root, 400*6, 50)
         self.flip = 0
 
     def step(self, frametime):
