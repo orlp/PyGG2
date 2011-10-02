@@ -7,10 +7,10 @@ from functions import sign, place_free, point_direction, load_image
 from shot import Shot
 
 class Weapon(GameObject):
-    def __init__(self, root, x, y):
+    def __init__(self, root, owner, x, y):
         GameObject.__init__(self, root, x, y)
 
-        self.owner = None
+        self.owner = owner
         self.firingSprite = None
 
         self.ammo = 0
@@ -71,8 +71,8 @@ class Weapon(GameObject):
 
 
 class ScatterGun(Weapon):
-    def __init__(self, root, x, y):
-        Weapon.__init__(self, root, x, y)
+    def __init__(self, root, owner, x, y):
+        Weapon.__init__(self, root, owner, x, y)
 
         self.image = load_image("sprites/weapons/scatterguns/0.png")
         self.rect = (8, -2) + tuple(self.image.get_rect()[2:])

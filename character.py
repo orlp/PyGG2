@@ -105,5 +105,4 @@ class Scout(Character):
         self.hp = 100
         self.maxHp = 100
 
-        self.weapon = ScatterGun(self.root, self.x, self.y)
-        self.weapon.owner = self
+        self.weapon = ScatterGun(self.root, self, self.x, self.y)
