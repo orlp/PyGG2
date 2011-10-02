@@ -32,16 +32,7 @@ class GameObject(pygame.sprite.Sprite):
 
     def endStep(self, frametime):
         self.x += self.hspeed * frametime
-        
-        if hasattr(self, "check_for_collision_map"):
-            if (self.check_for_collision_map()):
-                self.x -= self.hspeed * frametime
-        
         self.y += self.vspeed * frametime
-        
-        if hasattr(self, "check_for_collision_map"):
-            if (self.check_for_collision_map()):
-                self.y -= self.vspeed * frametime
         
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)

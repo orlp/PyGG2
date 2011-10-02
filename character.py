@@ -19,26 +19,54 @@ class Character(GameObject):
             if abs(self.hspeed) < 10: self.hspeed = 0
             else: self.hspeed -= sign(self.hspeed) * min(abs(self.hspeed), 1000 * frametime)
         if self.root.up:
-            #TODO if onground:
-            self.vspeed = -80
-        
+            # are we on the ground?
+            if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y+1))):
+                self.vspeed = -200
+                
         # gravitational force
-        self.vspeed += 100  * frametime
+        self.vspeed += 300  * frametime
 
         # TODO: air resistance, not hard limit
-        self.vspeed = min(100, self.vspeed)
+        self.vspeed = min(800, self.vspeed)
         
         # TODO: speed limit based on class
         self.hspeed = min(120, max(-120, self.hspeed))
 
 
     def endStep(self, frametime):
-        GameObject.endStep(self, frametime)
+        # first we move, ignoring walls
+        self.x += self.hspeed * frametime
+        
+        # if we are in a wall now, we must move back
+        if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+            # but if we just walked onto a one-pixel wall it's ok
+            if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y - 6))):
+                self.x -= min(6, self.hspeed * frametime) # move back one pixel (6 units is one pixel)
+                
+                # and if one pixel wasn't enough
+                while (self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y)))):
+                    self.x -= min(6, self.hspeed * frametime)
+                
+                self.hspeed = 0
+            else:
+                self.y -= 6
+        
+        # same stuff, but now vertically
+        self.y += self.vspeed * frametime
+        
+        if (self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y)))):
+            self.y -= min(6, self.vspeed * frametime)
+            
+            while (self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y)))):
+                self.y -= min(6, self.vspeed * frametime)
+        
+            self.vspeed = 0
+        
+        # just to be sure
+        self.x = max(self.x, 0)
+        self.y = max(self.y, 0)
+    
         self.weapon.posUpdate()
-
-    def check_for_collision_map(self):
-        return self.root.collisionMap.mask.overlap(self.mask, (int(self.x) - self.rect[0], int(self.y) - self.rect[1]))
-
 
     def draw(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -59,12 +87,13 @@ class Character(GameObject):
 class Scout(Character):
     def __init__(self, root):
         Character.__init__(self, root)
-
-        self.image = load_image("sprites/characters/scoutreds/0.png")
-        self.mask = pygame.mask.from_surface(self.image)
-
+        
         # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
         self.rect = pygame.Rect(24, 30, 12, 33)
+
+        self.image = load_image("sprites/characters/scoutreds/0.png")
+        self.mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
+        self.mask.fill()
 
         self.hp = 100
         self.maxHp = 100

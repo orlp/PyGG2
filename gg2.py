@@ -41,7 +41,6 @@ class GG2:
         for obj in self.GameObjectList: obj.step(frametime)
         for obj in self.GameObjectList: obj.endStep(frametime)
 
-
         for obj in self.GameObjectList:
             if obj.destroyInstance:
                 obj.destroy()
