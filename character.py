@@ -9,7 +9,7 @@ from weapons import Weapon, ScatterGun
 
 class Character(GameObject):
     def __init__(self, root):
-        GameObject.__init__(self, root, 0, 0)
+        GameObject.__init__(self, root, 50, 50)
         self.flip = 0
 
     def step(self, frametime):
@@ -36,12 +36,8 @@ class Character(GameObject):
         GameObject.endStep(self, frametime)
         self.weapon.posUpdate()
 
-    def collide(self, frametime):
-        check = objectCheckCollision(self)
-        
-        if check: characterHitObstacle(self, frametime)
-
-        GameObject.collide(self, frametime)
+    def check_for_collision_map(self):
+        return self.root.collisionMap.mask.overlap(self.mask, (int(self.x) - self.rect[0], int(self.y) - self.rect[1]))
 
 
     def draw(self):
@@ -49,11 +45,11 @@ class Character(GameObject):
 
         if point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview) > 90 and point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview) < 270:
             if self.flip == 0:
-                self.sprite = pygame.transform.flip(self.sprite, 1, 0)
+                self.image = pygame.transform.flip(self.image, 1, 0)
                 self.flip = 1
         else:
             if self.flip:
-                self.sprite = pygame.transform.flip(self.sprite, 1, 0)
+                self.image = pygame.transform.flip(self.image, 1, 0)
                 self.flip = 0
 
         GameObject.draw(self)
@@ -64,7 +60,8 @@ class Scout(Character):
     def __init__(self, root):
         Character.__init__(self, root)
 
-        self.sprite = load_image("sprites/characters/scoutreds/0.png")
+        self.image = load_image("sprites/characters/scoutreds/0.png")
+        self.mask = pygame.mask.from_surface(self.image)
 
         # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
         self.rect = pygame.Rect(24, 30, 12, 33)

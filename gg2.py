@@ -27,7 +27,7 @@ class GG2:
         self.Hview = self.Window.get_height()
         
         self.gameMap = map.Map(self)
-        self.collissionMap = map.CollisionMap(self)
+        self.collisionMap = map.CollisionMap(self)
         self.Myself = character.Scout(self)
         
         self.clock = pygame.time.Clock()
@@ -54,6 +54,7 @@ class GG2:
         # draw background
         self.Surface.fill((245, 245, 235))
         self.gameMap.draw()
+        self.collisionMap.draw()
 
         for obj in self.GameObjectList: obj.draw()
         

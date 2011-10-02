@@ -18,7 +18,7 @@ class GameObject(pygame.sprite.Sprite):
         self.hspeed = 0
         self.vspeed = 0
 
-        self.sprite = None
+        self.image = None
         self.rect = (0, 0, 0, 0)
 
         self.root.GameObjectList.append(self)
@@ -32,20 +32,29 @@ class GameObject(pygame.sprite.Sprite):
 
     def endStep(self, frametime):
         self.x += self.hspeed * frametime
+        
+        if hasattr(self, "check_for_collision_map"):
+            if (self.check_for_collision_map()):
+                self.x -= self.hspeed * frametime
+        
         self.y += self.vspeed * frametime
+        
+        if hasattr(self, "check_for_collision_map"):
+            if (self.check_for_collision_map()):
+                self.y -= self.vspeed * frametime
         
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
     def draw(self):
-        if self.sprite:
+        if self.image:
             x, y = int(self.x), int(self.y)
             xoff, yoff = self.rect[0:2]
             xview, yview = int(self.root.Xview), int(self.root.Yview)
             
             # range checking - TODO consider sprite heigth/width
             if x >= xview and x < xview + self.root.Wview and y >= yview and y < yview + self.root.Hview:
-                self.root.Surface.blit(self.sprite, (x - xoff - xview, y - yoff - yview))
+                self.root.Surface.blit(self.image, (x - xoff - xview, y - yoff - yview))
 
     def destroy(self):
         self.root.GameObjectList.remove(self)

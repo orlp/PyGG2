@@ -13,8 +13,8 @@ class Shot(GameObject):
         self.lifeAlarm = 0
         self.direction = 0
 
-        self.sprite = load_image("sprites/projectiles/shots/0.png")
-        self.rect = self.sprite.get_rect()
+        self.image = load_image("sprites/projectiles/shots/0.png")
+        self.rect = self.image.get_rect()
 
     def step(self, frametime):
         self.vspeed += 50 * frametime
@@ -28,11 +28,11 @@ class Shot(GameObject):
             self.destroyInstance = True
 
     def draw(self):
-        origsprite, origrect = self.sprite, self.rect
+        origsprite, origrect = self.image, self.rect
     
-        self.sprite = pygame.transform.rotate(self.sprite, self.direction)
-        self.rect = self.sprite.get_rect()
+        self.image = pygame.transform.rotate(self.image, self.direction)
+        self.rect = self.image.get_rect()
         
         GameObject.draw(self)
         
-        self.sprite, self.rect = origsprite, origrect
+        self.image, self.rect = origsprite, origrect
