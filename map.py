@@ -20,6 +20,3 @@ class CollisionMap():
         
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
-        
-    def draw(self):
-        self.root.Surface.blit(self.image, (0, 0), (self.root.Xview, self.root.Yview, self.root.Wview, self.root.Hview))

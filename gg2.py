@@ -53,7 +53,6 @@ class GG2:
         # draw background
         self.Surface.fill((245, 245, 235))
         self.gameMap.draw()
-        self.collisionMap.draw()
 
         for obj in self.GameObjectList: obj.draw()
         
