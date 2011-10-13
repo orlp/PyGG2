@@ -7,10 +7,10 @@ from functions import sign, place_free, point_direction, load_image
 from shot import Shot
 
 class Weapon(GameObject):
-    def __init__(self, root, x, y):
+    def __init__(self, root, owner, x, y):
         GameObject.__init__(self, root, x, y)
 
-        self.owner = None
+        self.owner = owner
         self.firingSprite = None
 
         self.ammo = 0
@@ -52,30 +52,30 @@ class Weapon(GameObject):
         pass
 
     def draw(self):
-        if not self.sprite: return
+        if not self.image: return
 
-        oldsprite, oldrect = self.sprite, self.rect
+        oldsprite, oldrect = self.image, self.rect
         
         if self.justShot:
-            self.sprite = self.firingSprite
+            self.image = self.firingSprite
 
         if self.owner.flip:
-            self.sprite = pygame.transform.flip(self.sprite, 0, 1)
+            self.image = pygame.transform.flip(self.image, 0, 1)
 
-        self.sprite = pygame.transform.rotate(self.sprite, self.direction)
-        self.rect = self.sprite.get_rect()
+        self.image = pygame.transform.rotate(self.image, self.direction)
+        self.rect = self.image.get_rect()
         
         GameObject.draw(self)
         
-        self.sprite, self.rect = oldsprite, oldrect
+        self.image, self.rect = oldsprite, oldrect
 
 
 class ScatterGun(Weapon):
-    def __init__(self, root, x, y):
-        Weapon.__init__(self, root, x, y)
+    def __init__(self, root, owner, x, y):
+        Weapon.__init__(self, root, owner, x, y)
 
-        self.sprite = load_image("sprites/weapons/scatterguns/0.png")
-        self.rect = (8, -2) + tuple(self.sprite.get_rect()[2:])
+        self.image = load_image("sprites/weapons/scatterguns/0.png")
+        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
         self.firingSprite = load_image("sprites/weapons/scatterguns/2.png")
 
         self.maxAmmo = 6

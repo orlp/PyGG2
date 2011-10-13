@@ -27,7 +27,7 @@ class GG2:
         self.Hview = self.Window.get_height()
         
         self.gameMap = map.Map(self)
-        self.collissionMap = map.CollisionMap(self)
+        self.collisionMap = map.CollisionMap(self)
         self.Myself = character.Scout(self)
         
         self.clock = pygame.time.Clock()
@@ -40,7 +40,6 @@ class GG2:
         for obj in self.GameObjectList: obj.beginStep(frametime)
         for obj in self.GameObjectList: obj.step(frametime)
         for obj in self.GameObjectList: obj.endStep(frametime)
-
 
         for obj in self.GameObjectList:
             if obj.destroyInstance:
