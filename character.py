@@ -4,7 +4,7 @@ import pygame
 from pygame.locals import *
 from gameobject import GameObject
 from functions import sign, place_free, point_direction, load_image
-from weapons import Weapon, ScatterGun
+from weapons import Weapon, ScatterGun, ShotGun, Revolver
 
 class Character(GameObject):
     def __init__(self, root):
