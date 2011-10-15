@@ -36,6 +36,9 @@ class GameObject(pygame.sprite.Sprite):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
+    def destroy(self, frametime):
+        pass
+
     def draw(self):
         if self.image:
             x, y = int(self.x), int(self.y)
