@@ -2,14 +2,14 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from gameobject import GameObject
+from gameobject import Gameobject
 from functions import point_direction, load_image
 
-class Shot(GameObject):
+class Shot(Gameobject):
     def __init__(self, root, x, y):
-        GameObject.__init__(self, root, x, y)
+        Gameobject.__init__(self, root, x, y)
         
-        self.lifeAlarm = 1.5
+        self.lifealarm = 1.5
         self.direction = 0
         self.damage = 8
 
@@ -24,12 +24,12 @@ class Shot(GameObject):
         self.direction = point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
 
     def endstep(self, frametime):
-        GameObject.endstep(self, frametime)
+        Gameobject.endstep(self, frametime)
 
-        self.lifeAlarm -= frametime
+        self.lifealarm -= frametime
 
-        if self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))) or self.lifeAlarm <= 0:
-            self.destroyInstance = True
+        if self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))) or self.lifealarm <= 0:
+            self.destroyinstance = True
 
     def draw(self):
         origsprite, origrect = self.image, self.rect
@@ -37,6 +37,6 @@ class Shot(GameObject):
         self.image = pygame.transform.rotate(self.image, self.direction)
         self.rect = self.image.get_rect()
         
-        GameObject.draw(self)
+        Gameobject.draw(self)
         
         self.image, self.rect = origsprite, origrect

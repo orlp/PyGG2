@@ -39,8 +39,8 @@ class GG2:
         for obj in self.gameobjects: obj.endstep(frametime)
 
         for obj in self.gameobjects:
-            if obj.destroyInstance: obj.destroy()
-        self.gameobjects = [obj for obj in self.gameobjects if not obj.destroyInstance]
+            if obj.destroyinstance: obj.destroy()
+        self.gameobjects = [obj for obj in self.gameobjects if not obj.destroyinstance]
 
     def render(self):
         # get info

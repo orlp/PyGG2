@@ -5,7 +5,7 @@ from pygame.locals import *
 from functions import sign, place_free, point_direction
 import math
 
-class GameObject(pygame.sprite.Sprite):
+class Gameobject(pygame.sprite.Sprite):
     def __init__(self, root, xpos, ypos):
         pygame.sprite.Sprite.__init__(self)
 
@@ -21,7 +21,7 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = (0, 0, 0, 0)
 
         self.root.gameobjects.append(self)
-        self.destroyInstance = False
+        self.destroyinstance = False
 
     def beginstep(self, frametime):
         pass

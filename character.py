@@ -2,13 +2,13 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from gameobject import GameObject
+from gameobject import Gameobject
 from functions import sign, place_free, point_direction, load_image
-from weapons import Weapon, ScatterGun, ShotGun, Revolver
+from weapons import Weapon, Scattergun, Shotgun, Revolver
 
-class Character(GameObject):
+class Character(Gameobject):
     def __init__(self, root):
-        GameObject.__init__(self, root, 400*6, 50)
+        Gameobject.__init__(self, root, 400*6, 50)
         self.flip = 0
 
     def step(self, frametime):
@@ -70,7 +70,7 @@ class Character(GameObject):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
     
-        self.weapon.posUpdate()
+        self.weapon.posupdate()
 
     def draw(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -84,7 +84,7 @@ class Character(GameObject):
                 self.image = pygame.transform.flip(self.image, 1, 0)
                 self.flip = 0
 
-        GameObject.draw(self)
+        Gameobject.draw(self)
     
     def onground(self):
         # are we on the ground? About half an unit from the ground is enough to qualify for this
@@ -105,4 +105,4 @@ class Scout(Character):
         self.hp = 100
         self.maxHp = 100
 
-        self.weapon = ScatterGun(self.root, self, self.x, self.y)
+        self.weapon = Scattergun(self.root, self, self.x, self.y)
