@@ -98,4 +98,64 @@ class ScatterGun(Weapon):
 
             shot.speed = math.hypot(shot.hspeed, shot.vspeed)
             self.refireAlarm = self.refireTime
-            
+
+
+class ShotGun(Weapon):
+    def __init__(self, root, owner, x, y):
+        Weapon.__init__(self, root, owner, x, y)
+
+        self.image = load_image("sprites/weapons/shotguns/0.png")
+        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
+        self.firingSprite = load_image("sprites/weapons/shotguns/2.png")
+
+        self.maxAmmo = 8
+        self.ammo = self.maxAmmo
+
+        self.refireTime = 0.5
+        self.reloadTime = 0.66# 2/3
+
+    def FirePrimary(self):
+        for i in range(4):
+            shot = Shot(self.root, self.x, self.y)
+            shot.owner = self.owner
+            shot.direction = self.direction + random.randint(0, 11)-7
+
+            shot.speed = 100 + (20 - random.randint(0, 40))# TODO: Put the correct speed
+
+            radDirection = math.radians(shot.direction)
+            shot.hspeed = math.cos(radDirection) * shot.speed + self.owner.hspeed/2
+            shot.vspeed = math.sin(radDirection) * -shot.speed
+
+            shot.speed = math.hypot(shot.hspeed, shot.vspeed)
+            self.refireAlarm = self.refireTime
+
+
+class Revolver(Weapon):
+    def __init__(self, root, owner, x, y):
+        Weapon.__init__(self, root, owner, x, y)
+
+        self.image = load_image("sprites/weapons/revolvers/0.png")
+        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
+        self.firingSprite = load_image("sprites/weapons/revolvers/2.png")
+
+        self.maxAmmo = 6
+        self.ammo = self.maxAmmo
+
+        self.refireTime = 0.6
+        self.reloadTime = 0.5
+
+    def FirePrimary(self):
+        shot = Shot(self.root, self.x, self.y)
+        shot.owner = self.owner
+        shot.direction = self.direction + random.randint(0, 1)-2
+
+        shot.speed = 100 + (20 - random.randint(0, 40))# TODO: Put the correct speed
+
+        shot.damage = 28
+
+        radDirection = math.radians(shot.direction)
+        shot.hspeed = math.cos(radDirection) * shot.speed
+        shot.vspeed = math.sin(radDirection) * -shot.speed
+
+        shot.speed = math.hypot(shot.hspeed, shot.vspeed)
+        self.refireAlarm = self.refireTime

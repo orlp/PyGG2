@@ -11,6 +11,7 @@ class Shot(GameObject):
         
         self.lifeAlarm = 200
         self.direction = 0
+        self.damage = 8
 
         self.image = load_image("sprites/projectiles/shots/0.png")
         self.rect = self.image.get_rect()
