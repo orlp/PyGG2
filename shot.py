@@ -9,7 +9,7 @@ class Shot(GameObject):
     def __init__(self, root, x, y):
         GameObject.__init__(self, root, x, y)
         
-        self.lifeAlarm = 200
+        self.lifeAlarm = 1.5
         self.direction = 0
 
         self.image = load_image("sprites/projectiles/shots/0.png")

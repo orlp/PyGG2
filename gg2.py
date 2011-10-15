@@ -48,7 +48,7 @@ class GG2:
         self.Yview = self.Myself.y - self.Hview/2
     
         # draw background
-        self.Surface.fill((245, 245, 235))
+        self.Surface.fill((0, 0, 0))
         self.gameMap.draw()
 
         for obj in self.GameObjectList: obj.draw()
