@@ -12,12 +12,6 @@ class GG2:
     Central class
     """
     
-    # This is to replace the gmk "all" and also to update everything.
-    GameObjectList = []
-    
-    Xview = 0
-    Yview = 0
-    
     def __init__(self):        
         # All drawing should be done on the Surface object
         self.Window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
@@ -25,7 +19,10 @@ class GG2:
         
         self.Wview = self.Window.get_width()
         self.Hview = self.Window.get_height()
+        self.Xview = 0
+        self.Yview = 0
         
+        self.GameObjectList = []
         self.gameMap = map.Map(self)
         self.collisionMap = map.CollisionMap(self)
         self.Myself = character.Scout(self)
@@ -41,6 +38,8 @@ class GG2:
         for obj in self.GameObjectList: obj.step(frametime)
         for obj in self.GameObjectList: obj.endStep(frametime)
 
+        for obj in self.GameObjectList:
+            if obj.destroyInstance: obj.destroy()
         self.GameObjectList = [obj for obj in self.GameObjectList if not obj.destroyInstance]
 
     def render(self):

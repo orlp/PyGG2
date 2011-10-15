@@ -90,7 +90,7 @@ class ScatterGun(Weapon):
             shot.owner = self.owner
             shot.direction = self.direction + (7 - random.randint(0, 15))
 
-            shot.speed = 100 + (20 - random.randint(0, 40))
+            shot.speed = 300 + (20 - random.randint(0, 40))
 
             radDirection = math.radians(shot.direction)
             shot.hspeed = math.cos(radDirection) * shot.speed + self.owner.hspeed/2

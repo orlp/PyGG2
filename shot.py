@@ -23,13 +23,12 @@ class Shot(GameObject):
         self.direction = point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
 
     def endStep(self, frametime):
+        GameObject.endStep(self, frametime)
 
-            GameObject.endStep(self, frametime)
+        self.lifeAlarm -= frametime
 
-            self.lifeAlarm -= 1
-
-            if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))) or self.lifeAlarm <= 0:
-                self.destroyInstance = True
+        if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))) or self.lifeAlarm <= 0:
+            self.destroyInstance = True
 
     def draw(self):
         origsprite, origrect = self.image, self.rect
