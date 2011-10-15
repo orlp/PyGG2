@@ -8,9 +8,9 @@ class Map():
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*6, self.image.get_height()*6))
 
     def draw(self):
-        self.root.Surface.blit(self.image, (0, 0), (self.root.Xview, self.root.Yview, self.root.Wview, self.root.Hview))
+        self.root.surface.blit(self.image, (0, 0), (self.root.xview, self.root.yview, self.root.wview, self.root.hview))
 
-class CollisionMap():
+class Collisionmap():
     def __init__(self, root):
         self.root = root
         

@@ -20,16 +20,16 @@ class GameObject(pygame.sprite.Sprite):
         self.image = None
         self.rect = (0, 0, 0, 0)
 
-        self.root.GameObjectList.append(self)
+        self.root.gameobjects.append(self)
         self.destroyInstance = False
 
-    def beginStep(self, frametime):
+    def beginstep(self, frametime):
         pass
 
     def step(self, frametime):
         pass
 
-    def endStep(self, frametime):
+    def endstep(self, frametime):
         self.x += self.hspeed * frametime
         self.y += self.vspeed * frametime
         
@@ -43,11 +43,11 @@ class GameObject(pygame.sprite.Sprite):
         if self.image:
             x, y = int(self.x), int(self.y)
             xoff, yoff = self.rect[0:2]
-            xview, yview = int(self.root.Xview), int(self.root.Yview)
+            xview, yview = int(self.root.xview), int(self.root.yview)
             
             # range checking - TODO consider sprite heigth/width
-            if x >= xview and x < xview + self.root.Wview and y >= yview and y < yview + self.root.Hview:
-                self.root.Surface.blit(self.image, (x - xoff - xview, y - yoff - yview))
+            if x >= xview and x < xview + self.root.wview and y >= yview and y < yview + self.root.hview:
+                self.root.surface.blit(self.image, (x - xoff - xview, y - yoff - yview))
     
     def destroy(self):
         pass

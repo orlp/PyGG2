@@ -29,9 +29,10 @@ def GG2main():
         game.left = key[K_a]
         game.right = key[K_d]
 
-        LMB, MMB, RMB = pygame.mouse.get_pressed()
-        game.LMB = LMB
-        game.RMB = RMB
+        leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
+        game.leftmouse = leftmouse
+        game.middlemouse = middlemouse
+        game.rightmouse = rightmouse
         
         # update the game and render
         game.update(game.clock.get_time() / 1000)

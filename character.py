@@ -31,7 +31,7 @@ class Character(GameObject):
         self.hspeed = min(120, max(-120, self.hspeed))
 
 
-    def endStep(self, frametime):
+    def endstep(self, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = self.onground()
         
@@ -39,18 +39,18 @@ class Character(GameObject):
         self.x += self.hspeed * frametime
         
         # if we are in a wall now, we must move back
-        if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+        if self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
             # but if we just walked onto a one-unit wall it's ok
             # but we had to be on the ground
-            if onground and not self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y - 6))):
+            if onground and not self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y - 6))):
                 # only walk up if necessary
-                while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+                while self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                     self.y -= 1
             else:
                 self.x = float(int(self.x)) # move back to a whole pixel
                 
                 # and if one pixel wasn't enough
-                while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+                while self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                     self.x -= sign(self.hspeed)
                 
                 self.hspeed = 0
@@ -58,10 +58,10 @@ class Character(GameObject):
         # same stuff, but now vertically
         self.y += self.vspeed * frametime
         
-        if self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+        if self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
             self.y = float(int(self.y))
             
-            while self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+            while self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                 self.y -= sign(self.vspeed)
         
             self.vspeed = 0
@@ -75,7 +75,7 @@ class Character(GameObject):
     def draw(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        if point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview) > 90 and point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview) < 270:
+        if point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview) > 90 and point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview) < 270:
             if self.flip == 0:
                 self.image = pygame.transform.flip(self.image, 1, 0)
                 self.flip = 1
@@ -88,7 +88,7 @@ class Character(GameObject):
     
     def onground(self):
         # are we on the ground? About half an unit from the ground is enough to qualify for this
-        return self.root.collisionMap.mask.overlap(self.mask, (int(self.x), int(self.y + 3)))
+        return self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y + 3)))
 
 
 class Scout(Character):

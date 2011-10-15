@@ -28,13 +28,13 @@ class Weapon(GameObject):
         else:
             self.refireAlarm -= frametime
 
-        if self.root.LMB and self.refireAlarm == 0:
+        if self.root.leftmouse and self.refireAlarm == 0:
             self.FirePrimary()
 
-        if self.root.RMB and self.refireAlarm == 0:
+        if self.root.rightmouse and self.refireAlarm == 0:
             self.FireSecondary()
 
-    def endStep(self, frametime):
+    def endstep(self, frametime):
         pass
 
     def posUpdate(self):
@@ -43,7 +43,7 @@ class Weapon(GameObject):
         
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        self.direction = point_direction(self.x, self.y, mouse_x + self.root.Xview, mouse_y + self.root.Yview)
+        self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
 
     def FirePrimary(self):
         pass
