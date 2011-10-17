@@ -103,6 +103,6 @@ class Scout(Character):
         self.mask.fill()
 
         self.hp = 100
-        self.maxHp = 100
+        self.maxhp = 100
 
         self.weapon = Scattergun(self.root, self, self.x, self.y)
