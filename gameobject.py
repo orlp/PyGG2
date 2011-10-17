@@ -18,7 +18,7 @@ class Gameobject(pygame.sprite.Sprite):
         self.vspeed = 0
 
         self.image = None
-        self.rect = (0, 0, 0, 0)
+        self.rect = pygame.Rect(0, 0, 0, 0)
 
         self.root.gameobjects.append(self)
         self.destroyinstance = False
@@ -42,7 +42,7 @@ class Gameobject(pygame.sprite.Sprite):
     def draw(self):
         if self.image:
             x, y = int(self.x), int(self.y)
-            xoff, yoff = self.rect[0:2]
+            xoff, yoff = self.rect.left, self.rect.top
             xview, yview = int(self.root.xview), int(self.root.yview)
             
             # range checking - TODO consider sprite heigth/width

@@ -11,7 +11,9 @@ class Weapon(Gameobject):
         Gameobject.__init__(self, root, x, y)
 
         self.owner = owner
-        self.firingsprite = None
+        
+        # weaponsprite contains the original sprite while image is the rotated image
+        # firingsprite is the sprite to be shown while firing
 
         self.ammo = 0
         self.maxammo = 0
@@ -37,10 +39,6 @@ class Weapon(Gameobject):
     def posupdate(self):
         self.x = self.owner.x
         self.y = self.owner.y
-        
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
 
     def fire_primary(self):
         pass
@@ -48,32 +46,31 @@ class Weapon(Gameobject):
     def fire_secondary(self):
         pass
 
-    def draw(self):
-        if not self.image: return
-
-        oldsprite, oldrect = self.image, self.rect
-        
+    def draw(self):        
         if self.refiretime - self.refirealarm < 0.1:
             self.image = self.firingsprite
+        else:
+            self.image = self.weaponsprite
 
         if self.owner.flip:
             self.image = pygame.transform.flip(self.image, 0, 1)
-
+        
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
+        
         self.image = pygame.transform.rotate(self.image, self.direction)
-        self.rect = self.image.get_rect()
+        print(self.rect, self.image.get_rect())
         
         Gameobject.draw(self)
-        
-        self.image, self.rect = oldsprite, oldrect
 
 
 class Scattergun(Weapon):
     def __init__(self, root, owner, x, y):
         Weapon.__init__(self, root, owner, x, y)
 
-        self.image = load_image("sprites/weapons/scatterguns/0.png")
-        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
+        self.weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
         self.firingsprite = load_image("sprites/weapons/scatterguns/2.png")
+        self.rect = pygame.Rect((0, 0), tuple(self.weaponsprite.get_rect()[2:]))
 
         self.maxammo = 6
         self.ammo = self.maxammo
@@ -101,9 +98,9 @@ class Shotgun(Weapon):
     def __init__(self, root, owner, x, y):
         Weapon.__init__(self, root, owner, x, y)
 
-        self.image = load_image("sprites/weapons/shotguns/0.png")
-        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
+        self.weaponsprite = load_image("sprites/weapons/shotguns/0.png")
         self.firingsprite = load_image("sprites/weapons/shotguns/2.png")
+        self.rect = pygame.Rect((8, -2), tuple(self.weaponsprite.get_rect()[2:])) # TODO correct offsets
 
         self.maxammo = 8
         self.ammo = self.maxammo
@@ -131,9 +128,9 @@ class Revolver(Weapon):
     def __init__(self, root, owner, x, y):
         Weapon.__init__(self, root, owner, x, y)
 
-        self.image = load_image("sprites/weapons/revolvers/0.png")
-        self.rect = (8, -2) + tuple(self.image.get_rect()[2:])
+        self.weaponsprite = load_image("sprites/weapons/revolvers/0.png")
         self.firingsprite = load_image("sprites/weapons/revolvers/2.png")
+        self.rect = pygame.Rect((8, -2), tuple(self.weaponsprite.get_rect()[2:])) # TODO correct offsets
 
         self.maxammo = 6
         self.ammo = self.maxammo
@@ -146,7 +143,7 @@ class Revolver(Weapon):
         shot.owner = self.owner
         shot.direction = self.direction + random.randint(0, 1)-2
 
-        shot.speed = 300 + (20 - random.randint(0, 40))# TODO: Put the correct speed
+        shot.speed = 300 + (20 - random.randint(0, 40)) # TODO: Put the correct speed
 
         shot.damage = 28
 
