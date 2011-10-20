@@ -58,21 +58,27 @@ class Weapon(Gameobject):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
         
-        x = self.image.get_rect().right
-        y = self.image.get_rect().bottom
+        # store width before rotating
+        oldw, oldh = self.image.get_rect().size
         self.image = pygame.transform.rotate(self.image, self.direction)
-        x -= self.image.get_rect().right
-        y -= self.image.get_rect().bottom
         
-        oldleft = self.rect.left
-        oldtop = self.rect.top
-        self.rect.left -= x
-        self.rect.top -= y
+        # get offset from rotating
+        offx, offy = self.image.get_rect().width - oldw, self.image.get_rect().height - oldh
+        
+        # store original offset
+        origx, origy = self.rect.topleft
+        
+        #print(self.direction)
+        self.rect.top -= self.image.get_rect().width * math.sin(math.radians(self.direction))
         
         Gameobject.draw(self)
+        xview, yview = int(self.root.xview), int(self.root.yview)
+        self.root.surface.set_at((int(self.x) - xview, int(self.y)  - yview), (255, 0, 255))
         
-        self.rect.left = oldleft
-        self.rect.top = oldtop
+        # restore original offset
+        self.rect.topleft = (origx, origy)
+        
+        Gameobject.draw(self)
 
 class Scattergun(Weapon):
     def __init__(self, root, owner, x, y):

@@ -47,7 +47,7 @@ class Gameobject(pygame.sprite.Sprite):
             
             # range checking - TODO consider sprite heigth/width
             if x >= xview and x < xview + self.root.wview and y >= yview and y < yview + self.root.hview:
-                self.root.surface.blit(self.image, (x - xoff - xview, y - yoff - yview))
+                self.root.surface.blit(self.image, (x + xoff - xview, y + yoff - yview))
     
     def destroy(self):
         pass

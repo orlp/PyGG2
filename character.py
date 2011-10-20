@@ -96,7 +96,7 @@ class Scout(Character):
         Character.__init__(self, root)
         
         # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
-        self.rect = pygame.Rect(24, 30, 12, 33)
+        self.rect = pygame.Rect(-24, -30, 12, 33)
 
         self.image = load_image("sprites/characters/scoutreds/0.png")
         self.mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
