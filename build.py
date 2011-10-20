@@ -25,7 +25,7 @@ def isSystemDLL(pathname):
             return 0
     return origIsSystemDLL(pathname) # return the orginal function
 py2exe.build_exe.isSystemDLL = isSystemDLL # override the default function with this one
- 
+
 class pygame2exe(py2exe.build_exe.py2exe): #This hack make sure that pygame default font is copied: no need to modify code for specifying default font
     def copy_extensions(self, extensions):
         #Get pygame default font
@@ -65,7 +65,7 @@ class BuildExe:
         self.icon_file = None
  
         #Extra files/dirs copied to game
-        self.extra_datas = ["sprites"]
+        self.extra_datas = []
  
         #Extra/excludes python modules
         self.extra_modules = []
@@ -80,7 +80,7 @@ class BuildExe:
         self.zipfile_name = None
  
         #Dist directory
-        self.dist_dir ='dist'
+        self.dist_dir = "dist"
  
     ## Code from DistUtils tutorial at http://wiki.python.org/moin/Distutils/Tutorial
     ## Originally borrowed from wxPython's setup and config files
@@ -151,7 +151,7 @@ class BuildExe:
             }],
             options = {'py2exe': {'optimize': 2, 'bundle_files': 1, 'compressed': True, \
                                   'excludes': self.exclude_modules, 'packages': self.extra_modules, \
-                                  'dll_excludes': self.exclude_dll,
+                                  'dll_excludes': self.exclude_dll, \
                                   'includes': self.extra_scripts} },
             zipfile = self.zipfile_name,
             data_files = extra_datas,
@@ -165,4 +165,7 @@ if __name__ == '__main__':
     if operator.lt(len(sys.argv), 2):
         sys.argv.append('py2exe')
     BuildExe().run() #Run generation
-    raw_input("Press any key to continue") #Pause to let user see that things ends 
+    
+    # rename and compress (requires UPX)
+    os.system("move dist\\main.exe dist\\pygg2.exe")
+    os.system("upx --best dist\\pygg2.exe")
