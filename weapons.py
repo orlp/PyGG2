@@ -58,10 +58,21 @@ class Weapon(Gameobject):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
         
+        x = self.image.get_rect().right
+        y = self.image.get_rect().bottom
         self.image = pygame.transform.rotate(self.image, self.direction)
+        x -= self.image.get_rect().right
+        y -= self.image.get_rect().bottom
+        
+        oldleft = self.rect.left
+        oldtop = self.rect.top
+        self.rect.left -= x
+        self.rect.top -= y
         
         Gameobject.draw(self)
-
+        
+        self.rect.left = oldleft
+        self.rect.top = oldtop
 
 class Scattergun(Weapon):
     def __init__(self, root, owner, x, y):
