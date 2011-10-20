@@ -14,6 +14,8 @@ try:
     import glob, fnmatch
     import sys, os, shutil
     import operator
+    import subprocess
+    import struct
 except ImportError, message:
     raise SystemExit,  "Unable to load module. %s" % message
  
@@ -65,7 +67,7 @@ class BuildExe:
         self.icon_file = None
  
         #Extra files/dirs copied to game
-        self.extra_datas = []
+        self.extra_datas = ["sprites"]
  
         #Extra/excludes python modules
         self.extra_modules = []
@@ -77,7 +79,7 @@ class BuildExe:
         self.extra_scripts = []
  
         #Zip file name (None will bundle files in exe instead of zip file)
-        self.zipfile_name = None
+        self.zipfile_name = "dependencies.dat"
  
         #Dist directory
         self.dist_dir = "dist"
@@ -160,12 +162,15 @@ class BuildExe:
         
         if os.path.isdir('build'): #Clean up build dir
             shutil.rmtree('build')
- 
+    
+    def after_building(self):
+        # rename main.exe to pygg2.exe
+        os.rename("dist/main.exe",  "dist/pygg2.exe")
+
 if __name__ == '__main__':
     if operator.lt(len(sys.argv), 2):
         sys.argv.append('py2exe')
-    BuildExe().run() #Run generation
+    build = BuildExe()
+    build.run()
+    build.after_building()
     
-    # rename and compress (requires UPX)
-    os.system("move dist\\main.exe dist\\pygg2.exe")
-    os.system("upx --best dist\\pygg2.exe")
