@@ -59,7 +59,6 @@ class Weapon(Gameobject):
         self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
         
         self.image = pygame.transform.rotate(self.image, self.direction)
-        print(self.rect, self.image.get_rect())
         
         Gameobject.draw(self)
 

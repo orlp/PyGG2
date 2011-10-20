@@ -22,7 +22,7 @@ class Character(Gameobject):
                 self.vspeed = -200
                 
         # gravitational force
-        self.vspeed += 300  * frametime
+        self.vspeed += 300 * frametime
 
         # TODO: air resistance, not hard limit
         self.vspeed = min(800, self.vspeed)

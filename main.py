@@ -4,6 +4,7 @@ from __future__ import division
 
 from gg2 import GG2
 import pygame
+import pygame._view # fix for pyinstaller
 from pygame.locals import *
 
 import cProfile
@@ -45,5 +46,5 @@ def GG2main():
     pygame.quit()
 
 # when profiling:
-cProfile.run("GG2main()")
-# GG2main()
+# cProfile.run("GG2main()")
+GG2main()
