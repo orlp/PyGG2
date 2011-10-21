@@ -51,34 +51,41 @@ class Weapon(Gameobject):
             self.image = self.firingsprite
         else:
             self.image = self.weaponsprite
-
+        
+        # store original offset
+        origx, origy = self.rect.topleft
+        
         if self.owner.flip:
             self.image = pygame.transform.flip(self.image, 0, 1)
+            self.rect.left = -self.rect.left
         
+        # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         mouse_x, mouse_y = pygame.mouse.get_pos()
         self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
         
         # store width before rotating
         oldw, oldh = self.image.get_rect().size
+        
         self.image = pygame.transform.rotate(self.image, self.direction)
         
-        # get offset from rotating
-        offx, offy = self.image.get_rect().width - oldw, self.image.get_rect().height - oldh
+        # get new height and width
+        neww, newh = self.image.get_rect().width, self.image.get_rect().height
         
-        # store original offset
-        origx, origy = self.rect.topleft
+        # debug code : draw rotation point TODO remove
+        xview, yview = int(self.root.xview), int(self.root.yview)
+        self.root.surface.set_at((int(self.x) - xview + self.rect.left, int(self.y) - yview + self.rect.top), (0, 255, 0))
         
-        #print(self.direction)
-        self.rect.top -= self.image.get_rect().width * math.sin(math.radians(self.direction))
+        # move weapon to simulate rotating around a pivot
+        if self.direction < 90:
+            self.rect.top -= oldw * math.sin(math.radians(self.direction))
+        elif self.direction < 180:
+            self.rect.top -= newh
+            self.rect.left -= math.cos(math.radians(180 - self.direction)) * oldw
         
         Gameobject.draw(self)
-        xview, yview = int(self.root.xview), int(self.root.yview)
-        self.root.surface.set_at((int(self.x) - xview, int(self.y)  - yview), (255, 0, 255))
         
         # restore original offset
         self.rect.topleft = (origx, origy)
-        
-        Gameobject.draw(self)
 
 class Scattergun(Weapon):
     def __init__(self, root, owner, x, y):
@@ -86,7 +93,7 @@ class Scattergun(Weapon):
 
         self.weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
         self.firingsprite = load_image("sprites/weapons/scatterguns/2.png")
-        self.rect = pygame.Rect((0, 0), tuple(self.weaponsprite.get_rect()[2:]))
+        self.rect = pygame.Rect((2, 7), tuple(self.weaponsprite.get_rect()[2:]))
 
         self.maxammo = 6
         self.ammo = self.maxammo

@@ -23,8 +23,8 @@ class GG2:
         self.yview = 0
         
         self.gameobjects = []
-        self.gamemap = map.Map(self)
-        self.collisionmap = map.Collisionmap(self)
+        self.gamemap = map.Map(self, "twodforttwo_remix")
+        self.collisionmap = map.Collisionmap(self, "twodforttwo_remix")
         self.myself = character.Scout(self)
         
         self.clock = pygame.time.Clock()

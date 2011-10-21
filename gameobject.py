@@ -44,9 +44,9 @@ class Gameobject(pygame.sprite.Sprite):
             x, y = int(self.x), int(self.y)
             xoff, yoff = self.rect.left, self.rect.top
             xview, yview = int(self.root.xview), int(self.root.yview)
+            width, height = self.image.get_rect().size
             
-            # range checking - TODO consider sprite heigth/width
-            if x >= xview and x < xview + self.root.wview and y >= yview and y < yview + self.root.hview:
+            if x >= (xview - width) and x < (xview + self.root.wview + width) and y >= (yview - height) and y < (yview + self.root.hview + height):
                 self.root.surface.blit(self.image, (x + xoff - xview, y + yoff - yview))
     
     def destroy(self):
