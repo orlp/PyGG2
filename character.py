@@ -1,6 +1,8 @@
 from __future__ import division
 
 import pygame
+import math
+
 from pygame.locals import *
 from gameobject import Gameobject
 from functions import sign, place_free, point_direction, load_image
@@ -9,7 +11,9 @@ from weapons import Weapon, Scattergun, Shotgun, Revolver
 class Character(Gameobject):
     def __init__(self, root):
         Gameobject.__init__(self, root, 400*6, 50)
-        self.flip = 0
+        
+        self.flip = 0 # are we flipped around?
+        self.weaponoffset = (0, 0) # where the character should carry it's gun
 
     def step(self, frametime):
         if self.root.left: self.hspeed -= 1000 * frametime
@@ -47,7 +51,7 @@ class Character(Gameobject):
                 while self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                     self.y -= 1
             else:
-                self.x = float(int(self.x)) # move back to a whole pixel
+                self.x = math.floor(self.x) # move back to a whole pixel
                 
                 # and if one pixel wasn't enough
                 while self.root.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):

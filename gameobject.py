@@ -2,7 +2,7 @@ from __future__ import division
 
 import pygame
 from pygame.locals import *
-from functions import sign, place_free, point_direction
+from functions import sign, point_direction
 import math
 
 class Gameobject(pygame.sprite.Sprite):
@@ -20,8 +20,8 @@ class Gameobject(pygame.sprite.Sprite):
         self.image = None
         self.rect = pygame.Rect(0, 0, 0, 0)
 
-        self.root.gameobjects.append(self)
         self.destroyinstance = False
+        self.root.gameobjects.append(self)
 
     def beginstep(self, frametime):
         pass
@@ -39,15 +39,15 @@ class Gameobject(pygame.sprite.Sprite):
     def destroy(self, frametime):
         pass
 
-    def draw(self):
+    def draw(self, additional_offset_x = 0, additional_offset_y = 0):
         if self.image:
-            x, y = int(self.x), int(self.y)
-            xoff, yoff = self.rect.left, self.rect.top
-            xview, yview = int(self.root.xview), int(self.root.yview)
             width, height = self.image.get_rect().size
             
-            if x >= (xview - width) and x < (xview + self.root.wview + width) and y >= (yview - height) and y < (yview + self.root.hview + height):
-                self.root.surface.blit(self.image, (x + xoff - xview, y + yoff - yview))
+            draw_x = int(self.x + self.rect.left - self.root.xview + additional_offset_x)
+            draw_y = int(self.y + self.rect.top - self.root.yview + additional_offset_y)
+            
+            if draw_x + width >= 0 and draw_x - width < self.root.view_width and draw_y + height >= 0 and draw_y - height < self.root.view_height:
+                self.root.surface.blit(self.image, (draw_x, draw_y))
     
     def destroy(self):
         pass

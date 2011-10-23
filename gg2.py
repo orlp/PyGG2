@@ -17,10 +17,10 @@ class GG2:
         self.window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
         self.surface = self.window
         
-        self.wview = self.window.get_width()
-        self.hview = self.window.get_height()
-        self.xview = 0
-        self.yview = 0
+        self.view_width = self.window.get_width()
+        self.view_height = self.window.get_height()
+        self.xview = 0.0
+        self.yview = 0.0
         
         self.gameobjects = []
         self.gamemap = map.Map(self, "twodforttwo_remix")
@@ -43,14 +43,15 @@ class GG2:
         self.gameobjects = [obj for obj in self.gameobjects if not obj.destroyinstance]
 
     def render(self):
-        # get info
-        self.xview = self.myself.x - self.wview/2
-        self.yview = self.myself.y - self.hview/2
+        # update view
+        self.xview = int(self.myself.x) - self.view_width / 2
+        self.yview = int(self.myself.y) - self.view_height / 2
     
         # draw background
         self.surface.fill((0, 0, 0))
         self.gamemap.draw()
-
+        
+        # draw objects
         for obj in self.gameobjects: obj.draw()
         
         # text drawing is quite expensive, save it

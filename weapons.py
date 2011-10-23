@@ -3,7 +3,7 @@ from __future__ import division
 import pygame, math, random
 from pygame.locals import *
 from gameobject import Gameobject
-from functions import sign, place_free, point_direction, load_image
+from functions import sign, point_direction, load_image
 from shot import Shot
 
 class Weapon(Gameobject):
@@ -61,7 +61,7 @@ class Weapon(Gameobject):
         
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.direction = point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview)
+        self.direction = point_direction(int(self.x), int(self.y), mouse_x + self.root.xview, mouse_y + self.root.yview)
         
         # store width before rotating
         oldw, oldh = self.image.get_rect().size
@@ -72,8 +72,7 @@ class Weapon(Gameobject):
         neww, newh = self.image.get_rect().width, self.image.get_rect().height
         
         # debug code : draw rotation point TODO remove
-        xview, yview = int(self.root.xview), int(self.root.yview)
-        self.root.surface.set_at((int(self.x) - xview + self.rect.left, int(self.y) - yview + self.rect.top), (0, 255, 0))
+        self.root.surface.set_at((int(self.x - self.root.xview + self.rect.left), int(self.y - self.root.xview + self.rect.top)), (0, 255, 0))
         
         # move weapon to simulate rotating around a pivot
         if self.direction < 90:
@@ -129,7 +128,7 @@ class Shotgun(Weapon):
         self.ammo = self.maxammo
 
         self.refiretime = 0.5
-        self.reloadtime = 0.66# 2/3
+        self.reloadtime = 2/3
 
     def fire_primary(self):
         for i in range(4):
