@@ -14,26 +14,35 @@ class GG2:
     
     def __init__(self):        
         # All drawing should be done on the surface object
-        self.window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
+        self.window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF) # use HWSURFACE in the case it helps, and DOUBLEBUF to prevent screen tearing
         self.surface = self.window
         
+        # constants
         self.view_width = self.window.get_width()
         self.view_height = self.window.get_height()
+        
+        # client rendering data
         self.xview = 0.0
         self.yview = 0.0
         
-        self.gameobjects = []
+        # map data
         self.gamemap = map.Map(self, "twodforttwo_remix")
         self.collisionmap = map.Collisionmap(self, "twodforttwo_remix")
-        self.myself = character.Scout(self)
+        self.backgroundcolor = pygame.Color(0, 0, 0)
         
+        # game objects
+        self.myself = character.Scout(self)
+        self.gameobjects = []
+        
+        # time management
         self.clock = pygame.time.Clock()
         
+        # DEBUG ONLY - TODO REMOVE
         # text drawing is quite expensive, save it
         self.fps = 0
         self.fpstext = pygame.font.SysFont("None", 30).render("0 FPS", 0, (130, 130, 130))
         
-    def update(self, frametime):        
+    def update(self, frametime):
         for obj in self.gameobjects: obj.beginstep(frametime)
         for obj in self.gameobjects: obj.step(frametime)
         for obj in self.gameobjects: obj.endstep(frametime)
@@ -48,18 +57,18 @@ class GG2:
         self.yview = int(self.myself.y) - self.view_height / 2
     
         # draw background
-        self.surface.fill((0, 0, 0))
+        self.surface.fill(self.backgroundcolor)
         self.gamemap.draw()
         
         # draw objects
         for obj in self.gameobjects: obj.draw()
         
+        # DEBUG ONLY - TODO REMOVE
         # text drawing is quite expensive, save it
         newfps = int(self.clock.get_fps())
         if newfps != self.fps:
             self.fps = newfps
             self.fpstext = pygame.font.SysFont("None", 30).render("%d FPS" % self.fps, 0, (130, 130, 130))
-        
         self.surface.blit(self.fpstext, (10, 10))
         
         pygame.display.update()

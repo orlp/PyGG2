@@ -12,6 +12,17 @@ def point_direction(x1, y1, x2, y2):
     if angle < 0: angle += 360
     return angle
 
+def rotate_surface_point(surface, angle, px, py):
+    width, height = surface.get_size()
+    rotated_surface = pygame.transform.rotate(surface, angle)
+
+    angle = math.radians(angle)
+    
+    xoff = (height - py) * math.sin(angle) + px * math.cos(angle)
+    yoff = (width - px) * math.sin(angle) + py * math.cos(angle)
+    
+    return rotated_surface, xoff, yoff
+
 # prevent double-loading, only load a filename once
 images = {}
 def load_image(filename):

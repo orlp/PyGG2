@@ -3,7 +3,7 @@ from __future__ import division
 import pygame, math, random
 from pygame.locals import *
 from gameobject import Gameobject
-from functions import sign, point_direction, load_image
+from functions import sign, point_direction, load_image, rotate_surface_point
 from shot import Shot
 
 class Weapon(Gameobject):
@@ -52,36 +52,34 @@ class Weapon(Gameobject):
         else:
             self.image = self.weaponsprite
         
-        # store original offset
-        origx, origy = self.rect.topleft
-        
         if self.owner.flip:
             self.image = pygame.transform.flip(self.image, 0, 1)
-            self.rect.left = -self.rect.left
+        
+        origx, origy = self.rect.topleft
+        
+        self.rect.left += self.owner.weaponoffset[0]
+        self.rect.top += self.owner.weaponoffset[1]
         
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         mouse_x, mouse_y = pygame.mouse.get_pos()
         self.direction = point_direction(int(self.x), int(self.y), mouse_x + self.root.xview, mouse_y + self.root.yview)
         
-        # store width before rotating
-        oldw, oldh = self.image.get_rect().size
+        self.image, xoff, yoff = rotate_surface_point(self.image, self.direction, 0, 0)
         
-        self.image = pygame.transform.rotate(self.image, self.direction)
         
-        # get new height and width
-        neww, newh = self.image.get_rect().width, self.image.get_rect().height
+        #if self.direction < 90:
+        #    self.rect.left -= xoff
+        #    self.rect.top -= yoff
         
-        # debug code : draw rotation point TODO remove
-        self.root.surface.set_at((int(self.x - self.root.xview + self.rect.left), int(self.y - self.root.xview + self.rect.top)), (0, 255, 0))
-        
-        # move weapon to simulate rotating around a pivot
-        if self.direction < 90:
-            self.rect.top -= oldw * math.sin(math.radians(self.direction))
-        elif self.direction < 180:
-            self.rect.top -= newh
-            self.rect.left -= math.cos(math.radians(180 - self.direction)) * oldw
-        
+        bgsurface = pygame.Surface(self.image.get_size())
+        bgsurface.fill((255, 255, 255))
+        oldimg = self.image
+        self.image = bgsurface
         Gameobject.draw(self)
+        
+        self.image = oldimg
+        Gameobject.draw(self)
+        self.root.surface.set_at((int(self.x - self.root.xview + xoff), int(self.y - self.root.xview + yoff)), (0, 255, 0))
         
         # restore original offset
         self.rect.topleft = (origx, origy)

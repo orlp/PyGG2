@@ -5,14 +5,14 @@ import math
 
 from pygame.locals import *
 from gameobject import Gameobject
-from functions import sign, place_free, point_direction, load_image
+from functions import sign, point_direction, load_image
 from weapons import Weapon, Scattergun, Shotgun, Revolver
 
 class Character(Gameobject):
     def __init__(self, root):
         Gameobject.__init__(self, root, 400*6, 50)
         
-        self.flip = 0 # are we flipped around?
+        self.flip = False # are we flipped around?
         self.weaponoffset = (0, 0) # where the character should carry it's gun
 
     def step(self, frametime):
@@ -80,13 +80,15 @@ class Character(Gameobject):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
         if point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview) > 90 and point_direction(self.x, self.y, mouse_x + self.root.xview, mouse_y + self.root.yview) < 270:
-            if self.flip == 0:
+            if not self.flip:
                 self.image = pygame.transform.flip(self.image, 1, 0)
-                self.flip = 1
+                self.flip = True
+                self.weaponoffset = (-self.weaponoffset[0], self.weaponoffset[1])
         else:
             if self.flip:
                 self.image = pygame.transform.flip(self.image, 1, 0)
-                self.flip = 0
+                self.flip = False
+                self.weaponoffset = (-self.weaponoffset[0], self.weaponoffset[1])
 
         Gameobject.draw(self)
     
@@ -101,6 +103,8 @@ class Scout(Character):
         
         # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
         self.rect = pygame.Rect(-24, -30, 12, 33)
+        
+        self.weaponoffset = (30, 40)
 
         self.image = load_image("sprites/characters/scoutreds/0.png")
         self.mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
