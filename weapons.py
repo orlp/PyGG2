@@ -57,12 +57,12 @@ class Weapon(Gameobject):
             self.image = pygame.transform.flip(self.image, 0, 1)
         
         # get starting offset
-        self.rect.topleft = self.rotate_point
-        self.rect.left += self.owner.weaponoffset[0]
-        self.rect.top += self.owner.weaponoffset[1]
+        self.rect.topleft = self.owner.weaponoffset
         
         # rotate
-        self.image, offset = rotate_surface_point(self.image, self.direction)
+        self.image, offset = rotate_surface_point(self.image, self.direction, self.rotate_point)
+        
+        # compensate for rotation
         self.rect.left -= offset[0]
         self.rect.top -= offset[1]
         
@@ -75,7 +75,7 @@ class Scattergun(Weapon):
         self.weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
         self.firingsprite = load_image("sprites/weapons/scatterguns/2.png")
         self.rect = pygame.Rect((0, 0), self.weaponsprite.get_size())
-        self.rotate_point = (0, 0)
+        self.rotate_point = (4, 8)
 
         self.maxammo = 6
         self.ammo = self.maxammo
