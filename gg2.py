@@ -31,8 +31,8 @@ class GG2:
         self.backgroundcolor = pygame.Color(0, 0, 0)
         
         # game objects
-        self.myself = character.Scout(self)
         self.gameobjects = []
+        self.myself = character.Scout(self)
         
         # time management
         self.clock = pygame.time.Clock()

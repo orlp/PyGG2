@@ -14,14 +14,15 @@ class Weapon(Gameobject):
         
         # weaponsprite contains the original sprite while image is the rotated image
         # firingsprite is the sprite to be shown while firing
-
-        self.ammo = 0
-        self.maxammo = 0
+        
         self.refirealarm = 0
-
         self.direction = 0
 
     def step(self, frametime):
+        # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        self.direction = point_direction(int(self.x), int(self.y), mouse_x + self.root.xview, mouse_y + self.root.yview)
+        
         if self.refirealarm <= 0:
             self.refirealarm = 0
         else:
@@ -55,34 +56,17 @@ class Weapon(Gameobject):
         if self.owner.flip:
             self.image = pygame.transform.flip(self.image, 0, 1)
         
-        origx, origy = self.rect.topleft
-        
+        # get starting offset
+        self.rect.topleft = self.rotate_point
         self.rect.left += self.owner.weaponoffset[0]
         self.rect.top += self.owner.weaponoffset[1]
         
-        # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.direction = point_direction(int(self.x), int(self.y), mouse_x + self.root.xview, mouse_y + self.root.yview)
+        # rotate
+        self.image, offset = rotate_surface_point(self.image, self.direction)
+        self.rect.left -= offset[0]
+        self.rect.top -= offset[1]
         
-        self.image, xoff, yoff = rotate_surface_point(self.image, self.direction, 0, 0)
-        
-        
-        #if self.direction < 90:
-        #    self.rect.left -= xoff
-        #    self.rect.top -= yoff
-        
-        bgsurface = pygame.Surface(self.image.get_size())
-        bgsurface.fill((255, 255, 255))
-        oldimg = self.image
-        self.image = bgsurface
         Gameobject.draw(self)
-        
-        self.image = oldimg
-        Gameobject.draw(self)
-        self.root.surface.set_at((int(self.x - self.root.xview + xoff), int(self.y - self.root.xview + yoff)), (0, 255, 0))
-        
-        # restore original offset
-        self.rect.topleft = (origx, origy)
 
 class Scattergun(Weapon):
     def __init__(self, root, owner, x, y):
@@ -90,7 +74,8 @@ class Scattergun(Weapon):
 
         self.weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
         self.firingsprite = load_image("sprites/weapons/scatterguns/2.png")
-        self.rect = pygame.Rect((2, 7), tuple(self.weaponsprite.get_rect()[2:]))
+        self.rect = pygame.Rect((0, 0), self.weaponsprite.get_size())
+        self.rotate_point = (0, 0)
 
         self.maxammo = 6
         self.ammo = self.maxammo
@@ -110,7 +95,7 @@ class Scattergun(Weapon):
             shot.hspeed = math.cos(raddirection) * shot.speed + self.owner.hspeed/2
             shot.vspeed = math.sin(raddirection) * -shot.speed
 
-            shot.speed = math.hypot(shot.hspeed, shot.vspeed)
+            shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
             self.refirealarm = self.refiretime
 
 
@@ -140,7 +125,7 @@ class Shotgun(Weapon):
             shot.hspeed = math.cos(raddirection) * shot.speed + self.owner.hspeed/2
             shot.vspeed = math.sin(raddirection) * -shot.speed
 
-            shot.speed = math.hypot(shot.hspeed, shot.vspeed)
+            shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
             self.refirealarm = self.refiretime
 
 
@@ -171,5 +156,5 @@ class Revolver(Weapon):
         shot.hspeed = math.cos(raddirection) * shot.speed
         shot.vspeed = math.sin(raddirection) * -shot.speed
 
-        shot.speed = math.hypot(shot.hspeed, shot.vspeed)
+        shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
         self.refirealarm = self.refiretime
