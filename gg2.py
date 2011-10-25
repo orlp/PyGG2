@@ -21,6 +21,9 @@ class GG2:
         self.view_width = self.window.get_width()
         self.view_height = self.window.get_height()
         
+        # global game data
+        self.time = 0.0 # this is the amount of time the game has been running
+        
         # client rendering data
         self.xview = 0.0
         self.yview = 0.0
@@ -34,15 +37,9 @@ class GG2:
         self.gameobjects = []
         self.myself = character.Scout(self)
         
-        # time management
-        self.clock = pygame.time.Clock()
-        
-        # DEBUG ONLY - TODO REMOVE
-        # text drawing is quite expensive, save it
-        self.fps = 0
-        self.fpstext = pygame.font.SysFont("None", 30).render("0 FPS", 0, (130, 130, 130))
-        
     def update(self, frametime):
+        self.time += frametime
+        
         for obj in self.gameobjects: obj.beginstep(frametime)
         for obj in self.gameobjects: obj.step(frametime)
         for obj in self.gameobjects: obj.endstep(frametime)
@@ -62,13 +59,5 @@ class GG2:
         
         # draw objects
         for obj in self.gameobjects: obj.draw()
-        
-        # DEBUG ONLY - TODO REMOVE
-        # text drawing is quite expensive, save it
-        newfps = int(self.clock.get_fps())
-        if newfps != self.fps:
-            self.fps = newfps
-            self.fpstext = pygame.font.SysFont("None", 30).render("%d FPS" % self.fps, 0, (130, 130, 130))
-        self.surface.blit(self.fpstext, (10, 10))
         
         pygame.display.update()

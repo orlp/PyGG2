@@ -21,9 +21,14 @@ def GG2main():
     # initialize
     pygame.init()
     
-    # create game
+    # create game object
     game = GG2()
+    
+    physics_timestep = 1/25 # always update physics in steps of 1/25th second
 
+    current_time = pygame.time.get_ticks() / 1000
+    accumulator = 0.0 # this counter will accumulate time to be used by the physics
+    
     # game loop
     while True:        
         # check if user exited the game
@@ -42,14 +47,17 @@ def GG2main():
         game.rightmouse = rightmouse
         
         # update the game and render
-        seconds_since_last_frame = game.clock.get_time() / 1000
-        if seconds_since_last_frame > 0.2:
-            seconds_since_last_frame = 0.2 # the game locks at 5 fps. Anything slower and we might fall through the floor and other weird bugs
-        game.update(seconds_since_last_frame)
+        new_time = pygame.time.get_ticks() / 1000
+        frame_time = min(0.25, new_time - current_time) # a limit of 0.25 seconds to prevent complete breakdown
+        current_time = new_time
+        
+        accumulator += frame_time
+        
+        while accumulator > physics_timestep:
+            game.update(physics_timestep)
+            accumulator -= physics_timestep
+        
         game.render()
-
-        # wait to get steady frame rate
-        game.clock.tick(framerate)
         
     # clean up
     pygame.quit()
