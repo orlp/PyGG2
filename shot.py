@@ -5,7 +5,10 @@ from pygame.locals import *
 from gameobject import Gameobject
 from functions import point_direction, load_image
 
+shotsprite = load_image("sprites/projectiles/shots/0.png")
+
 class Shot(Gameobject):
+
     def __init__(self, root, x, y):
         Gameobject.__init__(self, root, x, y)
         
@@ -14,7 +17,6 @@ class Shot(Gameobject):
         self.direction = 0
 
         # shotsprite contains the original sprite while image is the rotated image
-        self.shotsprite = load_image("sprites/projectiles/shots/0.png")
         self.image = pygame.transform.rotate(self.shotsprite, self.direction)
         self.rect = self.image.get_rect()
         

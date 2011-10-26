@@ -6,6 +6,7 @@ from pygame.locals import *
 import map
 import character
 import math
+import gamestate
 
 class GG2:
     """
@@ -21,9 +22,6 @@ class GG2:
         self.view_width = self.window.get_width()
         self.view_height = self.window.get_height()
         
-        # global game data
-        self.time = 0.0 # this is the amount of time the game has been running
-        
         # client rendering data
         self.xview = 0.0
         self.yview = 0.0
@@ -34,19 +32,13 @@ class GG2:
         self.backgroundcolor = pygame.Color(0, 0, 0)
         
         # game objects
-        self.gameobjects = []
+        self.previous_state = gamestate.Gamestate()
+        self.current_state = gamestate.Gamestate()
         self.myself = character.Scout(self)
         
     def update(self, frametime):
-        self.time += frametime
-        
-        for obj in self.gameobjects: obj.beginstep(frametime)
-        for obj in self.gameobjects: obj.step(frametime)
-        for obj in self.gameobjects: obj.endstep(frametime)
-
-        for obj in self.gameobjects:
-            if obj.destroyinstance: obj.destroy()
-        self.gameobjects = [obj for obj in self.gameobjects if not obj.destroyinstance]
+        self.previous_state = self.current_state.copy()
+        self.current_state.update(frametime)
 
     def render(self):
         # update view

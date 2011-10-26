@@ -25,7 +25,6 @@ def GG2main():
     game = GG2()
     
     physics_timestep = 1/25 # always update physics in steps of 1/25th second
-
     current_time = pygame.time.get_ticks() / 1000
     accumulator = 0.0 # this counter will accumulate time to be used by the physics
     
@@ -52,10 +51,9 @@ def GG2main():
         current_time = new_time
         
         accumulator += frame_time
-        
         while accumulator > physics_timestep:
-            game.update(physics_timestep)
             accumulator -= physics_timestep
+            game.update(frame_time)
         
         game.render()
         
