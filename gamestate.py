@@ -1,14 +1,12 @@
 from __future__ import division
 
-import pygame
+import math, pygame
 from pygame.locals import *
-
-import math
 
 # helper class for the gamestate
 # every entity should inherit from this
 class Entity:
-    def __init__(self, state):
+    def __init__(self, game, state):
         self.id = state.entity_count
         state.entities[id] = self
         state.entity_count += 1
@@ -16,10 +14,10 @@ class Entity:
     def destroy(self, state):
         del state.entities[self.id]
     
-    def beginstep(self, state, frametime): pass
-    def step(self, state, frametime): pass
-    def endstep(self, state, frametime): pass
-    def draw(self, state, surface): pass
+    def beginstep(self, game, state, frametime): pass
+    def step(self, game, state, frametime): pass
+    def endstep(self, game, state, frametime): pass
+    def draw(self, game, state, surface): pass
 
 # the main physics class
 # contains the complete game state
@@ -32,14 +30,16 @@ class Gamestate:
     def update(self, game, frametime):
         self.time += step
         
-        for entity in entities: entity.beginstep(self, game, frametime)
-        for entity in entities: entity.step(self, game, frametime)
-        for entity in entities: entity.endstep(self, game, frametime)
+        for entity in entities: entity.beginstep(game, self, frametime)
+        for entity in entities: entity.step(game, self, frametime)
+        for entity in entities: entity.endstep(game, self, frametime)
     
     def interpolate(self, next_state, alpha):
         interpolated_state = Gamestate()
+        
         interpolated_state.next_entity_id = next_state.next_entity_id
         interpolated_state.time = next_state.time * alpha + self.time * (1 - alpha)
+        interpolated_state.entities = {id:entity.interpolate(next_state[id]) for id, entity in self.entities.items()}
         
         return interpolated_state
         
