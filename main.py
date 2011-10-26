@@ -10,6 +10,13 @@ except: pass
 # DEBUG ONLY
 import cProfile
 
+# initialize pygame - use HWSURFACE in the case it helps, and DOUBLEBUF to prevent screen tearing
+pygame.init()
+pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
+
+# wait with importing of gg2 until the display is set
+# this is because on loading of object classes sprites are loaded
+# the sprites are .convert()'ed, and this requires the pygame display mode to be set
 import gg2
 
 # global settings
@@ -17,9 +24,6 @@ physics_timestep = 1/25 # always update physics in steps of 1/25th second
 
 # the main function
 def GG2main():
-    # initialize
-    pygame.init()
-    
     # create game object
     game = gg2.GG2()
     

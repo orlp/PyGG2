@@ -1,10 +1,13 @@
 from __future__ import division
 
-import pygame, math, random
+import pygame, math
 from pygame.locals import *
-from gameobject import Gameobject
-from functions import sign, point_direction, load_image, rotate_surface_point
-from shot import Shot
+
+import random
+
+import gameobject
+import function
+import shot
 
 class Weapon(Gameobject):
     def __init__(self, root, owner, x, y):

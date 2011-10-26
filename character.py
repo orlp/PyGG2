@@ -87,19 +87,17 @@ class Character(gameobject.Gameobject):
 
 
 class Scout(Character):
-    def __init__(self, root):
-        Character.__init__(self, root)
+    mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
+    sprite = functions.load_image("sprites/characters/scoutreds/0.png")
+    spriteoffset = (-24, -30)
+    weaponoffset = (8, 2) # where the character should carry it's gun
+    maxhp = 100
+    
+    def __init__(self, game, state):
+        Character.__init__(self, game, state)
+
+        self.hp = self.maxhp
         
-        # The Scout hitbox: left = 24; top = 30; width = 12; height = 33;
-        self.rect = pygame.Rect(-24, -30, 12, 33)
-        
-        self.weaponoffset = (8, 2) # where the character should carry it's gun
-
-        self.image = load_image("sprites/characters/scoutreds/0.png")
-        self.mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
-        self.mask.fill()
-
-        self.hp = 100
-        self.maxhp = 100
-
-        self.weapon = Scattergun(game, self, self.x, self.y)
+        weapon = Scattergun(self, game, state)
+        weapon.owner = self.id
+        self.weapon = weapon.id

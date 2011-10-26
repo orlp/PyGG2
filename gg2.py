@@ -12,9 +12,9 @@ class GG2:
     Central class
     """
     
-    def __init__(self):        
+    def __init__(self, window):        
         # All drawing should be done on the surface object
-        self.window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF) # use HWSURFACE in the case it helps, and DOUBLEBUF to prevent screen tearing
+        self.window = pygame.display.get_surface()
         
         # constants
         self.view_width = self.window.get_width()

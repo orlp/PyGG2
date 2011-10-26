@@ -55,5 +55,5 @@ def load_image(filename):
     image.set_colorkey((255, 0, 255), RLEACCEL)
     images[filename] = image
     
-    return image
+    return image.copy()
     
