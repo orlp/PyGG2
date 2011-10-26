@@ -4,7 +4,7 @@ import math, pygame
 from pygame.locals import *
 
 import gameobject
-import functions
+import function
 import weapons
 
 class Character(gameobject.Gameobject):
@@ -18,7 +18,7 @@ class Character(gameobject.Gameobject):
         if game.right: self.hspeed += 1000 * frametime
         if not (game.left or game.right):
             if abs(self.hspeed) < 10: self.hspeed = 0
-            else: self.hspeed -= functions.sign(self.hspeed) * min(abs(self.hspeed), 1000 * frametime)
+            else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 1000 * frametime)
         if game.up:
             if self.onground():
                 self.vspeed = -200
@@ -76,7 +76,7 @@ class Character(gameobject.Gameobject):
     def draw(self, game, state, surface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        self.flip = functions.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
+        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
         
         
         Gameobject.draw(self)
@@ -88,7 +88,7 @@ class Character(gameobject.Gameobject):
 
 class Scout(Character):
     mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
-    sprite = functions.load_image("sprites/characters/scoutreds/0.png")
+    sprite = function.load_image("sprites/characters/scoutreds/0.png")
     spriteoffset = (-24, -30)
     weaponoffset = (8, 2) # where the character should carry it's gun
     maxhp = 100
