@@ -66,13 +66,13 @@ class GG2:
         pygame.display.update()
     
     # this function is called to draw on the game's window
-    def draw_in_view(game, surface, offset_x = 0, offset_y = 0):
+    def draw_in_view(self, surface, offset = (0, 0)):
         width, height = surface.get_size()
         
         # calculate drawing position
-        draw_x = int(offset_x - game.xview)
-        draw_y = int(offset_y - game.yview)
+        draw_x = int(offset[0] - self.xview)
+        draw_y = int(offset[1] - self.yview)
         
         # even if we see a tiny little bit of the object, blit it - otherwise don't even blit
-        if draw_x + width >= 0 and draw_x - width < game.view_width and draw_y + height >= 0 and draw_y - height < game.view_height:
-            game.window.blit(surface, (draw_x, draw_y))
+        if draw_x + width >= 0 and draw_x - width < self.view_width and draw_y + height >= 0 and draw_y - height < self.view_height:
+            self.window.blit(surface, (draw_x, draw_y))

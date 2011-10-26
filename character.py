@@ -14,6 +14,8 @@ class Character(gameobject.Gameobject):
         self.flip = False # are we flipped around?
 
     def step(self, game, state, frametime):
+        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
+        
         if game.left: self.hspeed -= 1000 * frametime
         if game.right: self.hspeed += 1000 * frametime
         if not (game.left or game.right):
@@ -71,15 +73,18 @@ class Character(gameobject.Gameobject):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
     
-        self.weapon.posupdate()
+        state.entities[self.weapon].posupdate()
 
     def draw(self, game, state, surface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
-        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
+        image = self.sprite
+        if self.flip: image = pygame.transform.flip(image, 1, 0)
         
+        xoff = self.x + self.spriteoffset[0]
+        yoff = self.x + self.spriteoffset[1]
         
-        Gameobject.draw(self)
+        game.draw_in_view(image, (xoff, yoff))
     
     def onground(self):
         # are we on the ground? About half an unit from the ground is enough to qualify for this
@@ -98,6 +103,5 @@ class Scout(Character):
 
         self.hp = self.maxhp
         
-        weapon = Scattergun(self, game, state)
-        weapon.owner = self.id
+        weapon = Scattergun(self, game, state, self.id)
         self.weapon = weapon.id

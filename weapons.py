@@ -9,83 +9,69 @@ import gameobject
 import function
 import shot
 
+# abstract class, don't directly instantiate
 class Weapon(Gameobject):
-    def __init__(self, root, owner, x, y):
-        Gameobject.__init__(self, root, x, y)
+    def __init__(self, game, state, owner):
+        Gameobject.__init__(self, game, state)
 
         self.owner = owner
-        
-        # weaponsprite contains the original sprite while image is the rotated image
-        # firingsprite is the sprite to be shown while firing
-        
-        self.refirealarm = 0
-        self.direction = 0
+        self.refirealarm = 0.0
+        self.direction = 0.0
+        self.ammo = self.maxammo
 
-    def step(self, frametime):
+    def step(self, game, state, frametime):
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.direction = point_direction(int(self.x), int(self.y), mouse_x + self.root.xview, mouse_y + self.root.yview)
+        self.direction = point_direction(int(self.x), int(self.y), mouse_x + game.xview, mouse_y + game.yview)
         
         if self.refirealarm <= 0:
-            self.refirealarm = 0
+            self.refirealarm = 0.0
         else:
             self.refirealarm -= frametime
 
-        if self.root.leftmouse and self.refirealarm == 0:
+        if game.leftmouse and self.refirealarm == 0:
             self.fire_primary()
 
-        if self.root.rightmouse and self.refirealarm == 0:
+        if game.rightmouse and self.refirealarm == 0:
             self.fire_secondary()
-
-    def endstep(self, frametime):
-        pass
 
     def posupdate(self):
         self.x = self.owner.x
         self.y = self.owner.y
 
-    def fire_primary(self):
-        pass
+    # override this
+    def fire_primary(self): pass
+    def fire_secondary(self): pass
 
-    def fire_secondary(self):
-        pass
-
-    def draw(self):        
+    def draw(self, game, state, surface):
+        image = self.weaponsprite
         if self.refiretime - self.refirealarm < 0.1:
-            self.image = self.firingsprite
-        else:
-            self.image = self.weaponsprite
+            image = self.firingsprite
         
-        if self.owner.flip:
-            self.image = pygame.transform.flip(self.image, 0, 1)
+        if game.entities[self.owner].flip:
+            image = pygame.transform.flip(image, 0, 1)
         
         # get starting offset
-        self.rect.topleft = self.owner.weaponoffset
+        xoff, yoff = game.entities[self.owner].weaponoffset
         
         # rotate
-        self.image, offset = rotate_surface_point(self.image, self.direction, self.rotate_point)
+        image, offset = rotate_surface_point(self.image, self.direction, self.rotate_point)
         
         # compensate for rotation
-        self.rect.left -= offset[0]
-        self.rect.top -= offset[1]
+        xoff -= offset[0]
+        yoff -= offset[1]
         
-        Gameobject.draw(self)
+        game.draw_in_view(image, (xoff, yoff))
 
 class Scattergun(Weapon):
-    def __init__(self, root, owner, x, y):
-        Weapon.__init__(self, root, owner, x, y)
-
-        self.weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
-        self.firingsprite = load_image("sprites/weapons/scatterguns/2.png")
-        self.rect = pygame.Rect((0, 0), self.weaponsprite.get_size())
-        self.rotate_point = (4, 8)
-
-        self.maxammo = 6
-        self.ammo = self.maxammo
-
-        self.refiretime = 0.5
-        self.reloadtime = 1
-
+    weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
+    firingsprite = load_image("sprites/weapons/scatterguns/2.png")
+    
+    weapon_rotate_point = (4, 8) # where is the handle of the gun, where to rotate around
+    maxammo = 6
+    refiretime = 0.5
+    reloadtime = 1
+    
     def fire_primary(self):
         for i in range(6):
             shot = Shot(self.root, self.x, self.y)
@@ -101,7 +87,7 @@ class Scattergun(Weapon):
             shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
             self.refirealarm = self.refiretime
 
-
+"""
 class Shotgun(Weapon):
     def __init__(self, root, owner, x, y):
         Weapon.__init__(self, root, owner, x, y)
@@ -161,3 +147,4 @@ class Revolver(Weapon):
 
         shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
         self.refirealarm = self.refiretime
+"""
