@@ -42,6 +42,18 @@ def rotate_surface_point(surface, angle, point = (0, 0)):
         offset = F(py, width - px, width, math.radians(angle - 270))
     
     return rotated_surface, offset
+
+def draw_in_view(self, state, offset_x = 0, offset_y = 0):
+if self.image:
+    width, height = self.image.get_rect().size
+    
+    # calculate drawing position
+    draw_x = int(self.x + self.rect.left - self.root.xview + additional_offset_x)
+    draw_y = int(self.y + self.rect.top - self.root.yview + additional_offset_y)
+    
+    # even if we see a tiny little bit of the object, blit it - otherwise don't even blit
+    if draw_x + width >= 0 and draw_x - width < self.root.view_width and draw_y + height >= 0 and draw_y - height < self.root.view_height:
+        self.root.surface.blit(self.image, (draw_x, draw_y))
     
 # prevent double-loading, only load a filename once
 images = {}

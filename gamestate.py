@@ -5,39 +5,50 @@ from pygame.locals import *
 
 import math
 
+# helper class for the gamestate
+# every entity should inherit from this
+class Entity:
+    def __init__(self, state):
+        self.id = state.entity_count
+        state.entities[id] = self
+        state.entity_count += 1
+    
+    def destroy(self, state):
+        del state.entities[self.id]
+    
+    def beginstep(self, state, frametime): pass
+    def step(self, state, frametime): pass
+    def endstep(self, state, frametime): pass
+    def draw(self, state, surface): pass
+
 # the main physics class
 # contains the complete game state
 class Gamestate:
     def __init__(self):
-        self.objects = []
+        self.entities = {}
+        self.next_entity_id = 0
         self.time = 0.0
     
-    def update(self, frametime):
+    def update(self, game, frametime):
         self.time += step
         
-        for obj in self.objects: obj.beginstep(self, frametime)
-        for player in self.players: player.beginstep(self, frametime)
-        
-        for obj in self.objects: obj.step(self, frametime)
-        for player in self.players: player.step(self, frametime)
-        
-        for obj in self.objects: obj.endstep(self, frametime)
-        for player in self.players: player.endstep(self, frametime)
-        
-        self.objects = [obj for obj in self.objects if not obj.destroyinstance]
-        self.players = [player for player in self.objects if not player.destroyinstance]
+        for entity in entities: entity.beginstep(self, game, frametime)
+        for entity in entities: entity.step(self, game, frametime)
+        for entity in entities: entity.endstep(self, game, frametime)
     
     def interpolate(self, next_state, alpha):
-        integrated_state = Gamestate()
-        integrated_state.time = next_state.time * alpha + self.time * (1 - alpha)
+        interpolated_state = Gamestate()
+        interpolated_state.next_entity_id = next_state.next_entity_id
+        interpolated_state.time = next_state.time * alpha + self.time * (1 - alpha)
         
-        return integrated_state
+        return interpolated_state
         
     def copy(self):
         new = Gamestate()
         
+        new.entities = {id:entity.copy() for id, entity in self.entities.items()}
+        new.next_entity_id = self.next_entity_id
         new.time = self.time
-        new.objects = [obj.copy() for obj in self.objects]
         
         return new
     

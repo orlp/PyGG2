@@ -32,15 +32,18 @@ class GG2:
         self.backgroundcolor = pygame.Color(0, 0, 0)
         
         # game objects
-        self.previous_state = gamestate.Gamestate()
         self.current_state = gamestate.Gamestate()
+        self.previous_state = self.current_state.copy()
         self.myself = character.Scout(self)
         
     def update(self, frametime):
         self.previous_state = self.current_state.copy()
-        self.current_state.update(frametime)
+        self.current_state.update(self, frametime)
 
-    def render(self):
+    def render(self, alpha):
+        # get our interpolated state
+        interpolated_state = self.previous_state.interpolate(self.current_state, alpha)
+    
         # update view
         self.xview = int(self.myself.x) - self.view_width / 2
         self.yview = int(self.myself.y) - self.view_height / 2
@@ -49,7 +52,7 @@ class GG2:
         self.surface.fill(self.backgroundcolor)
         self.gamemap.draw()
         
-        # draw objects
-        for obj in self.gameobjects: obj.draw()
+        # draw entities
+        for entity in interpolated_state.entities: entity.draw(self, interpolated_state, self.surface)
         
         pygame.display.update()
