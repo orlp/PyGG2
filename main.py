@@ -12,7 +12,7 @@ import cProfile
 
 # initialize pygame - use HWSURFACE in the case it helps, and DOUBLEBUF to prevent screen tearing
 pygame.init()
-window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
+pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
 
 # wait with importing of gg2 until the display is set
 # this is because on loading of object classes sprites are loaded
@@ -25,7 +25,7 @@ physics_timestep = 1/30 # always update physics in steps of 1/30th second
 # the main function
 def GG2main():
     # create game object
-    game = gg2.GG2(window)
+    game = gg2.GG2()
     
     # pygame time tracking
     clock = pygame.time.Clock()
@@ -59,6 +59,8 @@ def GG2main():
             game.update(physics_timestep)
         
         game.render(accumulator / physics_timestep)
+        
+        # print(clock.get_fps())
         
     # clean up
     pygame.quit()

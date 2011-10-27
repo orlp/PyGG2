@@ -12,7 +12,7 @@ class GG2:
     Central class
     """
     
-    def __init__(self, window):        
+    def __init__(self):        
         # All drawing should be done on the surface object
         self.window = pygame.display.get_surface()
         

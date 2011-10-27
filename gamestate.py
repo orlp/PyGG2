@@ -39,11 +39,10 @@ class Gamestate:
         for entity in self.entities.values(): entity.endstep(game, self, frametime)
     
     def interpolate(self, next_state, alpha):
-        interpolated_state = Gamestate()
+        interpolated_state = self.copy()
         
         interpolated_state.next_entity_id = next_state.next_entity_id
         interpolated_state.time = self.time * (1 - alpha) + next_state.time * alpha
-        interpolated_state.entities = {id:copy.deepcopy(entity) for id, entity in self.entities.items()}
         
         for id, entity in interpolated_state.entities.items():
             if id in next_state.entities: # does our object still exist?
