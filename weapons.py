@@ -55,7 +55,7 @@ class Weapon(gameobject.Gameobject):
         
         # get starting offset
         owner = state.entities[self.owner]
-        xoff, yoff = owner.x, owner.y
+        xoff, yoff = int(owner.x), int(owner.y)
         xoff += owner.weaponoffset[0]
         yoff += owner.weaponoffset[1]
         
