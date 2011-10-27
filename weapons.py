@@ -68,7 +68,7 @@ class Weapon(gameobject.Gameobject):
         xoff -= offset[0]
         yoff -= offset[1]
         
-        game.draw_in_view(image, (xoff, yoff))
+        game.draw_world(image, (xoff, yoff))
     
     def interpolate(self, next_object, alpha):
         gameobject.Gameobject.interpolate(self, next_object, alpha)

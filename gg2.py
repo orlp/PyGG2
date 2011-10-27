@@ -12,8 +12,7 @@ class GG2:
     Central class
     """
     
-    def __init__(self):        
-        # All drawing should be done on the surface object
+    def __init__(self):
         self.window = pygame.display.get_surface()
         
         # constants
@@ -23,6 +22,7 @@ class GG2:
         # client rendering data
         self.xview = 0.0
         self.yview = 0.0
+        self.overlayblits = [] # this list contains blits pending for the overlay
         
         # map data
         self.gamemap = map.Map(self, "twodforttwo_remix")
@@ -64,11 +64,18 @@ class GG2:
         # draw entities
         for entity in interpolated_state.entities.values(): entity.draw(self, interpolated_state, self.window)
         
+        self.draw_overlay(focus_object.sprite)
+        
+        # blit overlay
+        for surface, offset in self.overlayblits:
+            self.window.blit(surface, offset)
+        self.overlayblits = []
+        
         # and display it to the user
         pygame.display.update()
     
-    # this function is called to draw on the game's window
-    def draw_in_view(self, surface, offset = (0, 0)):
+    # this function is called to draw on the game's window with game world coordinate
+    def draw_world(self, surface, offset = (0, 0)):
         width, height = surface.get_size()
         
         # calculate drawing position
@@ -78,3 +85,12 @@ class GG2:
         # even if we see a tiny little bit of the object, blit it - otherwise don't even blit
         if draw_x + width >= 0 and draw_x - width < self.view_width and draw_y + height >= 0 and draw_y - height < self.view_height:
             self.window.blit(surface, (draw_x, draw_y))
+    
+    # this function is called to draw over the game world with screen coordinates
+    def draw_overlay(self, surface, offset = (0, 0)):
+        width, height = surface.get_size()
+        
+        if offset[0] + width >= 0 and offset[0] - width < self.view_width and offset[1] + height >= 0 and offset[1] - height < self.view_height:
+            self.overlayblits.append((surface, offset))
+    
+    

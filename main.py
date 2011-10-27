@@ -60,7 +60,7 @@ def GG2main():
         
         game.render(accumulator / physics_timestep)
         
-        # print(clock.get_fps())
+        print(clock.get_fps())
         
     # clean up
     pygame.quit()

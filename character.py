@@ -88,7 +88,7 @@ class Character(gameobject.Gameobject):
         xoff = self.x + self.spriteoffset[0]
         yoff = self.y + self.spriteoffset[1]
         
-        game.draw_in_view(image, (xoff, yoff))
+        game.draw_world(image, (xoff, yoff))
     
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this

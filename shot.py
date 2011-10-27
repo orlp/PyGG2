@@ -50,7 +50,7 @@ class Shot(gameobject.Gameobject):
     
     def draw(self, game, state, frametime):
         image = pygame.transform.rotate(self.shotsprite, self.direction)
-        game.draw_in_view(image, (self.x, self.y))
+        game.draw_world(image, (self.x, self.y))
     
     def interpolate(self, next_object, alpha):
         gameobject.Gameobject.interpolate(self, next_object, alpha)
