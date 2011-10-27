@@ -20,7 +20,7 @@ window = pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
 import gg2
 
 # global settings
-physics_timestep = 1/25 # always update physics in steps of 1/25th second
+physics_timestep = 1/30 # always update physics in steps of 1/30th second
 
 # the main function
 def GG2main():

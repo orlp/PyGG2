@@ -33,21 +33,24 @@ class Character(gameobject.Gameobject):
         self.vspeed = min(800, self.vspeed)
         
         # TODO: speed limit based on class
-        self.hspeed = min(120, max(-120, self.hspeed))
+        self.hspeed = min(200, max(-200, self.hspeed))
 
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
-        onground = self.onground(game, state)
+        onground = True
         
         # first we move, ignoring walls
         self.x += self.hspeed * frametime
-        
         # if we are in a wall now, we must move back
+        
         if game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
             # but if we just walked onto a one-unit wall it's ok
             # but we had to be on the ground
             if onground and not game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y - 6))):
-                # only walk up if necessary
+                while game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
+                    self.y -= 1
+            # but sometimes we are so fast we will need to take two stairs at the same time
+            elif onground and not game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y - 12))) and game.collisionmap.mask.overlap(self.mask, (int(self.x - 6 * function.sign(self.hspeed)), int(self.y))):
                 while game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
                     self.y -= 1
             else:
@@ -88,7 +91,7 @@ class Character(gameobject.Gameobject):
         game.draw_in_view(image, (xoff, yoff))
     
     def onground(self, game, state):
-        # are we on the ground? About half an unit from the ground is enough to qualify for this
+        # are we on the ground? About one third of an unit from the ground is enough to qualify for this
         return game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y + 3)))
 
 

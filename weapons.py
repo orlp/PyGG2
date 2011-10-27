@@ -55,9 +55,11 @@ class Weapon(gameobject.Gameobject):
         
         # get starting offset
         owner = state.entities[self.owner]
-        xoff, yoff = int(owner.x), int(owner.y)
+        xoff, yoff = owner.x, owner.y
         xoff += owner.weaponoffset[0]
         yoff += owner.weaponoffset[1]
+        
+        xoff, yoff = int(xoff), int(yoff)
         
         # rotate
         image, offset = function.rotate_surface_point(image, self.direction, self.weapon_rotate_point)
