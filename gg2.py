@@ -54,8 +54,8 @@ class GG2:
         
         # update view
         focus_object = interpolated_state.entities[self.focus_object_id]
-        self.xview = int(focus_object.x) - self.view_width / 2
-        self.yview = int(focus_object.y) - self.view_height / 2
+        self.xview = int(int(focus_object.x) - self.view_width / 2)
+        self.yview = int(int(focus_object.y) - self.view_height / 2)
     
         # draw background
         self.window.fill(self.backgroundcolor)

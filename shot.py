@@ -48,6 +48,10 @@ class Shot(gameobject.Gameobject):
         if game.collisionmap.mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(state)
     
+    def draw(self, game, state, frametime):
+        image = pygame.transform.rotate(self.shotsprite, self.direction)
+        game.draw_in_view(image, (self.x, self.y))
+    
     def interpolate(self, next_object, alpha):
         gameobject.Gameobject.interpolate(self, next_object, alpha)
         self.direction = self.direction * (1 - alpha) + next_object.direction * alpha

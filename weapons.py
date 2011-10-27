@@ -70,7 +70,7 @@ class Weapon(gameobject.Gameobject):
     
     def interpolate(self, next_object, alpha):
         gameobject.Gameobject.interpolate(self, next_object, alpha)
-        self.direction = self.direction * (1 - alpha) + next_object.direction * alpha
+        self.direction = next_object.direction 
 
 class Scattergun(Weapon):
     weaponsprite = function.load_image("sprites/weapons/scatterguns/0.png")
