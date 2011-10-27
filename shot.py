@@ -54,4 +54,4 @@ class Shot(gameobject.Gameobject):
     
     def interpolate(self, next_object, alpha):
         gameobject.Gameobject.interpolate(self, next_object, alpha)
-        self.direction = self.direction * (1 - alpha) + next_object.direction * alpha
+        self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
