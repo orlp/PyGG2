@@ -35,6 +35,8 @@ class GG2:
         # TODO EDIT
         # start up by adding entities
         player = character.Scout(self, self.current_state)
+        player.x = 2400
+        player.y = 50
         
         # the object the camera should follow
         # deleting it is undefined, use with care :D
@@ -51,16 +53,16 @@ class GG2:
         interpolated_state = self.previous_state.interpolate(self.current_state, alpha)
         
         # update view
-        focus_object = interpolated_state[self.focus_object_id]
+        focus_object = interpolated_state.entities[self.focus_object_id]
         self.xview = int(focus_object.x) - self.view_width / 2
         self.yview = int(focus_object.y) - self.view_height / 2
     
         # draw background
         self.window.fill(self.backgroundcolor)
-        self.gamemap.draw()
+        self.gamemap.draw(self)
         
         # draw entities
-        for entity in interpolated_state.entities: entity.draw(self, interpolated_state, self.window)
+        for entity in interpolated_state.entities.values(): entity.draw(self, interpolated_state, self.window)
         
         # and display it to the user
         pygame.display.update()

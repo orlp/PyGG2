@@ -9,12 +9,13 @@ import weapons
 
 class Character(gameobject.Gameobject):
     def __init__(self, game, state):
-        Gameobject.__init__(self, game, state)
+        gameobject.Gameobject.__init__(self, game, state)
         
         self.flip = False # are we flipped around?
 
     def step(self, game, state, frametime):
-        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
         
         if game.left: self.hspeed -= 1000 * frametime
         if game.right: self.hspeed += 1000 * frametime
@@ -22,7 +23,7 @@ class Character(gameobject.Gameobject):
             if abs(self.hspeed) < 10: self.hspeed = 0
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 1000 * frametime)
         if game.up:
-            if self.onground():
+            if self.onground(game, state):
                 self.vspeed = -200
                 
         # gravitational force
@@ -36,7 +37,7 @@ class Character(gameobject.Gameobject):
 
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
-        onground = self.onground()
+        onground = self.onground(game, state)
         
         # first we move, ignoring walls
         self.x += self.hspeed * frametime
@@ -65,7 +66,7 @@ class Character(gameobject.Gameobject):
             self.y = float(int(self.y))
             
             while game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y))):
-                self.y -= sign(self.vspeed)
+                self.y -= function.sign(self.vspeed)
         
             self.vspeed = 0
         
@@ -73,7 +74,7 @@ class Character(gameobject.Gameobject):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
     
-        state.entities[self.weapon].posupdate()
+        state.entities[self.weapon].posupdate(game, state)
 
     def draw(self, game, state, surface):
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -82,17 +83,19 @@ class Character(gameobject.Gameobject):
         if self.flip: image = pygame.transform.flip(image, 1, 0)
         
         xoff = self.x + self.spriteoffset[0]
-        yoff = self.x + self.spriteoffset[1]
+        yoff = self.y + self.spriteoffset[1]
         
         game.draw_in_view(image, (xoff, yoff))
     
-    def onground(self):
+    def onground(self, game, state):
         # are we on the ground? About half an unit from the ground is enough to qualify for this
         return game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y + 3)))
 
 
 class Scout(Character):
     mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
+    mask.fill()
+    
     sprite = function.load_image("sprites/characters/scoutreds/0.png")
     spriteoffset = (-24, -30)
     weaponoffset = (8, 2) # where the character should carry it's gun
@@ -103,5 +106,4 @@ class Scout(Character):
 
         self.hp = self.maxhp
         
-        weapon = Scattergun(self, game, state, self.id)
-        self.weapon = weapon.id
+        self.weapon = weapons.Scattergun(game, state, self.id).id

@@ -10,19 +10,21 @@ import function
 import shot
 
 # abstract class, don't directly instantiate
-class Weapon(Gameobject):
+class Weapon(gameobject.Gameobject):
     def __init__(self, game, state, owner):
-        Gameobject.__init__(self, game, state)
+        gameobject.Gameobject.__init__(self, game, state)
 
         self.owner = owner
         self.refirealarm = 0.0
         self.direction = 0.0
         self.ammo = self.maxammo
+        
+        self.posupdate(game, state)
 
     def step(self, game, state, frametime):
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.direction = point_direction(int(self.x), int(self.y), mouse_x + game.xview, mouse_y + game.yview)
+        self.direction = function.point_direction(int(self.x), int(self.y), mouse_x + game.xview, mouse_y + game.yview)
         
         if self.refirealarm <= 0:
             self.refirealarm = 0.0
@@ -30,14 +32,14 @@ class Weapon(Gameobject):
             self.refirealarm -= frametime
 
         if game.leftmouse and self.refirealarm == 0:
-            self.fire_primary()
+            self.fire_primary(game, state)
 
         if game.rightmouse and self.refirealarm == 0:
-            self.fire_secondary()
+            self.fire_secondary(game, state)
 
-    def posupdate(self):
-        self.x = self.owner.x
-        self.y = self.owner.y
+    def posupdate(self, game, state):
+        self.x = state.entities[self.owner].x
+        self.y = state.entities[self.owner].y
 
     # override this
     def fire_primary(self): pass
@@ -48,44 +50,42 @@ class Weapon(Gameobject):
         if self.refiretime - self.refirealarm < 0.1:
             image = self.firingsprite
         
-        if game.entities[self.owner].flip:
+        if state.entities[self.owner].flip:
             image = pygame.transform.flip(image, 0, 1)
         
         # get starting offset
-        xoff, yoff = game.entities[self.owner].weaponoffset
+        owner = state.entities[self.owner]
+        xoff, yoff = owner.x, owner.y
+        xoff += owner.weaponoffset[0]
+        yoff += owner.weaponoffset[1]
         
         # rotate
-        image, offset = rotate_surface_point(self.image, self.direction, self.rotate_point)
+        image, offset = function.rotate_surface_point(image, self.direction, self.weapon_rotate_point)
         
         # compensate for rotation
         xoff -= offset[0]
         yoff -= offset[1]
         
         game.draw_in_view(image, (xoff, yoff))
+    
+    def interpolate(self, next_object, alpha):
+        gameobject.Gameobject.interpolate(self, next_object, alpha)
+        self.direction = self.direction * (1 - alpha) + next_object.direction * alpha
 
 class Scattergun(Weapon):
-    weaponsprite = load_image("sprites/weapons/scatterguns/0.png")
-    firingsprite = load_image("sprites/weapons/scatterguns/2.png")
+    weaponsprite = function.load_image("sprites/weapons/scatterguns/0.png")
+    firingsprite = function.load_image("sprites/weapons/scatterguns/2.png")
     
     weapon_rotate_point = (4, 8) # where is the handle of the gun, where to rotate around
     maxammo = 6
     refiretime = 0.5
     reloadtime = 1
     
-    def fire_primary(self):
+    def fire_primary(self, game, state):
         for i in range(6):
-            shot = Shot(self.root, self.x, self.y)
-            shot.owner = self.owner
-            shot.direction = self.direction + (7 - random.randint(0, 15))
-
-            shot.speed = 300 + (20 - random.randint(0, 40))# TODO: Put the correct speed
-
-            raddirection = math.radians(shot.direction)
-            shot.hspeed = math.cos(raddirection) * shot.speed + self.owner.hspeed/2
-            shot.vspeed = math.sin(raddirection) * -shot.speed
-
-            shot.speed = math.hypot(shot.hspeed, shot.vspeed) # nightcracker - Why are we recalculating bullet speed?
-            self.refirealarm = self.refiretime
+            shot.Shot(game, state, self.id)
+        
+        self.refirealarm = self.refiretime
 
 """
 class Shotgun(Weapon):

@@ -2,18 +2,22 @@ from __future__ import division
 
 import math, pygame
 from pygame.locals import *
+import copy
 
 # helper class for the gamestate
 # every entity should inherit from this
 class Entity:
     def __init__(self, game, state):
-        self.id = state.entity_count
-        state.entities[id] = self
-        state.entity_count += 1
+        self.id = state.next_entity_id
+        state.entities[self.id] = self
+        state.next_entity_id += 1
     
     def destroy(self, state):
         del state.entities[self.id]
     
+    # default member functions - notice the lack of
+    # .interpolate(), .serialize(), .deserialize():
+    # they are obligated and shouldn't just be added by inheritance
     def beginstep(self, game, state, frametime): pass
     def step(self, game, state, frametime): pass
     def endstep(self, game, state, frametime): pass
@@ -28,25 +32,29 @@ class Gamestate:
         self.time = 0.0
     
     def update(self, game, frametime):
-        self.time += step
+        self.time += frametime
         
-        for entity in entities: entity.beginstep(game, self, frametime)
-        for entity in entities: entity.step(game, self, frametime)
-        for entity in entities: entity.endstep(game, self, frametime)
+        for entity in self.entities.values(): entity.beginstep(game, self, frametime)
+        for entity in self.entities.values(): entity.step(game, self, frametime)
+        for entity in self.entities.values(): entity.endstep(game, self, frametime)
     
     def interpolate(self, next_state, alpha):
         interpolated_state = Gamestate()
         
         interpolated_state.next_entity_id = next_state.next_entity_id
-        interpolated_state.time = next_state.time * alpha + self.time * (1 - alpha)
-        interpolated_state.entities = {id:entity.interpolate(next_state[id]) for id, entity in self.entities.items()}
+        interpolated_state.time = self.time * (1 - alpha) + next_state.time * alpha
+        interpolated_state.entities = {id:copy.deepcopy(entity) for id, entity in self.entities.items()}
+        
+        for id, entity in interpolated_state.entities.items():
+            if id in next_state.entities: # does our object still exist?
+                entity.interpolate(next_state.entities[id], alpha)
         
         return interpolated_state
         
     def copy(self):
         new = Gamestate()
         
-        new.entities = {id:entity.copy() for id, entity in self.entities.items()}
+        new.entities = {id:copy.deepcopy(entity) for id, entity in self.entities.items()}
         new.next_entity_id = self.next_entity_id
         new.time = self.time
         
