@@ -42,8 +42,8 @@ class Weapon(gameobject.Gameobject):
         self.y = state.entities[self.owner].y
 
     # override this
-    def fire_primary(self): pass
-    def fire_secondary(self): pass
+    def fire_primary(self, game, state): pass
+    def fire_secondary(self, game, state): pass
 
     def draw(self, game, state, surface):
         image = self.weaponsprite
