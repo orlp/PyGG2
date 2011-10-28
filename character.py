@@ -92,7 +92,7 @@ class Character(gameobject.Gameobject):
     
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
-        return game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y + 3)))
+        return game.collisionmap.mask.overlap(self.mask, (int(self.x), int(self.y + 1)))
 
 
 class Scout(Character):

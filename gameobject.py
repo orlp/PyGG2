@@ -19,10 +19,6 @@ class Gameobject(gamestate.Entity):
         self.hspeed = 0.0
         self.vspeed = 0.0
         
-        # derivatives
-        self.d_hspeed = 0.0
-        self.d_vspeed = 0.0
-        
     def endstep(self, game, state, frametime):
         self.x += self.hspeed * frametime
         self.y += self.vspeed * frametime

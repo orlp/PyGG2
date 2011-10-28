@@ -9,10 +9,11 @@ except: pass
 
 # DEBUG ONLY
 import cProfile
+import pstats
 
-# initialize pygame - use HWSURFACE in the case it helps, and DOUBLEBUF to prevent screen tearing
+# initialize pygame - DOUBLEBUF to prevent screen tearing
 pygame.init()
-pygame.display.set_mode((800, 600), HWSURFACE | DOUBLEBUF)
+pygame.display.set_mode((800, 600), DOUBLEBUF)
 
 # wait with importing of gg2 until the display is set
 # this is because on loading of object classes sprites are loaded
@@ -30,6 +31,10 @@ def GG2main():
     # pygame time tracking
     clock = pygame.time.Clock()
     
+    # DEBUG code: calculate average fps
+    average_fps = 0
+    num_average_fps = 0
+    
     accumulator = 0.0 # this counter will accumulate time to be used by the physics
     
     # game loop
@@ -43,6 +48,9 @@ def GG2main():
         game.up = key[K_w]
         game.left = key[K_a]
         game.right = key[K_d]
+        
+        # DEBUG quit game with escape
+        if key[K_ESCAPE]: break
 
         leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
         game.leftmouse = leftmouse
@@ -58,13 +66,24 @@ def GG2main():
             accumulator -= physics_timestep
             game.update(physics_timestep)
         
+        # debug code
+        fps = clock.get_fps()
+        average_fps = (average_fps * num_average_fps + fps) / (num_average_fps + 1)
+        num_average_fps += 1
+        
         game.render(accumulator / physics_timestep)
-        
-        print(clock.get_fps())
-        
+    
+    print(average_fps)
+    
     # clean up
     pygame.quit()
 
+def profileGG2():
+    cProfile.run("GG2main()", "game_profi")
+    p = pstats.Stats("game_profi")
+    p.sort_stats("cumulative")
+    p.print_stats()
+    
 # when profiling:
-# cProfile.run("GG2main()")
+# profileGG2()
 GG2main()

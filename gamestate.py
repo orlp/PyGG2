@@ -53,12 +53,13 @@ class Gamestate:
     def copy(self):
         new = Gamestate()
         
-        new.entities = {id:copy.deepcopy(entity) for id, entity in self.entities.items()}
+        new.entities = {id:copy.copy(entity) for id, entity in self.entities.items()}
         new.next_entity_id = self.next_entity_id
         new.time = self.time
         
         return new
     
+    # TODO: make serialize functions
     def serialize_state(self):
         bytestate = str()
         return bytestate

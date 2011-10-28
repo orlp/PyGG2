@@ -64,9 +64,7 @@ class GG2:
         # draw entities
         for entity in interpolated_state.entities.values(): entity.draw(self, interpolated_state, self.window)
         
-        self.draw_overlay(focus_object.sprite)
-        
-        # blit overlay
+        # blit overlay last
         for surface, offset in self.overlayblits:
             self.window.blit(surface, offset)
         self.overlayblits = []
