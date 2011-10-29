@@ -27,7 +27,7 @@ class Shot(gameobject.Gameobject):
         self.direction = srcwep.direction + (7 - random.randint(0, 15))
         
         speed = 300 + (20 - random.randint(0, 40)) # TODO: Put the correct speed
-        self.hspeed = math.cos(math.radians(self.direction)) * speed + srcplayer.hspeed/2
+        self.hspeed = math.cos(math.radians(self.direction)) * speed + srcplayer.hspeed/2 # TODO: add unit vectors
         self.vspeed = math.sin(math.radians(self.direction)) * -speed + srcplayer.vspeed/2
 
     def step(self, game, state, frametime):

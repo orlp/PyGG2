@@ -13,7 +13,7 @@ import pstats
 
 # initialize pygame - DOUBLEBUF to prevent screen tearing
 pygame.init()
-pygame.display.set_mode((800, 600), DOUBLEBUF)
+pygame.display.set_mode((800, 600), FULLSCREEN | DOUBLEBUF)
 
 # wait with importing of gg2 until the display is set
 # this is because on loading of object classes sprites are loaded
