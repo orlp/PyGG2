@@ -26,9 +26,14 @@ class Shot(gameobject.Gameobject):
         
         self.direction = srcwep.direction + (7 - random.randint(0, 15))
         
-        speed = 300 + (20 - random.randint(0, 40)) # TODO: Put the correct speed
-        self.hspeed = math.cos(math.radians(self.direction)) * speed + srcplayer.hspeed/2 # TODO: add unit vectors
-        self.vspeed = math.sin(math.radians(self.direction)) * -speed + srcplayer.vspeed/2
+        playerdir = math.degrees(math.atan2(-srcplayer.vspeed, srcplayer.hspeed))
+        playerspeed = math.hypot(srcplayer.hspeed, srcplayer.vspeed)
+        diffdir = self.direction - playerdir
+        
+        speed = 500 + math.cos(math.radians(diffdir)) * playerspeed
+        
+        self.hspeed = math.cos(math.radians(self.direction)) * speed
+        self.vspeed = math.sin(math.radians(self.direction)) * -speed
 
     def step(self, game, state, frametime):
         # gravitational force

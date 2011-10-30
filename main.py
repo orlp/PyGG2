@@ -13,7 +13,7 @@ import pstats
 
 # initialize pygame - DOUBLEBUF to prevent screen tearing
 pygame.init()
-pygame.display.set_mode((800, 600), FULLSCREEN | DOUBLEBUF)
+pygame.display.set_mode((800, 600), DOUBLEBUF)
 
 # wait with importing of gg2 until the display is set
 # this is because on loading of object classes sprites are loaded
@@ -21,7 +21,7 @@ pygame.display.set_mode((800, 600), FULLSCREEN | DOUBLEBUF)
 import gg2
 
 # global settings
-physics_timestep = 1/30 # always update physics in steps of 1/30th second
+physics_timestep = 1/60 # always update physics in these steps
 
 # the main function
 def GG2main():
@@ -79,8 +79,8 @@ def GG2main():
     pygame.quit()
 
 def profileGG2():
-    cProfile.run("GG2main()", "game_profi")
-    p = pstats.Stats("game_profi")
+    cProfile.run("GG2main()", "game_profi.txt")
+    p = pstats.Stats("game_profi.txt")
     p.sort_stats("cumulative")
     p.print_stats()
     

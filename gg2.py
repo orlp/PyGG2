@@ -56,9 +56,12 @@ class GG2:
         focus_object = interpolated_state.entities[self.focus_object_id]
         self.xview = int(int(focus_object.x) - self.view_width / 2)
         self.yview = int(int(focus_object.y) - self.view_height / 2)
-    
+        
+        # clear screen if needed
+        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= self.gamemap.image.get_width() or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= self.gamemap.image.get_height():
+            self.window.fill(self.backgroundcolor)
+            
         # draw background
-        self.window.fill(self.backgroundcolor)
         self.gamemap.draw(self)
         
         # draw entities
@@ -90,5 +93,3 @@ class GG2:
         
         if offset[0] + width >= 0 and offset[0] - width < self.view_width and offset[1] + height >= 0 and offset[1] - height < self.view_height:
             self.overlayblits.append((surface, offset))
-    
-    

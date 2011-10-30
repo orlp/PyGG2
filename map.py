@@ -5,7 +5,7 @@ class Map():
         self.image = pygame.image.load("sprites/maps/" + mapname + ".png").convert()
         self.image = pygame.transform.scale(self.image, (self.image.get_width()*6, self.image.get_height()*6))
 
-    def draw(self, game):
+    def draw(self, game):        
         game.window.blit(self.image, (0, 0), (game.xview, game.yview, game.view_width, game.view_height))
 
 class Collisionmap():
