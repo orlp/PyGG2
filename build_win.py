@@ -16,6 +16,7 @@ try:
     import operator
     import subprocess
     import struct
+    import zipfile
 except ImportError, message:
     raise SystemExit,  "Unable to load module. %s" % message
  
@@ -67,14 +68,14 @@ class BuildExe:
         self.icon_file = None
  
         #Extra files/dirs copied to game
-        self.extra_datas = ["sprites"]
+        self.extra_datas = []
  
         #Extra/excludes python modules
         self.extra_modules = []
         self.exclude_modules = []
         
         #DLL Excludes
-        self.exclude_dll = ['']
+        self.exclude_dll = ['w9xpopen.exe']
         #python scripts (strings) to be included, seperated by a comma
         self.extra_scripts = []
  
@@ -166,10 +167,33 @@ class BuildExe:
     def after_building(self):
         # rename main.exe to pygg2.exe
         os.rename("dist/main.exe",  "dist/pygg2.exe")
+        
+        # zip up sprites
+        print("Zip up sprites")
+        zip = zipfile.ZipFile("dist/sprites.zip", "w", zipfile.ZIP_DEFLATED)
+        for folder, subfolders, files in os.walk("sprites"):
+            for file in files:
+                path = os.path.join(folder, file)
+                print("Zipping %s into dist/sprites.zip" % path)
+                zip.write(path, os.path.relpath(path, "sprites"))
+        zip.close()
+        
+        # and also zip up the complete distribution
+        print("Creating dist archive ready for distribution")
+        zip = zipfile.ZipFile("dist/pygg2.zip", "w", zipfile.ZIP_DEFLATED)
+        for folder, subfolders, files in os.walk("dist"):
+            for file in files:
+                # what are you talking about? it's zipfiles all the way down!
+                if file == "pygg2.zip": continue
+                
+                path = os.path.join(folder, file)
+                print("Zipping %s into dist/pygg2.zip" % path)
+                zip.write(path, os.path.join("pygg2", os.path.relpath(path, "dist")))
+        zip.close()
+        
 
 def build():
-    if operator.lt(len(sys.argv), 2):
-        sys.argv.append('py2exe')
+    sys.argv.append('py2exe')
     build = BuildExe()
     build.run()
     build.after_building()

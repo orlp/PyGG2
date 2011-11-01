@@ -20,6 +20,9 @@ def GG2main():
     pygame.init()
     pygame.display.set_mode((800, 600), DOUBLEBUF)
 
+    fullscreen = False # are we fullscreen? pygame doesn't track this
+    keys = pygame.key.get_pressed()
+    
     # wait with importing of gg2 until the display is set
     # this is because on loading of object classes sprites are loaded
     # the sprites are .convert()'ed, and this requires the pygame display mode to be set
@@ -44,13 +47,19 @@ def GG2main():
             break
         
         # handle input
-        key = pygame.key.get_pressed()
-        game.up = key[K_w]
-        game.left = key[K_a]
-        game.right = key[K_d]
+        oldkeys = keys
+        keys = pygame.key.get_pressed()
+        game.up = keys[K_w]
+        game.left = keys[K_a]
+        game.right = keys[K_d]
         
         # DEBUG quit game with escape
-        if key[K_ESCAPE]: break
+        if keys[K_ESCAPE]: break
+        
+        # did we just release the F11 button? if yes, go fullscreen
+        if oldkeys[K_F11] and not keys[K_F11]:
+            fullscreen = not fullscreen
+            pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
 
         leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
         game.leftmouse = leftmouse

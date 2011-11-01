@@ -68,9 +68,11 @@ def load_image(filename):
         return images[filename].copy()
     
     image = None
-    if os.path.isdir("sprites"):
+    # first try to load the sprite from the sprite folder, fall back to our zipped sprites
+    # this allows users to override sprites, and makes testing/developing easier
+    try:
         image = pygame.image.load("sprites/" + filename + ".png")
-    else:
+    except:
         sprites = zipfile.ZipFile("sprites.zip", "r")
         spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
         image = pygame.image.load(spritefile, filename + ".png")
