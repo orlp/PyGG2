@@ -96,7 +96,7 @@ def profileGG2():
     p.sort_stats("cumulative")
     p.print_stats()
     
-# when profiling:
-# profileGG2()
 if __name__ == "__main__":
+    # when profiling:
+    # profileGG2()
     GG2main()
