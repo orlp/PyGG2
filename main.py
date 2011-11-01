@@ -16,11 +16,14 @@ physics_timestep = 1/60 # always update physics in these steps
 
 # the main function
 def GG2main():
-    # initialize pygame - DOUBLEBUF to prevent screen tearing
+    # initialize pygame
     pygame.init()
-    pygame.display.set_mode((800, 600), DOUBLEBUF)
-
+    
+    # set display mode
     fullscreen = False # are we fullscreen? pygame doesn't track this
+    pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
+
+    # keep state of keys stored for one frame so we can detect down/up events
     keys = pygame.key.get_pressed()
     
     # wait with importing of gg2 until the display is set
