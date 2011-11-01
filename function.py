@@ -1,7 +1,11 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import math, pygame
 from pygame.locals import *
+
+import zipfile
+import cStringIO
+import os.path
 
 def sign(x):
     # Returns the sign of the number given
@@ -63,7 +67,16 @@ def load_image(filename):
     if filename in images:
         return images[filename].copy()
     
-    image = pygame.image.load(filename).convert()
+    image = None
+    if os.path.isdir("sprites"):
+        image = pygame.image.load("sprites/" + filename + ".png")
+    else:
+        sprites = zipfile.ZipFile("sprites.zip", "r")
+        spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
+        image = pygame.image.load(spritefile, filename + ".png")
+        spritefile.close()
+    
+    image = image.convert()
     image.set_colorkey((255, 0, 255), RLEACCEL)
     images[filename] = image
     

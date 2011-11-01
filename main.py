@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from __future__ import division
+from __future__ import division, print_function
 
 import math, pygame
 from pygame.locals import *
@@ -11,20 +11,20 @@ except: pass
 import cProfile
 import pstats
 
-# initialize pygame - DOUBLEBUF to prevent screen tearing
-pygame.init()
-pygame.display.set_mode((800, 600), DOUBLEBUF)
-
-# wait with importing of gg2 until the display is set
-# this is because on loading of object classes sprites are loaded
-# the sprites are .convert()'ed, and this requires the pygame display mode to be set
-import gg2
-
 # global settings
 physics_timestep = 1/60 # always update physics in these steps
 
 # the main function
 def GG2main():
+    # initialize pygame - DOUBLEBUF to prevent screen tearing
+    pygame.init()
+    pygame.display.set_mode((800, 600), DOUBLEBUF)
+
+    # wait with importing of gg2 until the display is set
+    # this is because on loading of object classes sprites are loaded
+    # the sprites are .convert()'ed, and this requires the pygame display mode to be set
+    import gg2
+
     # create game object
     game = gg2.GG2()
     
@@ -79,11 +79,12 @@ def GG2main():
     pygame.quit()
 
 def profileGG2():
-    cProfile.run("GG2main()", "game_profi.txt")
-    p = pstats.Stats("game_profi.txt")
+    cProfile.run("GG2main()", "game_profile")
+    p = pstats.Stats("game_profile")
     p.sort_stats("cumulative")
     p.print_stats()
     
 # when profiling:
 # profileGG2()
-GG2main()
+if __name__ == "__main__":
+    GG2main()

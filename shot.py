@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import pygame, math
 from pygame.locals import *
@@ -8,7 +8,7 @@ import gameobject
 import function
 
 class Shot(gameobject.Gameobject):
-    shotsprite = function.load_image("sprites/projectiles/shots/0.png")
+    shotsprite = function.load_image("projectiles/shots/0")
     max_flight_time = 1.5
     damage = 8
     
@@ -26,10 +26,10 @@ class Shot(gameobject.Gameobject):
         
         self.direction = srcwep.direction + (7 - random.randint(0, 15))
         
+        # add user speed to bullet speed but don't change direction of the bullet
         playerdir = math.degrees(math.atan2(-srcplayer.vspeed, srcplayer.hspeed))
-        playerspeed = math.hypot(srcplayer.hspeed, srcplayer.vspeed)
         diffdir = self.direction - playerdir
-        
+        playerspeed = math.hypot(srcplayer.hspeed, srcplayer.vspeed)
         speed = 500 + math.cos(math.radians(diffdir)) * playerspeed
         
         self.hspeed = math.cos(math.radians(self.direction)) * speed
@@ -50,7 +50,7 @@ class Shot(gameobject.Gameobject):
         
         image = pygame.transform.rotate(self.shotsprite, self.direction)
         mask = pygame.mask.from_surface(image)
-        if game.collisionmap.mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+        if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(state)
     
     def draw(self, game, state, frametime):

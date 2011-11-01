@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import pygame, math
 from pygame.locals import *
@@ -46,22 +46,27 @@ class Weapon(gameobject.Gameobject):
     def fire_secondary(self, game, state): pass
 
     def draw(self, game, state, surface):
+        owner = state.entities[self.owner]
+        
         image = self.weaponsprite
+        offset = owner.weaponoffset
+        
         if self.refiretime - self.refirealarm < 0.1:
             image = self.firingsprite
-        
-        if state.entities[self.owner].flip:
+            
+        if owner.flip:
             image = pygame.transform.flip(image, 0, 1)
+            offset = owner.weaponoffset_flipped
+        
         
         # get starting offset
-        owner = state.entities[self.owner]
         xoff, yoff = owner.x, owner.y
-        xoff += owner.weaponoffset[0]
-        yoff += owner.weaponoffset[1]
+        xoff += offset[0]
+        yoff += offset[1]
         
         xoff, yoff = int(xoff), int(yoff)
         
-        # rotate
+        # rotate 
         image, offset = function.rotate_surface_point(image, self.direction, self.weapon_rotate_point)
         
         # compensate for rotation
@@ -75,10 +80,10 @@ class Weapon(gameobject.Gameobject):
         self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
 
 class Scattergun(Weapon):
-    weaponsprite = function.load_image("sprites/weapons/scatterguns/0.png")
-    firingsprite = function.load_image("sprites/weapons/scatterguns/2.png")
+    weaponsprite = function.load_image("weapons/scatterguns/0")
+    firingsprite = function.load_image("weapons/scatterguns/2")
     
-    weapon_rotate_point = (4, 8) # where is the handle of the gun, where to rotate around
+    weapon_rotate_point = (6, 2) # where is the handle of the gun, where to rotate around
     maxammo = 6
     refiretime = 0.5
     reloadtime = 1

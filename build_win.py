@@ -167,10 +167,13 @@ class BuildExe:
         # rename main.exe to pygg2.exe
         os.rename("dist/main.exe",  "dist/pygg2.exe")
 
-if __name__ == '__main__':
+def build():
     if operator.lt(len(sys.argv), 2):
         sys.argv.append('py2exe')
     build = BuildExe()
     build.run()
     build.after_building()
+
+if __name__ == '__main__':
+    print("Don't run directly - run python make.py build")
     

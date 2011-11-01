@@ -1,4 +1,4 @@
-from __future__ import division
+from __future__ import division, print_function
 
 import math, pygame
 from pygame.locals import *
@@ -25,8 +25,7 @@ class GG2:
         self.overlayblits = [] # this list contains blits pending for the overlay
         
         # map data
-        self.gamemap = map.Map(self, "twodforttwo_remix")
-        self.collisionmap = map.Collisionmap(self, "twodforttwo_remix")
+        self.map = map.Map(self, "twodforttwo_remix")
         self.backgroundcolor = pygame.Color(0, 0, 0)
         
         # game states
@@ -58,11 +57,11 @@ class GG2:
         self.yview = int(int(focus_object.y) - self.view_height / 2)
         
         # clear screen if needed
-        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= self.gamemap.image.get_width() or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= self.gamemap.image.get_height():
+        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= self.map.image.get_width() or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= self.map.image.get_height():
             self.window.fill(self.backgroundcolor)
             
         # draw background
-        self.gamemap.draw(self)
+        self.map.draw(self)
         
         # draw entities
         for entity in interpolated_state.entities.values(): entity.draw(self, interpolated_state, self.window)
