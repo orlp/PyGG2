@@ -16,6 +16,30 @@ import gg2
 # global settings
 physics_timestep = 1/60 # always update physics in these steps
 
+# http://pygame.org/wiki/toggle_fullscreen
+def toggle_fullscreen():
+    screen = pygame.display.get_surface()
+    tmp = screen.convert()
+    caption = pygame.display.get_caption()
+    cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007 
+    
+    w,h = screen.get_width(),screen.get_height()
+    flags = screen.get_flags()
+    bits = screen.get_bitsize()
+    
+    pygame.display.quit()
+    pygame.display.init()
+    
+    screen = pygame.display.set_mode((w,h),flags^FULLSCREEN,bits)
+    screen.blit(tmp,(0,0))
+    pygame.display.set_caption(*caption)
+ 
+    pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
+ 
+    pygame.mouse.set_cursor( *cursor )  # Duoas 16-04-2007
+    
+    return screen
+
 # the main function
 def GG2main():
     # initialize pygame
@@ -59,7 +83,7 @@ def GG2main():
         # did we just release the F11 button? if yes, go fullscreen
         if oldkeys[K_F11] and not keys[K_F11]:
             fullscreen = not fullscreen
-            pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
+            game.window = toggle_fullscreen()
 
         leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
         game.leftmouse = leftmouse
