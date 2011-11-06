@@ -3,7 +3,7 @@ from __future__ import division, print_function
 import pygame
 import function
 
-class Map(object):
+class Map():
     def __init__(self, game, mapname):
         self.mapname = mapname
     
