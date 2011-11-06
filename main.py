@@ -65,7 +65,7 @@ def GG2main():
         game.leftmouse = leftmouse
         game.middlemouse = middlemouse
         game.rightmouse = rightmouse
-        game.mousepos = pygame.mouse.get_pos()
+        game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
         
         # update the game and render
         clock.tick()

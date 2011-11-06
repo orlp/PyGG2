@@ -16,12 +16,13 @@ class ShotDrawer(entity.EntityDrawer):
         self.shotsprite = function.load_image("projectiles/shots/0")
     
     def draw(self, game, state):
-        shot = state.entities[self.entity_id]
+        shot = self.get_entity(state)
         image = pygame.transform.rotate(self.shotsprite, shot.direction)
         game.draw_world(image, (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
     Drawer = ShotDrawer
+    
     max_flight_time = 1.5
     damage = 8
     
@@ -32,7 +33,8 @@ class Shot(entity.MovingObject):
         self.flight_time = 0.0
         self.sourceweapon = sourceweapon
         
-        srcwep, srcplayer = state.entities[sourceweapon], state.entities[state.entities[sourceweapon].owner]
+        srcwep = state.get_entity(sourceweapon)
+        srcplayer = state.get_entity(srcwep.owner)
         
         self.x = srcplayer.x
         self.y = srcplayer.y
@@ -54,8 +56,7 @@ class Shot(entity.MovingObject):
         
         # calculate direction
         self.direction = function.point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
-        
-        
+    
     def endstep(self, game, state, frametime):
         super(Shot, self).endstep(game, state, frametime)
 

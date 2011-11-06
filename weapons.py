@@ -22,11 +22,10 @@ class Weapon(entity.Entity):
         self.ammo = self.maxammo
 
     def step(self, game, state, frametime):
-        owner = state.entities[self.owner]
+        owner = state.get_entity(self.owner)
     
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.direction = function.point_direction(int(owner.x), int(owner.y), mouse_x + game.xview, mouse_y + game.yview)
+        self.direction = function.point_direction(int(owner.x), int(owner.y), game.mousepos[0] + game.xview, game.mousepos[1] + game.yview)
         
         if self.refirealarm <= 0:
             self.refirealarm = 0.0
@@ -58,8 +57,8 @@ class ScattergunDrawer(entity.EntityDrawer):
         self.firingsprite = function.load_image("weapons/scatterguns/2")
         
     def draw(self, game, state):
-        weapon = state.entities[self.entity_id]
-        owner = state.entities[weapon.owner]
+        weapon = state.get_entity(self.entity_id)
+        owner = state.get_entity(weapon.owner)
         
         image = self.weaponsprite
         offset = self.weaponoffset
@@ -70,7 +69,6 @@ class ScattergunDrawer(entity.EntityDrawer):
         if owner.flip:
             image = pygame.transform.flip(image, 0, 1)
             offset = self.weaponoffset_flipped
-        
         
         # get starting offset
         xoff, yoff = owner.x, owner.y

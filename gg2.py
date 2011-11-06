@@ -31,7 +31,8 @@ class GG2:
         self.leftmouse = False
         self.middlemouse = False
         self.rightmouse = False
-        self.mousepos = (0, 0)
+        self.mouse_x = 0
+        self.mouse_y = 0
         
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
