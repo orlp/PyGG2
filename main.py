@@ -92,9 +92,9 @@ def profileGG2():
     cProfile.run("GG2main()", "game_profile")
     p = pstats.Stats("game_profile")
     p.sort_stats("cumulative")
-    p.print_stats()
+    p.print_stats(30)
     
 if __name__ == "__main__":
     # when profiling:
-    # profileGG2()
-    GG2main()
+    profileGG2()
+    # GG2main()

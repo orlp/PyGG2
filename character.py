@@ -17,7 +17,7 @@ class Character(entity.MovingObject):
 
     def step(self, game, state, frametime):
         # TODO - Only update flip if we are the client player
-        self.flip = game.mousepos[0] < game.view_width / 2
+        self.flip = game.mouse_x < game.view_width / 2
         
         # if we are holding down movement keys, move
         if game.left: self.hspeed -= 1000 * frametime

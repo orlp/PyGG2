@@ -25,7 +25,7 @@ class Weapon(entity.Entity):
         owner = state.get_entity(self.owner)
     
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
-        self.direction = function.point_direction(int(owner.x), int(owner.y), game.mousepos[0] + game.xview, game.mousepos[1] + game.yview)
+        self.direction = function.point_direction(int(owner.x), int(owner.y), game.mouse_x + game.xview, game.mouse_y + game.yview)
         
         if self.refirealarm <= 0:
             self.refirealarm = 0.0
