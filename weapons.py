@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division, print_function
 
 import pygame, math
@@ -7,7 +9,7 @@ import random
 
 import entity
 import function
-import shot
+import projectile
 
 # abstract class, don't directly instantiate
 class Weapon(entity.Entity):
@@ -95,6 +97,6 @@ class Scattergun(Weapon):
     
     def fire_primary(self, game, state):
         for i in range(6):
-            shot.Shot(game, state, self.id)
+            projectile.Shot(game, state, self.id)
         
         self.refirealarm = self.refiretime

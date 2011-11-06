@@ -49,6 +49,7 @@ def GG2main():
         oldkeys = keys
         keys = pygame.key.get_pressed()
         game.up = keys[K_w]
+        game.down = keys[K_s]
         game.left = keys[K_a]
         game.right = keys[K_d]
         
@@ -64,6 +65,7 @@ def GG2main():
         game.leftmouse = leftmouse
         game.middlemouse = middlemouse
         game.rightmouse = rightmouse
+        game.mousepos = pygame.mouse.get_pos()
         
         # update the game and render
         clock.tick()

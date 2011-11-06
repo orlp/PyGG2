@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from __future__ import division, print_function
 
 import math, pygame
@@ -7,11 +9,8 @@ import map
 import character
 import gamestate
 
+# the central class
 class GG2:
-    """
-    Central class
-    """
-    
     def __init__(self):
         self.window = pygame.display.get_surface()
         
@@ -23,6 +22,16 @@ class GG2:
         self.xview = 0.0
         self.yview = 0.0
         self.overlayblits = [] # this list contains blits pending for the overlay
+        
+        # client input
+        self.up = False
+        self.down = False
+        self.left = False
+        self.right = False
+        self.leftmouse = False
+        self.middlemouse = False
+        self.rightmouse = False
+        self.mousepos = (0, 0)
         
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
@@ -38,7 +47,7 @@ class GG2:
         player.y = 50
         
         # the object the camera should follow
-        # deleting it is undefined, use with care :D
+        # deleting that object is undefined, use with care :D
         self.focus_object_id = player.id
         
         self.previous_state = self.current_state.copy()

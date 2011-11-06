@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 from __future__ import division, print_function
 
 import pygame
 import function
 
-class Map():
+class Map(object):
     def __init__(self, game, mapname):
         self.mapname = mapname
     
