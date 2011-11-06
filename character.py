@@ -14,8 +14,7 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
 
     def step(self, game, state, frametime):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        self.flip = function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) > 90 and function.point_direction(self.x, self.y, mouse_x + game.xview, mouse_y + game.yview) < 270
+        self.flip = mousepos[0] < game.view_width / 2
         
         if game.left: self.hspeed -= 1000 * frametime
         if game.right: self.hspeed += 1000 * frametime
@@ -93,7 +92,7 @@ class ScoutDrawer(entity.EntityDrawer):
     def draw(self, game, state):
         character = state.entities[self.entity_id]
         
-        mouse_x, mouse_y = pygame.mouse.get_pos()
+        mouse_x, mouse_y = game.mousepos
 
         image = self.sprite
         if character.flip: image = pygame.transform.flip(image, 1, 0)

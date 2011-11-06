@@ -7,11 +7,8 @@ import map
 import character
 import gamestate
 
+# the central class
 class GG2:
-    """
-    Central class
-    """
-    
     def __init__(self):
         self.window = pygame.display.get_surface()
         
@@ -38,7 +35,7 @@ class GG2:
         player.y = 50
         
         # the object the camera should follow
-        # deleting it is undefined, use with care :D
+        # deleting that object is undefined, use with care :D
         self.focus_object_id = player.id
         
         self.previous_state = self.current_state.copy()

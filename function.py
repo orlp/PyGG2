@@ -74,7 +74,7 @@ def load_image(filename):
         image = pygame.image.load("sprites/" + filename + ".png")
     except:
         sprites = zipfile.ZipFile("sprites.zip", "r")
-        spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
+        spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "rb").read())
         image = pygame.image.load(spritefile, filename + ".png")
         spritefile.close()
     

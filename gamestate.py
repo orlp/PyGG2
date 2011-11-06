@@ -10,6 +10,9 @@ class Gamestate:
         self.next_entity_id = 0
         self.time = 0.0
     
+    def get_entity(self, entity_id):
+        return self.entities[entity_id]
+    
     def update(self, game, frametime):
         self.time += frametime
         
