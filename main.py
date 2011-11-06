@@ -11,6 +11,8 @@ except: pass
 import cProfile
 import pstats
 
+import gg2
+
 # global settings
 physics_timestep = 1/60 # always update physics in these steps
 
@@ -26,22 +28,16 @@ def GG2main():
     # keep state of keys stored for one frame so we can detect down/up events
     keys = pygame.key.get_pressed()
     
-    # wait with importing of gg2 until the display is set
-    # this is because on loading of object classes sprites are loaded
-    # the sprites are .convert()'ed, and this requires the pygame display mode to be set
-    import gg2
-
     # create game object
     game = gg2.GG2()
     
     # pygame time tracking
     clock = pygame.time.Clock()
+    accumulator = 0.0 # this counter will accumulate time to be used by the physics
     
     # DEBUG code: calculate average fps
     average_fps = 0
     num_average_fps = 0
-    
-    accumulator = 0.0 # this counter will accumulate time to be used by the physics
     
     # game loop
     while True:        

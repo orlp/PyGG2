@@ -64,7 +64,7 @@ class GG2:
         self.map.draw(self)
         
         # draw entities
-        for entity in interpolated_state.entities.values(): entity.draw(self, interpolated_state, self.window)
+        for entity in interpolated_state.entities.values(): entity.drawer.draw(self, interpolated_state)
         
         # blit overlay last
         for surface, offset in self.overlayblits:

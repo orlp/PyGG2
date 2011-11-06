@@ -3,13 +3,13 @@ from __future__ import division, print_function
 import math, pygame
 from pygame.locals import *
 
-import gameobject
 import function
+import entity
 import weapons
 
-class Character(gameobject.Gameobject):
+class Character(entity.MovingObject):
     def __init__(self, game, state):
-        gameobject.Gameobject.__init__(self, game, state)
+        super(Character, self).__init__(game, state)
         
         self.flip = False # are we flipped around?
 
@@ -77,32 +77,39 @@ class Character(gameobject.Gameobject):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
     
-        state.entities[self.weapon].posupdate(game, state)
-
-    def draw(self, game, state, surface):
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        image = self.sprite
-        if self.flip: image = pygame.transform.flip(image, 1, 0)
-        
-        xoff = self.x + self.spriteoffset[0]
-        yoff = self.y + self.spriteoffset[1]
-        
-        game.draw_world(image, (xoff, yoff))
-    
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
         return game.map.collision_mask.overlap(self.mask, (int(self.x), int(self.y + 1)))
 
 
+class ScoutDrawer(entity.EntityDrawer):
+    spriteoffset = (-24, -30)
+    
+    def __init__(self, game, state, entity_id):
+        super(ScoutDrawer, self).__init__(game, state, entity_id)
+        
+        self.sprite = function.load_image("characters/scoutreds/0")
+
+    def draw(self, game, state):
+        character = state.entities[self.entity_id]
+        
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        image = self.sprite
+        if character.flip: image = pygame.transform.flip(image, 1, 0)
+        
+        xoff = character.x + self.spriteoffset[0]
+        yoff = character.y + self.spriteoffset[1]
+        
+        game.draw_world(image, (xoff, yoff))
+        
+
 class Scout(Character):
+    Drawer = ScoutDrawer
+
     mask = pygame.mask.Mask((12, 33)) # width, height of scout - rectangle collision
     mask.fill()
     
-    sprite = function.load_image("characters/scoutreds/0")
-    spriteoffset = (-24, -30)
-    weaponoffset = (10, 8) # where the character should carry it's gun
-    weaponoffset_flipped = (8, 6)
     maxhp = 100
     
     def __init__(self, game, state):

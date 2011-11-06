@@ -4,16 +4,27 @@ import pygame, math
 from pygame.locals import *
 import random
 
-import gameobject
+import entity
 import function
 
-class Shot(gameobject.Gameobject):
-    shotsprite = function.load_image("projectiles/shots/0")
+class ShotDrawer(entity.EntityDrawer):
+    def __init__(self, game, state, entity_id):
+        super(ShotDrawer, self).__init__(game, state, entity_id)
+    
+        self.shotsprite = function.load_image("projectiles/shots/0")
+    
+    def draw(self, game, state):
+        shot = state.entities[self.entity_id]
+        image = pygame.transform.rotate(self.shotsprite, shot.direction)
+        game.draw_world(image, (shot.x, shot.y))
+
+class Shot(entity.MovingObject):
+    Drawer = ShotDrawer
     max_flight_time = 1.5
     damage = 8
     
     def __init__(self, game, state, sourceweapon):
-        gameobject.Gameobject.__init__(self, game, state)
+        super(Shot, self).__init__(game, state)
         
         self.direction = 0.0
         self.flight_time = 0.0
@@ -21,8 +32,8 @@ class Shot(gameobject.Gameobject):
         
         srcwep, srcplayer = state.entities[sourceweapon], state.entities[state.entities[sourceweapon].owner]
         
-        self.x = srcwep.x
-        self.y = srcwep.y
+        self.x = srcplayer.x
+        self.y = srcplayer.y
         
         self.direction = srcwep.direction + (7 - random.randint(0, 15))
         
@@ -44,19 +55,15 @@ class Shot(gameobject.Gameobject):
         
         
     def endstep(self, game, state, frametime):
-        gameobject.Gameobject.endstep(self, game, state, frametime)
+        super(Shot, self).endstep(game, state, frametime)
 
         self.flight_time += frametime
         
-        image = pygame.transform.rotate(self.shotsprite, self.direction)
+        image = pygame.transform.rotate(self.drawer.shotsprite, self.direction)
         mask = pygame.mask.from_surface(image)
         if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(state)
     
-    def draw(self, game, state, frametime):
-        image = pygame.transform.rotate(self.shotsprite, self.direction)
-        game.draw_world(image, (self.x, self.y))
-    
     def interpolate(self, next_object, alpha):
-        gameobject.Gameobject.interpolate(self, next_object, alpha)
+        super(Shot, self).interpolate(next_object, alpha)
         self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
