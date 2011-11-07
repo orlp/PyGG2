@@ -20,17 +20,13 @@ class ShotDrawer(entity.EntityDrawer):
         
         # initiate shot sprite for every angle 0 <= a <= 360
         if not self.shotsprite_angles:
-            for dir in range(361):
-                self.shotsprite_angles[dir] = pygame.transform.rotate(self.shotsprite, dir)
+            for angle in range(361):
+                self.shotsprite_angles[angle] = pygame.transform.rotate(self.shotsprite, angle)
         
     def draw(self, game, state):
         shot = self.get_entity(state)
-        maxsize = max(self.shotsprite.get_size())
-        
-        if game.is_onscreen((shot.x, shot.y), (maxsize, maxsize)):
-            dir = int(shot.direction) % 360
-            
-            game.draw_world(self.shotsprite_angles[dir], (shot.x, shot.y))
+        angle = int(shot.direction) % 360
+        game.draw_world(self.shotsprite_angles[angle], (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
     Drawer = ShotDrawer
@@ -45,8 +41,8 @@ class Shot(entity.MovingObject):
         
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.shot_hitmasks:
-            for dir in range(361):
-                self.shot_hitmasks[dir] = pygame.mask.from_surface(self.drawer.shotsprite_angles[dir])
+            for angle in range(361):
+                self.shot_hitmasks[angle] = pygame.mask.from_surface(self.drawer.shotsprite_angles[angle])
         
         self.direction = 0.0
         self.flight_time = 0.0
@@ -99,14 +95,13 @@ class RocketDrawer(entity.EntityDrawer):
         
         # initiate rocket sprite for every angle 0 <= a <= 360
         if not self.rocketsprite_angles:
-            for dir in range(361):
-                self.rocketsprite_angles[dir] = pygame.transform.rotate(self.rocketsprite, dir)
+            for angle in range(361):
+                self.rocketsprite_angles[angle] = pygame.transform.rotate(self.rocketsprite, angle)
     
     def draw(self, game, state):
         rocket = self.get_entity(state)
-        dir = int(rocket.direction) % 360
-        
-        game.draw_world(self.rocketsprite_angles[dir], (rocket.x, rocket.y))
+        angle = int(rocket.direction) % 360
+        game.draw_world(self.rocketsprite_angles[angle], (rocket.x, rocket.y))
 
 class Rocket(entity.MovingObject):
     Drawer = RocketDrawer
@@ -123,8 +118,8 @@ class Rocket(entity.MovingObject):
         
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.rocket_hitmasks:
-            for dir in range(361):
-                self.rocket_hitmasks[dir] = pygame.mask.from_surface(self.drawer.rocketsprite_angles[dir])
+            for angle in range(361):
+                self.rocket_hitmasks[angle] = pygame.mask.from_surface(self.drawer.rocketsprite_angles[angle])
         
         self.direction = 0.0
         self.flight_time = 0.0
@@ -150,8 +145,7 @@ class Rocket(entity.MovingObject):
                     force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius))*self.knockback
                     obj.hspeed += force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y))
                     obj.vspeed += force*((obj.y-self.y)/math.hypot(self.x - obj.x, self.y - obj.y))/3
-                    
-
+        
         super(Rocket, self).destroy(state)
 
     def step(self, game, state, frametime):
@@ -169,10 +163,8 @@ class Rocket(entity.MovingObject):
 
         self.flight_time += frametime
         
-        dir = int(self.direction) % 360
-        
-        mask = self.rocket_hitmasks[dir]
-        if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+        angle = int(self.direction) % 360
+        if game.map.collision_mask.overlap(self.rocket_hitmasks[angle], (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(game, state)
     
     def interpolate(self, prev_obj, next_obj, alpha):

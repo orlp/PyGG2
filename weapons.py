@@ -97,6 +97,6 @@ class Scattergun(Weapon):
     
     def fire_primary(self, game, state):
         for i in range(6):
-            projectile.Shot(game, state, self.id)
+            projectile.Rocket(game, state, self.id)
         
         self.refirealarm = self.refiretime
