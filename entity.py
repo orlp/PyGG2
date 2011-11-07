@@ -62,6 +62,6 @@ class MovingObject(Entity):
     def interpolate(self, prev_obj, next_obj, alpha):
         self.x = prev_obj.x * (1 - alpha) + next_obj.x * alpha
         self.y = prev_obj.y * (1 - alpha) + next_obj.y * alpha
-        self.hspeed = prev_obj.hspeed * (1 - alpha) + next_obj.hspeed * alpha
-        self.vspeed = prev_obj.vspeed * (1 - alpha) + next_obj.vspeed * alpha
+        # self.hspeed = prev_obj.hspeed * (1 - alpha) + next_obj.hspeed * alpha
+        # self.vspeed = prev_obj.vspeed * (1 - alpha) + next_obj.vspeed * alpha
         
