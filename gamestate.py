@@ -25,7 +25,7 @@ class Gamestate(object):
             if not id in next_state.entities: continue
             if not id in self.entities:
                 self.entities[id] = prev_state.entities[id].copy()
-            entity.interpolate(prev_state.entities[id], next_state.entities[id], alpha)
+            self.entities[id].interpolate(entity, next_state.entities[id], alpha)
         
     def copy(self):
         new = Gamestate()
