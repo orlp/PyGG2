@@ -19,7 +19,7 @@ class ShotDrawer(entity.EntityDrawer):
         self.shotsprite = function.load_image("projectiles/shots/0")
         
         # initiate shot sprite for every angle 0 <= a <= 360
-        if not shotsprite_angles:
+        if not self.shotsprite_angles:
             for dir in range(361):
                 self.shotsprite_angles[dir] = pygame.transform.rotate(self.shotsprite, dir)
         
@@ -44,8 +44,8 @@ class Shot(entity.MovingObject):
         super(Shot, self).__init__(game, state)
         
         # initiate shot hitmask for every angle 0 <= a <= 360
-        if not shot_hitmasks:
-            for i in range(361):
+        if not self.shot_hitmasks:
+            for dir in range(361):
                 self.shot_hitmasks[dir] = pygame.mask.from_surface(self.drawer.shotsprite_angles[dir])
         
         self.direction = 0.0
