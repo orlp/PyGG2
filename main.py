@@ -88,7 +88,8 @@ def GG2main():
         # did we just release the F11 button? if yes, go fullscreen
         if oldkeys[K_F11] and not keys[K_F11]:
             fullscreen = not fullscreen
-            game.window = toggle_fullscreen()
+            if not pygame.display.toggle_fullscreen():
+                game.window = toggle_fullscreen()
 
         leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
         game.leftmouse = leftmouse
@@ -124,5 +125,5 @@ def profileGG2():
     
 if __name__ == "__main__":
     # when profiling:
-    profileGG2()
-    # GG2main()
+    # profileGG2()
+    GG2main()
