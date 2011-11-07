@@ -49,20 +49,6 @@ def rotate_surface_point(surface, angle, point = (0, 0)):
     
     return rotated_surface, offset
 
-# def interpolate_angle(a, b, alpha):
-    # a, b = math.radians(a), math.radians(b)
-
-    # # add up weighted unit vectors
-    # vx = math.cos(a) * (1 - alpha) + math.cos(b) * alpha
-    # vy = math.sin(a) * (1 - alpha) + math.sin(b) * alpha
-    
-    # # is our unit vector undefined? then return counter-clockwise increasing rotation
-    # if vx == 0 and vy == 0:
-        # return (math.degrees(a) + 180 * alpha) % 360
-        
-    # # calculate angle
-    # return math.degrees(math.atan2(vy, vx)) % 360
-
 # from http://www.nanobit.net/doxy/quake3/q__math_8c-source.html LerpAngle
 def interpolate_angle(a, b, alpha):
     a, b = a % 360, b % 360
