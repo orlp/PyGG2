@@ -16,8 +16,7 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
 
     def step(self, game, state, frametime):
-        # TODO - Only update flip if we are the client player
-        self.flip = game.mouse_x < game.view_width / 2
+        self.flip = ((state.entities[self.weapon].direction+270)%360)<180
         
         # if we are holding down movement keys, move
         if game.left: self.hspeed -= 1000 * frametime
