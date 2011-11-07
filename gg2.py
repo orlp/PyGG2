@@ -80,9 +80,6 @@ class GG2:
         for surface, offset in self.overlayblits:
             self.window.blit(surface, offset)
         self.overlayblits = []
-        
-        # and display it to the user
-        pygame.display.update()
     
     # this function is called to draw on the game's window with game world coordinate
     def draw_world(self, surface, offset = (0, 0)):

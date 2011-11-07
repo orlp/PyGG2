@@ -33,8 +33,8 @@ class Shot(entity.MovingObject):
         self.flight_time = 0.0
         self.sourceweapon = sourceweapon
         
-        srcwep = state.get_entity(sourceweapon)
-        srcplayer = state.get_entity(srcwep.owner)
+        srcwep = state.entities[sourceweapon]
+        srcplayer = state.entities[srcwep.owner]
         
         self.x = srcplayer.x
         self.y = srcplayer.y

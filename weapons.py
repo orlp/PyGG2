@@ -22,7 +22,7 @@ class Weapon(entity.Entity):
         self.ammo = self.maxammo
 
     def step(self, game, state, frametime):
-        owner = state.get_entity(self.owner)
+        owner = state.entities[self.owner]
     
         # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
         self.direction = function.point_direction(int(owner.x), int(owner.y), game.mouse_x + game.xview, game.mouse_y + game.yview)
@@ -57,8 +57,8 @@ class ScattergunDrawer(entity.EntityDrawer):
         self.firingsprite = function.load_image("weapons/scatterguns/2")
         
     def draw(self, game, state):
-        weapon = state.get_entity(self.entity_id)
-        owner = state.get_entity(weapon.owner)
+        weapon = state.entities[self.entity_id]
+        owner = state.entities[weapon.owner]
         
         image = self.weaponsprite
         offset = self.weaponoffset

@@ -14,7 +14,7 @@ import pstats
 import gg2
 
 # global settings
-physics_timestep = 1/60 # always update physics in these steps
+physics_timestep = 1/30 # always update physics in these steps
 
 # http://pygame.org/wiki/toggle_fullscreen
 def toggle_fullscreen():
@@ -47,7 +47,8 @@ def GG2main():
     
     # set display mode
     fullscreen = False # are we fullscreen? pygame doesn't track this
-    pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
+    window = pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
+    window.set_alpha(None)
 
     # keep state of keys stored for one frame so we can detect down/up events
     keys = pygame.key.get_pressed()
@@ -62,6 +63,9 @@ def GG2main():
     # DEBUG code: calculate average fps
     average_fps = 0
     num_average_fps = 0
+    
+    font = pygame.font.Font(None, 17)
+    text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
     
     # game loop
     while True:        
@@ -99,15 +103,13 @@ def GG2main():
         while accumulator > physics_timestep:
             accumulator -= physics_timestep
             game.update(physics_timestep)
-        
-        # debug code
-        fps = clock.get_fps()
-        average_fps = (average_fps * num_average_fps + fps) / (num_average_fps + 1)
-        num_average_fps += 1
+            text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         
         game.render(accumulator / physics_timestep)
-    
-    print(average_fps)
+        
+        game.window.blit(text, (0, 0))
+        
+        pygame.display.update()
     
     # clean up
     pygame.quit()
