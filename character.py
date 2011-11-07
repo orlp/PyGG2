@@ -19,7 +19,7 @@ class Character(entity.MovingObject):
     def step(self, game, state, frametime):
         angle = state.entities[self.weapon].direction % 360
         self.flip = not (angle < 90 or angle > 270)
-        self.walkframe = (self.walkframe+abs(self.hspeed)/20) % 2;
+        self.walkframe = (self.walkframe+abs(self.hspeed)/20) % 2
         
         # if we are holding down movement keys, move
         if game.left: self.hspeed -= 1000 * frametime
