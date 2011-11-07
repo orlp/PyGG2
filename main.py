@@ -98,7 +98,7 @@ def GG2main():
         game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
         
         # update the game and render
-        clock.tick(120)
+        clock.tick()
         frame_time = min(0.25, clock.get_time() / 1000) # a limit of 0.25 seconds to prevent complete breakdown
         
         accumulator += frame_time
