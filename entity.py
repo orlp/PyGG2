@@ -53,25 +53,11 @@ class MovingObject(Entity):
         # hspeed and vspeed are the speeds of the object in respective directions
         self.hspeed = 0.0
         self.vspeed = 0.0
-    
-    def copy(self):
-        cpobj = super(MovingObject, self).copy()
-        
-        cpobj.x = self.x
-        cpobj.y = self.y
-        cpobj.hspeed = self.hspeed
-        cpobj.vspeed = self.vspeed
-        
-        return cpobj
         
     def endstep(self, game, state, frametime):
         # first move
         self.x += self.hspeed * frametime
         self.y += self.vspeed * frametime
-        
-        # in our coordinate system we do not support negative coordinates
-        self.x = max(self.x, 0)
-        self.y = max(self.y, 0)
 
     def interpolate(self, prev_obj, next_obj, alpha):
         self.x = prev_obj.x * (1 - alpha) + next_obj.x * alpha

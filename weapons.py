@@ -92,11 +92,11 @@ class Scattergun(Weapon):
     Drawer = ScattergunDrawer
 
     maxammo = 6
-    refiretime = 0.05
+    refiretime = .5
     reloadtime = 1
     
     def fire_primary(self, game, state):
-        for i in range(10):
+        for i in range(200):
             projectile.Shot(game, state, self.id)
         
         self.refirealarm = self.refiretime
