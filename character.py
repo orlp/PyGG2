@@ -16,7 +16,8 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
 
     def step(self, game, state, frametime):
-        self.flip = ((state.entities[self.weapon].direction+270)%360)<180
+        angle = state.entities[self.weapon].direction % 360
+        self.flip = not (angle < 90 or angle > 270)
         
         # if we are holding down movement keys, move
         if game.left: self.hspeed -= 1000 * frametime
