@@ -46,9 +46,9 @@ class Weapon(entity.Entity):
         self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
 
 class ScattergunDrawer(entity.EntityDrawer):
-    weapon_rotate_point = (6, 2) # where is the handle of the gun, where to rotate around
-    weaponoffset = (10, 8) # where the character should carry it's gun
-    weaponoffset_flipped = (8, 6)
+    weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
+    weaponoffset = (12, 13) # where the character should carry it's gun
+    weaponoffset_flipped = (6, 8)
     
     def __init__(self, game, state, entity_id):
         super(ScattergunDrawer, self).__init__(game, state, entity_id)
@@ -62,6 +62,7 @@ class ScattergunDrawer(entity.EntityDrawer):
         
         image = self.weaponsprite
         offset = self.weaponoffset
+        rotate_point = self.weapon_rotate_point
         
         if weapon.refiretime - weapon.refirealarm < 0.1:
             image = self.firingsprite
