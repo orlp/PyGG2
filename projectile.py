@@ -79,6 +79,6 @@ class Shot(entity.MovingObject):
         if game.map.collision_mask.overlap(self.mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(state)
     
-    def interpolate(self, next_object, alpha):
-        super(Shot, self).interpolate(next_object, alpha)
-        self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
+    def interpolate(self, prev_obj, next_obj, alpha):
+        super(Shot, self).interpolate(prev_obj, next_obj, alpha)
+        self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)

@@ -52,17 +52,19 @@ class GG2:
         self.focus_object_id = player.id
         
         self.previous_state = self.current_state.copy()
+        self.interpolated_state = self.previous_state.copy()
         
     def update(self, frametime):
         self.previous_state = self.current_state.copy()
+        self.interpolated_state = self.previous_state.copy()
         self.current_state.update(self, frametime)
 
     def render(self, alpha):
-        # get our interpolated state
-        interpolated_state = self.previous_state.interpolate(self.current_state, alpha)
+        # calculate our interpolated state
+        self.interpolated_state.interpolate(self.previous_state, self.current_state, alpha)
         
         # update view
-        focus_object = interpolated_state.entities[self.focus_object_id]
+        focus_object = self.interpolated_state.entities[self.focus_object_id]
         self.xview = int(int(focus_object.x) - self.view_width / 2)
         self.yview = int(int(focus_object.y) - self.view_height / 2)
         
@@ -74,7 +76,7 @@ class GG2:
         self.map.draw(self)
         
         # draw entities
-        for entity in interpolated_state.entities.values(): entity.drawer.draw(self, interpolated_state)
+        for entity in self.interpolated_state.entities.values(): entity.drawer.draw(self, self.interpolated_state)
         
         # blit overlay last
         for surface, offset in self.overlayblits:

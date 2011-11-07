@@ -17,17 +17,15 @@ class Gamestate(object):
         for entity in self.entities.values(): entity.step(game, self, frametime)
         for entity in self.entities.values(): entity.endstep(game, self, frametime)
     
-    def interpolate(self, next_state, alpha):
-        interpolated_state = Gamestate()
+    def interpolate(self, prev_state, next_state, alpha):
+        self.next_entity_id = next_state.next_entity_id
+        self.time = prev_state.time * (1 - alpha) + next_state.time * alpha
         
-        interpolated_state.next_entity_id = next_state.next_entity_id
-        interpolated_state.time = self.time * (1 - alpha) + next_state.time * alpha
-        interpolated_state.entities = {id:entity.copy() for id, entity in self.entities.items() if id in next_state.entities}
-        
-        for id, entity in interpolated_state.entities.items():
-            entity.interpolate(next_state.entities[id], alpha)
-        
-        return interpolated_state
+        for id, entity in prev_state.entities.items():
+            if not id in next_state.entities: continue
+            if not id in self.entities:
+                self.entities[id] = prev_state.entities[id].copy()
+            entity.interpolate(prev_state.entities[id], next_state.entities[id], alpha)
         
     def copy(self):
         new = Gamestate()

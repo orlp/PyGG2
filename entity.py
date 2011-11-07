@@ -73,9 +73,9 @@ class MovingObject(Entity):
         self.x = max(self.x, 0)
         self.y = max(self.y, 0)
 
-    def interpolate(self, next_object, alpha):
-        self.x = self.x * (1 - alpha) + next_object.x * alpha
-        self.y = self.y * (1 - alpha) + next_object.y * alpha
-        self.hspeed = self.hspeed * (1 - alpha) + next_object.hspeed * alpha
-        self.vspeed = self.vspeed * (1 - alpha) + next_object.vspeed * alpha
+    def interpolate(self, prev_obj, next_obj, alpha):
+        self.x = prev_obj.x * (1 - alpha) + next_obj.x * alpha
+        self.y = prev_obj.y * (1 - alpha) + next_obj.y * alpha
+        self.hspeed = prev_obj.hspeed * (1 - alpha) + next_obj.hspeed * alpha
+        self.vspeed = prev_obj.vspeed * (1 - alpha) + next_obj.vspeed * alpha
         

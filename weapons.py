@@ -42,9 +42,9 @@ class Weapon(entity.Entity):
     def fire_primary(self, game, state): pass
     def fire_secondary(self, game, state): pass
     
-    def interpolate(self, next_object, alpha):
-        self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
-        self.refirealarm = (1 - alpha) * self.refirealarm + alpha * next_object.refirealarm
+    def interpolate(self, prev_obj, next_obj, alpha):
+        self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
+        self.refirealarm = (1 - alpha) * prev_obj.refirealarm + alpha * next_obj.refirealarm
 
 class ScattergunDrawer(entity.EntityDrawer):
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
