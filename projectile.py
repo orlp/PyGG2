@@ -10,6 +10,8 @@ import entity
 import function
 
 class ShotDrawer(entity.EntityDrawer):
+    shotsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
+
     def __init__(self, game, state, entity_id):
         super(ShotDrawer, self).__init__(game, state, entity_id)
     
@@ -17,8 +19,19 @@ class ShotDrawer(entity.EntityDrawer):
     
     def draw(self, game, state):
         shot = self.get_entity(state)
-        image = pygame.transform.rotate(self.shotsprite, shot.direction)
-        game.draw_world(image, (shot.x, shot.y))
+        maxsize = max(self.shotsprite.get_size())
+        
+        # OPTIMIZATION don't bother doing anything at all if we are offscreen
+        if game.is_onscreen((shot.x, shot.y), (maxsize, maxsize)):
+            dir = int(shot.direction) % 360
+            
+            if dir in self.shotsprite_angles:
+                sprite = self.shotsprite_angles[dir]
+            else:
+                sprite = pygame.transform.rotate(self.shotsprite, dir)
+                self.shotsprite_angles[dir] = sprite
+            
+            game.draw_world(sprite, (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
     Drawer = ShotDrawer
@@ -40,6 +53,7 @@ class Shot(entity.MovingObject):
         self.y = srcplayer.y
         
         self.direction = srcwep.direction + (7 - random.randint(0, 15))
+        self.mask = pygame.mask.from_surface(pygame.transform.rotate(self.drawer.shotsprite, self.direction))
         
         # add user speed to bullet speed but don't change direction of the bullet
         playerdir = math.degrees(math.atan2(-srcplayer.vspeed, srcplayer.hspeed))
@@ -62,9 +76,7 @@ class Shot(entity.MovingObject):
 
         self.flight_time += frametime
         
-        image = pygame.transform.rotate(self.drawer.shotsprite, self.direction)
-        mask = pygame.mask.from_surface(image)
-        if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+        if game.map.collision_mask.overlap(self.mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
             self.destroy(state)
     
     def interpolate(self, next_object, alpha):

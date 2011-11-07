@@ -2,11 +2,9 @@
 
 from __future__ import division, print_function
 
-import copy
-
 # the main physics class
 # contains the complete game state
-class Gamestate:
+class Gamestate(object):
     def __init__(self):
         self.entities = {}
         self.next_entity_id = 0
@@ -20,21 +18,21 @@ class Gamestate:
         for entity in self.entities.values(): entity.endstep(game, self, frametime)
     
     def interpolate(self, next_state, alpha):
-        interpolated_state = self.copy()
+        interpolated_state = Gamestate()
         
         interpolated_state.next_entity_id = next_state.next_entity_id
         interpolated_state.time = self.time * (1 - alpha) + next_state.time * alpha
+        interpolated_state.entities = {id:entity.copy() for id, entity in self.entities.items() if id in next_state.entities}
         
         for id, entity in interpolated_state.entities.items():
-            if id in next_state.entities: # does our object still exist?
-                entity.interpolate(next_state.entities[id], alpha)
+            entity.interpolate(next_state.entities[id], alpha)
         
         return interpolated_state
         
     def copy(self):
         new = Gamestate()
         
-        new.entities = {id:copy.copy(entity) for id, entity in self.entities.items()}
+        new.entities = {id:entity.copy() for id, entity in self.entities.items()}
         new.next_entity_id = self.next_entity_id
         new.time = self.time
         

@@ -37,13 +37,14 @@ class Weapon(entity.Entity):
 
         if game.rightmouse and self.refirealarm == 0:
             self.fire_secondary(game, state)
-
+            
     # override this
     def fire_primary(self, game, state): pass
     def fire_secondary(self, game, state): pass
     
     def interpolate(self, next_object, alpha):
         self.direction = function.interpolate_angle(self.direction, next_object.direction, alpha)
+        self.refirealarm = (1 - alpha) * self.refirealarm + alpha * next_object.refirealarm
 
 class ScattergunDrawer(entity.EntityDrawer):
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
@@ -64,7 +65,7 @@ class ScattergunDrawer(entity.EntityDrawer):
         offset = self.weaponoffset
         rotate_point = self.weapon_rotate_point
         
-        if weapon.refiretime - weapon.refirealarm < 0.1:
+        if weapon.refiretime - weapon.refirealarm < 0.02:
             image = self.firingsprite
             
         if owner.flip:
@@ -91,11 +92,11 @@ class Scattergun(Weapon):
     Drawer = ScattergunDrawer
 
     maxammo = 6
-    refiretime = 0.5
+    refiretime = 0.05
     reloadtime = 1
     
     def fire_primary(self, game, state):
-        for i in range(6):
+        for i in range(4):
             projectile.Shot(game, state, self.id)
         
         self.refirealarm = self.refiretime

@@ -10,33 +10,34 @@ except: pass
 # DEBUG ONLY
 import cProfile
 import pstats
+import os
 
 import gg2
 
 # global settings
-physics_timestep = 1/30 # always update physics in these steps
+PHYSICS_TIMESTEP = 1/60 # always update physics in these steps
 
 # http://pygame.org/wiki/toggle_fullscreen
 def toggle_fullscreen():
     screen = pygame.display.get_surface()
     tmp = screen.convert()
     caption = pygame.display.get_caption()
-    cursor = pygame.mouse.get_cursor()  # Duoas 16-04-2007 
+    cursor = pygame.mouse.get_cursor()
     
-    w,h = screen.get_width(),screen.get_height()
+    w, h = screen.get_width(), screen.get_height()
     flags = screen.get_flags()
     bits = screen.get_bitsize()
     
     pygame.display.quit()
     pygame.display.init()
     
-    screen = pygame.display.set_mode((w,h),flags^FULLSCREEN,bits)
-    screen.blit(tmp,(0,0))
+    screen = pygame.display.set_mode((w, h), flags ^ FULLSCREEN, bits)
+    screen.blit(tmp, (0, 0))
     pygame.display.set_caption(*caption)
  
-    pygame.key.set_mods(0) #HACK: work-a-round for a SDL bug??
+    pygame.key.set_mods(0) # HACK: work-a-round for a SDL bug??
  
-    pygame.mouse.set_cursor( *cursor )  # Duoas 16-04-2007
+    pygame.mouse.set_cursor(*cursor)
     
     return screen
 
@@ -96,16 +97,16 @@ def GG2main():
         game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
         
         # update the game and render
-        clock.tick()
+        clock.tick(120)
         frame_time = min(0.25, clock.get_time() / 1000) # a limit of 0.25 seconds to prevent complete breakdown
         
         accumulator += frame_time
-        while accumulator > physics_timestep:
-            accumulator -= physics_timestep
-            game.update(physics_timestep)
+        while accumulator > PHYSICS_TIMESTEP:
+            accumulator -= PHYSICS_TIMESTEP
+            game.update(PHYSICS_TIMESTEP)
             text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         
-        game.render(accumulator / physics_timestep)
+        game.render(accumulator / PHYSICS_TIMESTEP)
         
         game.window.blit(text, (0, 0))
         
@@ -116,9 +117,10 @@ def GG2main():
 
 def profileGG2():
     cProfile.run("GG2main()", "game_profile")
-    p = pstats.Stats("game_profile")
+    p = pstats.Stats("game_profile", stream=open("profile.txt", "w"))
     p.sort_stats("cumulative")
     p.print_stats(30)
+    os.remove("game_profile")
     
 if __name__ == "__main__":
     # when profiling:

@@ -26,6 +26,11 @@ class Entity(object):
         if self.Drawer: self.drawer = self.Drawer(game, state, self.id)
         else: self.drawer = None
     
+    def copy(self):
+        cpobj = object.__new__(type(self))
+        cpobj.__dict__.update(self.__dict__)
+        return cpobj
+    
     def destroy(self, state):
         del state.entities[self.id]
     
@@ -48,6 +53,16 @@ class MovingObject(Entity):
         # hspeed and vspeed are the speeds of the object in respective directions
         self.hspeed = 0.0
         self.vspeed = 0.0
+    
+    def copy(self):
+        cpobj = super(MovingObject, self).copy()
+        
+        cpobj.x = self.x
+        cpobj.y = self.y
+        cpobj.hspeed = self.hspeed
+        cpobj.vspeed = self.vspeed
+        
+        return cpobj
         
     def endstep(self, game, state, frametime):
         # first move

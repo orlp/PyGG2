@@ -65,7 +65,7 @@ class BuildExe:
         self.project_description = "Python implementation of Gang Garrison 2"
  
         #Icon file (None will use pygame default icon)
-        self.icon_file = None
+        self.icon_file = "gg2.ico"
  
         #Extra files/dirs copied to game
         self.extra_datas = []
@@ -80,7 +80,7 @@ class BuildExe:
         self.extra_scripts = []
  
         #Zip file name (None will bundle files in exe instead of zip file)
-        self.zipfile_name = "dependencies.dat"
+        self.zipfile_name = None
  
         #Dist directory
         self.dist_dir = "dist"

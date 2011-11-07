@@ -20,6 +20,7 @@ elif sys.argv[1] == "clean":
     remove("*.pyc")
     remove("*.pyo")
     remove("game_profile")
+    remove("profile.txt")
     try: shutil.rmtree("dist")
     except: pass
 elif sys.argv[1] == "test":

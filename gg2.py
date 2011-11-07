@@ -81,6 +81,9 @@ class GG2:
             self.window.blit(surface, offset)
         self.overlayblits = []
     
+    def is_onscreen(self, objpos, objsize):
+        return objpos[0] + objsize[0] - self.xview >= 0 and objpos[0] - objsize[0] - self.xview < self.view_width and objpos[1] + objsize[1] - self.yview >= 0 and objpos[1] - objsize[1] - self.yview < self.view_height
+    
     # this function is called to draw on the game's window with game world coordinate
     def draw_world(self, surface, offset = (0, 0)):
         width, height = surface.get_size()
