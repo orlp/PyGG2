@@ -14,10 +14,12 @@ class Character(entity.MovingObject):
         super(Character, self).__init__(game, state)
         
         self.flip = False # are we flipped around?
+        self.walkframe = 0 # walk anim
 
     def step(self, game, state, frametime):
         angle = state.entities[self.weapon].direction % 360
         self.flip = not (angle < 90 or angle > 270)
+        self.walkframe = (self.walkframe+abs(self.hspeed)/20) % 2;
         
         # if we are holding down movement keys, move
         if game.left: self.hspeed -= 1000 * frametime
@@ -92,13 +94,16 @@ class ScoutDrawer(entity.EntityDrawer):
     def __init__(self, game, state, entity_id):
         super(ScoutDrawer, self).__init__(game, state, entity_id)
         
-        self.sprite = function.load_image("characters/scoutreds/0")
+        self.sprites = [
+            function.load_image("characters/scoutreds/0"),
+            function.load_image("characters/scoutreds/1")
+        ]
         self.spriteoffset = (-24, -30)
 
     def draw(self, game, state):
         character = self.get_entity(state)
 
-        image = self.sprite
+        image = self.sprites[int(character.walkframe)]
         if character.flip: image = pygame.transform.flip(image, 1, 0)
         
         xoff = character.x + self.spriteoffset[0]
