@@ -26,13 +26,21 @@ class ShotDrawer(entity.EntityDrawer):
     def draw(self, game, state, frametime):
         shot = self.get_entity(state)
         angle = int(shot.direction) % 360
-        game.draw_world(self.shotsprite_angles[angle], (shot.x, shot.y))
+        
+        image = self.shotsprite_angles[angle]
+        
+        if shot.max_flight_time - shot.flight_time < shot.fade_time:
+            image.set_alpha(255 * (shot.max_flight_time - shot.flight_time) / shot.fade_time)
+        else: image.set_alpha(255)
+        
+        game.draw_world(image, (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
     Drawer = ShotDrawer
     
     shot_hitmasks = {} # rotating is expensive, we save each rotated mask per angle (integers)
     
+    fade_time = .2 # seconds of fading when max_flight_time is being reached
     max_flight_time = 1.5
     damage = 8
     
@@ -101,15 +109,23 @@ class RocketDrawer(entity.EntityDrawer):
     def draw(self, game, state, frametime):
         rocket = self.get_entity(state)
         angle = int(rocket.direction) % 360
-        game.draw_world(self.rocketsprite_angles[angle], (rocket.x, rocket.y))
+        
+        image = self.rocketsprite_angles[angle]
+        
+        if rocket.max_flight_time - rocket.flight_time < rocket.fade_time:
+            image.set_alpha(255 * (rocket.max_flight_time - rocket.flight_time) / rocket.fade_time)
+        else: image.set_alpha(255)
+        
+        game.draw_world(image, (rocket.x, rocket.y))
 
 class Rocket(entity.MovingObject):
     Drawer = RocketDrawer
     
-    max_flight_time = 15
+    fade_time = .3 # seconds of fading when max_flight_time is being reached
+    max_flight_time = 20
     damage = 35
     blastradius = 65
-    knockback = 200
+    knockback = 1200
     
     rocket_hitmasks = {} # rotating is expensive, we save each rotated mask per angle (integers)
     

@@ -32,9 +32,8 @@ def toggle_fullscreen():
     pygame.display.quit()
     pygame.display.init()
     
-    # toggle fullscreen flag and get the new state
+    # toggle fullscreen flag
     flags ^= FULLSCREEN
-    fullscreen = flags & FULLSCREEN
     
     # restore settings, this time with fullscreen toggled.
     screen = pygame.display.set_mode((w, h), flags, bits)
@@ -44,8 +43,8 @@ def toggle_fullscreen():
  
     pygame.key.set_mods(0) # HACK: work-a-round for a SDL bug??
  
-    return screen, fullscreen
-
+    return screen
+    
 # the main function
 def GG2main():
     # initialize pygame
