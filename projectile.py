@@ -23,7 +23,7 @@ class ShotDrawer(entity.EntityDrawer):
             for angle in range(361):
                 self.shotsprite_angles[angle] = pygame.transform.rotate(self.shotsprite, angle)
         
-    def draw(self, game, state):
+    def draw(self, game, state, frametime):
         shot = self.get_entity(state)
         angle = int(shot.direction) % 360
         game.draw_world(self.shotsprite_angles[angle], (shot.x, shot.y))
@@ -98,7 +98,7 @@ class RocketDrawer(entity.EntityDrawer):
             for angle in range(361):
                 self.rocketsprite_angles[angle] = pygame.transform.rotate(self.rocketsprite, angle)
     
-    def draw(self, game, state):
+    def draw(self, game, state, frametime):
         rocket = self.get_entity(state)
         angle = int(rocket.direction) % 360
         game.draw_world(self.rocketsprite_angles[angle], (rocket.x, rocket.y))

@@ -57,7 +57,7 @@ class ScattergunDrawer(entity.EntityDrawer):
         self.weaponsprite = function.load_image("weapons/scatterguns/0")
         self.firingsprite = function.load_image("weapons/scatterguns/2")
         
-    def draw(self, game, state):
+    def draw(self, game, state, frametime):
         weapon = state.entities[self.entity_id]
         owner = state.entities[weapon.owner]
         

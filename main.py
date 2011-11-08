@@ -15,7 +15,7 @@ import os
 import gg2
 
 # global settings
-PHYSICS_TIMESTEP = 1/30 # always update physics in these steps
+PHYSICS_TIMESTEP = 1/50 # always update physics in these steps
 
 # http://pygame.org/wiki/toggle_fullscreen
 def toggle_fullscreen():
@@ -98,17 +98,17 @@ def GG2main():
         game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
         
         # update the game and render
-        clock.tick(80)
-        frame_time = min(0.25, clock.get_time() / 1000) # a limit of 0.25 seconds to prevent complete breakdown
+        frame_time = clock.tick() / 1000
+        frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
         
         accumulator += frame_time
         while accumulator > PHYSICS_TIMESTEP:
             accumulator -= PHYSICS_TIMESTEP
             game.update(PHYSICS_TIMESTEP)
+            text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         
-        game.render(accumulator / PHYSICS_TIMESTEP)
+        game.render(accumulator / PHYSICS_TIMESTEP, frame_time)
         
-        text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         game.window.blit(text, (0, 0))
         
         pygame.display.flip()
