@@ -10,7 +10,7 @@ class EntityDrawer(object):
     def get_entity(self, state):
         return state.entities[self.entity_id]
     
-    def draw(self, game, state): pass
+    def draw(self, game, state, frametime): pass
 
 # every entity should inherit from this
 class Entity(object):

@@ -59,7 +59,7 @@ class GG2:
         self.interpolated_state = self.previous_state.copy()
         self.current_state.update(self, frametime)
 
-    def render(self, alpha):
+    def render(self, alpha, frametime):
         # calculate our interpolated state
         self.interpolated_state.interpolate(self.previous_state, self.current_state, alpha)
         
@@ -76,7 +76,7 @@ class GG2:
         self.map.draw(self)
         
         # draw entities
-        for entity in self.interpolated_state.entities.values(): entity.drawer.draw(self, self.interpolated_state)
+        for entity in self.interpolated_state.entities.values(): entity.drawer.draw(self, self.interpolated_state, frametime)
         
         # blit overlay last
         for surface, offset in self.overlayblits:
