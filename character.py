@@ -104,13 +104,14 @@ class ScoutDrawer(entity.EntityDrawer):
     def draw(self, game, state, frametime):
         character = self.get_entity(state)
         
-        anim = 0
-        if abs(character.hspeed) > 1:
+        anim_frame = 0
+        # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
+        if abs(character.hspeed) > 20: 
             self.animoffset += frametime * abs(character.hspeed) / 20
             self.animoffset %= 2
-            anim = int(self.animoffset)
+            anim_frame = int(self.animoffset)
         
-        image = self.sprites[anim]
+        image = self.sprites[anim_frame]
         
         if character.flip: image = pygame.transform.flip(image, 1, 0)
         
@@ -128,7 +129,6 @@ class Scout(Character):
     collision_mask.fill()
     
     maxhp = 100
-    
     def __init__(self, game, state):
         Character.__init__(self, game, state)
 

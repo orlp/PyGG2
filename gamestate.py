@@ -19,7 +19,7 @@ class Gamestate(object):
     
     def interpolate(self, prev_state, next_state, alpha):
         self.next_entity_id = next_state.next_entity_id
-        self.time = prev_state.time * (1 - alpha) + next_state.time * alpha
+        self.time = prev_state.time + (next_state.time - prev_state.time) * alpha
         
         for id, entity in prev_state.entities.items():
             if not id in next_state.entities: continue

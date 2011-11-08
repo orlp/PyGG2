@@ -76,7 +76,7 @@ def load_image(filename):
         spritefile.close()
     
     image = image.convert()
-    image.set_colorkey((255, 0, 255), RLEACCEL)
+    image.set_colorkey((255, 0, 255), RLEACCEL) # RLEACCEL means slow changing, fast blitting
     images[filename] = image
     
     return image.copy()

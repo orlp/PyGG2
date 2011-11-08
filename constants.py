@@ -7,3 +7,4 @@ import function
 
 # this file contains all kinds of constants
 
+PHYSICS_TIMESTEP = 1/50 # always update physics in these steps

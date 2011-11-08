@@ -2,9 +2,11 @@
 
 from __future__ import division, print_function
 
-import math, pygame
+import pygame
 from pygame.locals import *
-try: import pygame._view # fix for py2exe dependency detection
+
+# fix for py2exe dependency detection
+try: import pygame._view
 except: pass
 
 # DEBUG ONLY
@@ -13,33 +15,36 @@ import pstats
 import os
 
 import gg2
-
-# global settings
-PHYSICS_TIMESTEP = 1/50 # always update physics in these steps
+import constants
 
 # http://pygame.org/wiki/toggle_fullscreen
 def toggle_fullscreen():
+    # save data before restarting the screen
     screen = pygame.display.get_surface()
     tmp = screen.convert()
     caption = pygame.display.get_caption()
     cursor = pygame.mouse.get_cursor()
-    
     w, h = screen.get_width(), screen.get_height()
     flags = screen.get_flags()
     bits = screen.get_bitsize()
     
+    # restart the screen
     pygame.display.quit()
     pygame.display.init()
     
-    screen = pygame.display.set_mode((w, h), flags ^ FULLSCREEN, bits)
+    # toggle fullscreen flag and get the new state
+    flags ^= FULLSCREEN
+    fullscreen = flags & FULLSCREEN
+    
+    # restore settings, this time with fullscreen toggled.
+    screen = pygame.display.set_mode((w, h), flags, bits)
     screen.blit(tmp, (0, 0))
     pygame.display.set_caption(*caption)
+    pygame.mouse.set_cursor(*cursor)
  
     pygame.key.set_mods(0) # HACK: work-a-round for a SDL bug??
  
-    pygame.mouse.set_cursor(*cursor)
-    
-    return screen
+    return screen, fullscreen
 
 # the main function
 def GG2main():
@@ -49,7 +54,6 @@ def GG2main():
     # set display mode
     fullscreen = False # are we fullscreen? pygame doesn't track this
     window = pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
-    window.set_alpha(None)
 
     # keep state of keys stored for one frame so we can detect down/up events
     keys = pygame.key.get_pressed()
@@ -61,12 +65,9 @@ def GG2main():
     clock = pygame.time.Clock()
     accumulator = 0.0 # this counter will accumulate time to be used by the physics
     
-    # DEBUG code: calculate average fps
-    average_fps = 0
-    num_average_fps = 0
-    
-    font = pygame.font.Font(None, 17)
-    text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
+    # DEBUG code: show fps    
+    fps_font = pygame.font.Font(None, 17)
+    fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
     
     # game loop
     while True:        
@@ -77,10 +78,16 @@ def GG2main():
         # handle input
         oldkeys = keys
         keys = pygame.key.get_pressed()
+        leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
+        
+        game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
         game.up = keys[K_w]
         game.down = keys[K_s]
         game.left = keys[K_a]
         game.right = keys[K_d]
+        game.leftmouse = leftmouse
+        game.middlemouse = middlemouse
+        game.rightmouse = rightmouse
         
         # DEBUG quit game with escape
         if keys[K_ESCAPE]: break
@@ -91,25 +98,19 @@ def GG2main():
             if not pygame.display.toggle_fullscreen():
                 game.window = toggle_fullscreen()
 
-        leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
-        game.leftmouse = leftmouse
-        game.middlemouse = middlemouse
-        game.rightmouse = rightmouse
-        game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
-        
         # update the game and render
         frame_time = clock.tick() / 1000
         frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
         
         accumulator += frame_time
-        while accumulator > PHYSICS_TIMESTEP:
-            accumulator -= PHYSICS_TIMESTEP
-            game.update(PHYSICS_TIMESTEP)
-            text = font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
+        while accumulator > constants.PHYSICS_TIMESTEP:
+            accumulator -= constants.PHYSICS_TIMESTEP
+            game.update(constants.PHYSICS_TIMESTEP)
+            fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         
-        game.render(accumulator / PHYSICS_TIMESTEP, frame_time)
+        game.render(accumulator / constants.PHYSICS_TIMESTEP, frame_time)
         
-        game.window.blit(text, (0, 0))
+        game.window.blit(fps_text, (0, 0))
         
         pygame.display.flip()
     

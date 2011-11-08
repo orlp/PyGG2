@@ -60,6 +60,6 @@ class MovingObject(Entity):
         self.y += self.vspeed * frametime
 
     def interpolate(self, prev_obj, next_obj, alpha):
-        self.x = prev_obj.x * (1 - alpha) + next_obj.x * alpha
-        self.y = prev_obj.y * (1 - alpha) + next_obj.y * alpha
+        self.x = prev_obj.x + (next_obj.x - prev_obj.x) * alpha
+        self.y = prev_obj.y + (next_obj.y - prev_obj.y) * alpha
         
