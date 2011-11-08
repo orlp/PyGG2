@@ -98,6 +98,7 @@ class ScoutDrawer(entity.EntityDrawer):
         ]
         self.spriteoffset = (-24, -30)
         
+        # time tracker for the moving of the character's legs
         self.animoffset = 0.0
 
     def draw(self, game, state, frametime):
@@ -105,7 +106,7 @@ class ScoutDrawer(entity.EntityDrawer):
         
         anim = 0
         if abs(character.hspeed) > 1:
-            self.animoffset = frametime * abs(character.hspeed) / 20
+            self.animoffset += frametime * abs(character.hspeed) / 20
             self.animoffset %= 2
             anim = int(self.animoffset)
         
