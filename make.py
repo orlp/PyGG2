@@ -24,9 +24,9 @@ if sys.argv[1] == "build":
         includes = distutils.sysconfig.get_python_inc()
         libs = os.path.join(includes, "../libs")
         
-        subprocess.call("gcc -O3 -c -o c/bitmask.o c/bitmask.c")
-        subprocess.call("gcc -I%s -O3 -c -o c/_mask.o c/_mask.c" % includes)
-        subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs)
+        subprocess.call("gcc -O3 -c -o c/bitmask.o c/bitmask.c", shell=True)
+        subprocess.call("gcc -I%s -O3 -c -o c/_mask.o c/_mask.c" % includes, shell=True)
+        subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs, shell=True)
 elif sys.argv[1] == "clean":
     remove("*.pyc")
     remove("c/*.pyc")
