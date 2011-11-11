@@ -51,9 +51,8 @@ class Shot(entity.MovingObject):
         
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.shot_hitmasks:
-            collisionmask = mask.from_image("sprites/projectiles/shots/0.png")
             for angle in range(361):
-                self.shot_hitmasks[angle] = collisionmask.rotate(angle)
+                self.shot_hitmasks[angle] = function.load_mask("projectiles/shots/0").rotate(angle)
         
         self.direction = 0.0
         self.flight_time = 0.0
@@ -137,9 +136,8 @@ class Rocket(entity.MovingObject):
         
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.rocket_hitmasks:
-            collisionmask = mask.from_image("sprites/projectiles/rockets/0.png")
             for angle in range(361):
-                self.rocket_hitmasks[angle] = collisionmask.rotate(angle)
+                self.rocket_hitmasks[angle] = function.load_mask("projectiles/rockets/0").rotate(angle)
         
         self.direction = 0.0
         self.flight_time = 0.0

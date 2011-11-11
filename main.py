@@ -73,6 +73,7 @@ def GG2main():
         # check if user exited the game
         if QUIT in {event.type for event in pygame.event.get()}:
             break
+        pygame.event.clear()
         
         # handle input
         oldkeys = keys
@@ -112,7 +113,7 @@ def GG2main():
         game.window.blit(fps_text, (0, 0))
         
         pygame.display.update()
-    
+        
     # clean up
     pygame.quit()
 

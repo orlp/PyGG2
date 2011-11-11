@@ -13,19 +13,20 @@ def remove(name):
     except: pass
 
 if sys.argv[1] == "build":
-    includes = distutils.sysconfig.get_python_inc()
-    libs = os.path.join(includes, "../libs")
-    
-    subprocess.call("gcc -O3 -c -o c/bitmask.o c/bitmask.c")
-    subprocess.call("gcc -I%s -O3 -c -o c/_mask.o c/_mask.c" % includes)
-    subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs)
-    
-elif sys.argv[1] == "dist":
-    if platform.system() == "Windows":
-        import build_win
-        build_win.build()
+    if sys.argv[2] == "dist":
+        if platform.system() == "Windows":
+            import build_win
+            sys.argv = sys.argv[:2]
+            build_win.build()
+        else:
+            print(platform.system() + " not supported.")
     else:
-        print(platform.system() + " not supported.")
+        includes = distutils.sysconfig.get_python_inc()
+        libs = os.path.join(includes, "../libs")
+        
+        subprocess.call("gcc -O3 -c -o c/bitmask.o c/bitmask.c")
+        subprocess.call("gcc -I%s -O3 -c -o c/_mask.o c/_mask.c" % includes)
+        subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs)
 elif sys.argv[1] == "clean":
     remove("*.pyc")
     remove("c/*.pyc")

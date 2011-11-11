@@ -4,10 +4,12 @@ from __future__ import division, print_function
 
 import math, pygame
 from pygame.locals import *
+import mask
 
 import zipfile
 import cStringIO
 import os.path
+
 
 def sign(x):
     # Returns the sign of the number given
@@ -81,3 +83,22 @@ def load_image(filename):
     
     return image.copy()
     
+masks = {}
+def load_mask(filename): 
+    if filename in masks:
+        return masks[filename].copy()
+    
+    bitmask = None
+    # first try to load the sprite from the sprite folder, fall back to our zipped sprites
+    # this allows users to override sprites, and makes testing/developing easier
+    try:
+        bitmask = mask.from_image("sprites/" + filename + ".png")
+    except:
+        sprites = zipfile.ZipFile("sprites.zip", "r")
+        spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
+        bitmask = mask.from_image(spritefile, filename + ".png")
+        spritefile.close()
+    
+    masks[filename] = bitmask
+    
+    return bitmask.copy()
