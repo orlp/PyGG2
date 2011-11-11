@@ -42,7 +42,7 @@ class Shot(entity.MovingObject):
     
     shot_hitmasks = {} # rotating is expensive, we save each rotated mask per angle (integers)
     
-    fade_time = .2 # seconds of fading when max_flight_time is being reached
+    fade_time = 0.8 # seconds of fading when max_flight_time is being reached
     max_flight_time = 1.5
     damage = 8
     
