@@ -111,7 +111,7 @@ def GG2main():
         
         game.window.blit(fps_text, (0, 0))
         
-        pygame.display.flip()
+        pygame.display.update()
     
     # clean up
     pygame.quit()
