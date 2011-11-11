@@ -8,6 +8,7 @@ from pygame.locals import *
 import function
 import entity
 import weapons
+import mask
 
 class Character(entity.MovingObject):
     def __init__(self, game, state):
@@ -125,12 +126,11 @@ class Scout(Character):
     Drawer = ScoutDrawer
 
     # width, height of scout - rectangle collision
-    collision_mask = pygame.mask.Mask((12, 33))
-    collision_mask.fill()
+    collision_mask = mask.Mask(12, 33, True)
     
     maxhp = 100
     def __init__(self, game, state):
         Character.__init__(self, game, state)
 
         self.hp = self.maxhp
-        self.weapon = weapons.Scattergun(game, state, self.id).id
+        #self.weapon = weapons.Scattergun(game, state, self.id).id

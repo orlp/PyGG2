@@ -9,6 +9,7 @@ import random
 import entity
 import character
 import function
+import mask
 
 class ShotDrawer(entity.EntityDrawer):
     shotsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
@@ -50,7 +51,8 @@ class Shot(entity.MovingObject):
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.shot_hitmasks:
             for angle in range(361):
-                self.shot_hitmasks[angle] = pygame.mask.from_surface(self.drawer.shotsprite_angles[angle])
+                self.shot_hitmasks[angle] = mask.from_image("sprites/projectiles/shots/0.png")
+                self.shot_hitmasks[angle] = self.shot_hitmasks[angle].rotate(angle)
         
         self.direction = 0.0
         self.flight_time = 0.0
@@ -135,7 +137,8 @@ class Rocket(entity.MovingObject):
         # initiate shot hitmask for every angle 0 <= a <= 360
         if not self.rocket_hitmasks:
             for angle in range(361):
-                self.rocket_hitmasks[angle] = pygame.mask.from_surface(self.drawer.rocketsprite_angles[angle])
+                self.rocket_hitmasks[angle] = mask.from_image("sprites/projectiles/rockets/0.png")
+                self.rocket_hitmasks[angle] = self.rocket_hitmasks[angle].rotate(angle)
         
         self.direction = 0.0
         self.flight_time = 0.0
