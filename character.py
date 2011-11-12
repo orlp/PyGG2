@@ -15,6 +15,7 @@ class Character(entity.MovingObject):
         super(Character, self).__init__(game, state)
         
         self.flip = False # are we flipped around?
+        self.intel = False # has intel (for drawing purposes)
         
     def step(self, game, state, frametime):
         angle = state.entities[self.weapon].direction % 360
@@ -93,10 +94,9 @@ class ScoutDrawer(entity.EntityDrawer):
     def __init__(self, game, state, entity_id):
         super(ScoutDrawer, self).__init__(game, state, entity_id)
         
-        self.sprites = [
-            function.load_image("characters/scoutreds/0"),
-            function.load_image("characters/scoutreds/1")
-        ]
+        self.sprites = list([
+            function.load_image("characters/scoutreds/%s" % i) for i in range(4)
+        ])
         self.spriteoffset = (-24, -30)
         
         # time tracker for the moving of the character's legs
@@ -112,7 +112,7 @@ class ScoutDrawer(entity.EntityDrawer):
             self.animoffset %= 2
             anim_frame = int(self.animoffset)
         
-        image = self.sprites[anim_frame]
+        image = self.sprites[anim_frame+(2 if character.intel else 0)]
         
         if character.flip: image = pygame.transform.flip(image, 1, 0)
         
