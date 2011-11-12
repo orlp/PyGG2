@@ -96,7 +96,7 @@ def load_mask(filename):
     except:
         sprites = zipfile.ZipFile("sprites.zip", "r")
         spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
-        bitmask = mask.from_image(spritefile, filename + ".png")
+        bitmask = mask.from_image(spritefile)
         spritefile.close()
     
     masks[filename] = bitmask

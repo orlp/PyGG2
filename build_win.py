@@ -65,7 +65,7 @@ class BuildExe:
         self.project_description = "Python implementation of Gang Garrison 2"
  
         #Icon file (None will use pygame default icon)
-        self.icon_file = "gg2.ico"
+        self.icon_file = None
  
         #Extra files/dirs copied to game
         self.extra_datas = []
