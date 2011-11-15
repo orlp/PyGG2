@@ -84,9 +84,10 @@ def load_image(filename):
     return image.copy()
     
 masks = {}
-def load_mask(filename): 
+def load_mask(filename, give_orig=False): 
     if filename in masks:
-        return masks[filename].copy()
+        if give_orig: return masks[filename]
+        else: return masks[filename].copy()
     
     bitmask = None
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
@@ -101,4 +102,5 @@ def load_mask(filename):
     
     masks[filename] = bitmask
     
-    return bitmask.copy()
+    if give_orig: return bitmask
+    else: return bitmask.copy()
