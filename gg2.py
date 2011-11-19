@@ -54,8 +54,7 @@ class GG2:
         self.previous_state = self.current_state.copy()
         self.interpolated_state = self.previous_state.copy()
 
-    def sendinput(self, game):
-
+    def sendinput(self):
         # Set Character input to this, later on we'll also send stuff here to the server.
         self.focus_object_id.up = self.up
         self.focus_object_id.down = self.down

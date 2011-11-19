@@ -62,7 +62,8 @@ def GG2main():
     
     # pygame time tracking
     clock = pygame.time.Clock()
-    accumulator = 0.0 # this counter will accumulate time to be used by the physics
+    physics_accumulator = 0.0 # this counter will accumulate time to be used by the physics
+    inputsender_accumulator = 0.0 # this counter will accumulate time to send input at a constant rate
     
     # DEBUG code: show fps    
     fps_font = pygame.font.Font(None, 17)
@@ -103,13 +104,18 @@ def GG2main():
         frame_time = clock.tick() / 1000
         frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
         
-        accumulator += frame_time
-        while accumulator > constants.PHYSICS_TIMESTEP:
-            accumulator -= constants.PHYSICS_TIMESTEP
+        physics_accumulator += frame_time
+        while physics_accumulator > constants.PHYSICS_TIMESTEP:
+            physics_accumulator -= constants.PHYSICS_TIMESTEP
             game.update(constants.PHYSICS_TIMESTEP)
             fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
         
-        game.render(accumulator / constants.PHYSICS_TIMESTEP, frame_time)
+        inputsender_accumulator += frame_time
+        while inputsender_accumulator > constants.INPUT_SEND_FPS:
+            inputsender_accumulator -= constants.INPUT_SEND_FPS
+            game.sendinput()
+        
+        game.render(physics_accumulator / constants.PHYSICS_TIMESTEP, frame_time)
         
         game.window.blit(fps_text, (0, 0))
         
