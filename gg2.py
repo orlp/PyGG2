@@ -55,17 +55,18 @@ class GG2:
         self.previous_state = self.current_state.copy()
         self.interpolated_state = self.previous_state.copy()
 
-    def sendinput(self):
-
+    def sendinput(self, game, state):
         # Set Character input to this, later on we'll also send stuff here to the server.
-        self.focus_object_id.up = self.up
-        self.focus_object_id.down = self.down
-        self.focus_object_id.left = self.left
-        self.focus_object_id.right = self.right
-        self.focus_object_id.leftmouse = self.leftmouse
-        self.focus_object_id.middlemouse = self.middlemouse
-        self.focus_object_id.rightmouse = self.rightmouse
-        self.focus_object_id.aimdirection = function.point_direction(int(self.focus_object_id.x), int(self.focus_object_id.y), self.mouse_x + self.xview, self.mouse_y + self.yview)
+        client = state.entities[self.focus_object_id]
+        
+        client.up = self.up
+        client.down = self.down
+        client.left = self.left
+        client.right = self.right
+        client.leftmouse = self.leftmouse
+        client.middlemouse = self.middlemouse
+        client.rightmouse = self.rightmouse
+        client.aimdirection = function.point_direction(int(client.x), int(client.y), self.mouse_x + self.xview, self.mouse_y + self.yview)
         
     def update(self, frametime):
         self.previous_state = self.current_state.copy()

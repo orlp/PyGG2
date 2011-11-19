@@ -104,16 +104,16 @@ def GG2main():
         frame_time = clock.tick() / 1000
         frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
         
+        inputsender_accumulator += frame_time
+        while inputsender_accumulator > constants.INPUT_SEND_FPS:
+            inputsender_accumulator -= constants.INPUT_SEND_FPS
+            game.sendinput(game, game.current_state)
+        
         physics_accumulator += frame_time
         while physics_accumulator > constants.PHYSICS_TIMESTEP:
             physics_accumulator -= constants.PHYSICS_TIMESTEP
             game.update(constants.PHYSICS_TIMESTEP)
             fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
-        
-        inputsender_accumulator += frame_time
-        while inputsender_accumulator > constants.INPUT_SEND_FPS:
-            inputsender_accumulator -= constants.INPUT_SEND_FPS
-            game.sendinput()
         
         game.render(physics_accumulator / constants.PHYSICS_TIMESTEP, frame_time)
         
