@@ -32,7 +32,7 @@ class Entity(object):
         return cpobj
     
     def destroy(self, state):
-        del state.entities[self.id]
+        state.removed_entities.append(self.id)
     
     # default member functions - notice the lack of
     # .interpolate(), .serialize(), .deserialize():

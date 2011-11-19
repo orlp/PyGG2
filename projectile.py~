@@ -32,7 +32,12 @@ class ShotDrawer(entity.EntityDrawer):
         
         if shot.max_flight_time - shot.flight_time < shot.fade_time:
             image.set_alpha(255 * (shot.max_flight_time - shot.flight_time) / shot.fade_time)
+        else: image.set_alpha(255)
+<<<<<<< HEAD
+
+=======
         
+>>>>>>> 8b9d8ae5d0f81378a8c2cbf223a56ba82cc3cfbc
         game.draw_world(image, (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
@@ -88,6 +93,12 @@ class Shot(entity.MovingObject):
             self.shot_hitmasks[angle] = mask
         
         if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+            h_unit_speed = math.cos(math.radians(self.direction))
+            v_unit_speed = -math.sin(math.radians(self.direction))
+            while game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))):
+                self.x -= h_unit_speed
+                self.y -= v_unit_speed
+                
             self.destroy(state)
     
     def interpolate(self, prev_obj, next_obj, alpha):
