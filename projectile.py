@@ -89,6 +89,12 @@ class Shot(entity.MovingObject):
             self.shot_hitmasks[angle] = mask
         
         if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+            h_unit_speed = math.cos(math.radians(self.direction))
+            v_unit_speed = -math.sin(math.radians(self.direction))
+            while game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))):
+                self.x -= h_unit_speed
+                self.y -= v_unit_speed
+                
             self.destroy(state)
     
     def interpolate(self, prev_obj, next_obj, alpha):
