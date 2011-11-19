@@ -96,7 +96,8 @@ def GG2main():
         if oldkeys[K_F11] and not keys[K_F11]:
             fullscreen = not fullscreen
             if not pygame.display.toggle_fullscreen():
-                game.window = toggle_fullscreen()
+                window = toggle_fullscreen()
+                game.window = window
 
         # update the game and render
         frame_time = clock.tick() / 1000
