@@ -25,6 +25,7 @@ class Character(entity.MovingObject):
         self.leftmouse = False
         self.middlemouse = False
         self.rightmouse = False
+        self.aimdirection = 0
         
     def step(self, game, state, frametime):
         angle = state.entities[self.weapon].direction % 360

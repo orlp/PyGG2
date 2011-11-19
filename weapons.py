@@ -24,18 +24,17 @@ class Weapon(entity.Entity):
     def step(self, game, state, frametime):
         owner = state.entities[self.owner]
     
-        # get angle of cursor relative to the horizontal axis, increasing counter-clockwise
-        self.direction = function.point_direction(int(owner.x), int(owner.y), game.mouse_x + game.xview, game.mouse_y + game.yview)
+        self.direction = owner.aimdirection
         
         if self.refirealarm <= 0:
             self.refirealarm = 0.0
         else:
             self.refirealarm -= frametime
 
-        if game.leftmouse and self.refirealarm == 0:
+        if owner.leftmouse and self.refirealarm == 0:
             self.fire_primary(game, state)
 
-        if game.rightmouse and self.refirealarm == 0:
+        if owner.rightmouse and self.refirealarm == 0:
             self.fire_secondary(game, state)
             
     # override this

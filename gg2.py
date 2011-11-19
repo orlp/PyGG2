@@ -8,6 +8,7 @@ from pygame.locals import *
 import map
 import character
 import gamestate
+import function
 
 # the central class
 class GG2:
@@ -54,7 +55,7 @@ class GG2:
         self.previous_state = self.current_state.copy()
         self.interpolated_state = self.previous_state.copy()
 
-    def sendinput(self, game):
+    def sendinput(self):
 
         # Set Character input to this, later on we'll also send stuff here to the server.
         self.focus_object_id.up = self.up
@@ -64,6 +65,7 @@ class GG2:
         self.focus_object_id.leftmouse = self.leftmouse
         self.focus_object_id.middlemouse = self.middlemouse
         self.focus_object_id.rightmouse = self.rightmouse
+        self.focus_object_id.aimdirection = function.point_direction(int(self.focus_object_id.x), int(self.focus_object_id.y), self.mouse_x + self.xview, self.mouse_y + self.yview)
         
     def update(self, frametime):
         self.previous_state = self.current_state.copy()
