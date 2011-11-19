@@ -1,82 +1,131 @@
+#!/usr/bin/env python
+
 from __future__ import division, print_function
 
-import math
+import pygame
+from pygame.locals import *
+
+# fix for py2exe dependency detection
+try: import pygame._view
+except: pass
+
+# DEBUG ONLY
+import cProfile
+import pstats
 import os
 
-import pyglet
-from pyglet.gl import *
-from pyglet.window import key
-
-import game
+import gg2
 import constants
 
-# debug
-import cProfile, pstats
+# http://pygame.org/wiki/toggle_fullscreen
+def toggle_fullscreen():
+    # save data before restarting the screen
+    screen = pygame.display.get_surface()
+    tmp = screen.convert()
+    caption = pygame.display.get_caption()
+    cursor = pygame.mouse.get_cursor()
+    w, h = screen.get_width(), screen.get_height()
+    flags = screen.get_flags()
+    bits = screen.get_bitsize()
     
-class GG2main(object):
-    def __init__(self):
-        # set pyglet settings
-        pyglet.options["shadow_window"] = False
-        glEnable(GL_BLEND)
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+    # restart the screen
+    pygame.display.quit()
+    pygame.display.init()
     
-        # create window
-        self.window = pyglet.window.Window(width=800, height=600, caption="PyGG2")
-        self.window.switch_to()
+    # toggle fullscreen flag
+    flags ^= FULLSCREEN
+    
+    # restore settings, this time with fullscreen toggled.
+    screen = pygame.display.set_mode((w, h), flags, bits)
+    screen.blit(tmp, (0, 0))
+    pygame.display.set_caption(*caption)
+    pygame.mouse.set_cursor(*cursor)
+ 
+    pygame.key.set_mods(0) # HACK: work-a-round for a SDL bug??
+ 
+    return screen
+    
+# the main function
+def GG2main():
+    # initialize pygame
+    pygame.init()
+    
+    # set display mode
+    fullscreen = False # are we fullscreen? pygame doesn't track this
+    window = pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
 
-        # time tracking
-        self.accumulator = 0.0
-        self.clock = pyglet.clock.Clock()
-        self.fpsdisplay = pyglet.clock.ClockDisplay(clock=self.clock)
-        
-        # create game object
-        self.game = game.Game(self.window)
-        
-        # key tracking
-        self.keys = key.KeyStateHandler()
-        self.window.push_handlers(self.keys)
-        self.oldkeys = self.keys.copy()
-        
-        # set hooks
-        pyglet.clock.schedule(self.tick)
-        
-    def on_mouse_motion(x, y, dx, dy):
-        self.game.mouse_x = x
-        self.game.mouse_y = y
+    # keep state of keys stored for one frame so we can detect down/up events
+    keys = pygame.key.get_pressed()
     
-    def tick(self, dt):
-        # use our own time management
-        dt = self.clock.tick()
+    # create game object
+    game = gg2.GG2()
+    
+    # pygame time tracking
+    clock = pygame.time.Clock()
+    accumulator = 0.0 # this counter will accumulate time to be used by the physics
+    
+    # DEBUG code: show fps    
+    fps_font = pygame.font.Font(None, 17)
+    fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
+    
+    # game loop
+    while True:        
+        # check if user exited the game
+        if QUIT in {event.type for event in pygame.event.get()}:
+            break
+        pygame.event.clear()
         
         # handle input
-        self.game.left = self.keys[key.LEFT]
-        self.game.right = self.keys[key.RIGHT]
-        self.game.up = self.keys[key.UP] 
-        self.game.down = self.keys[key.DOWN]
-        self.game.leftmouse = False
-        self.game.middlemouse = False
-        self.game.rightmouse = False
+        oldkeys = keys
+        keys = pygame.key.get_pressed()
+        leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
         
-        self.accumulator += dt
+        game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
+        game.up = keys[K_w]
+        game.down = keys[K_s]
+        game.left = keys[K_a]
+        game.right = keys[K_d]
+        game.leftmouse = leftmouse
+        game.middlemouse = middlemouse
+        game.rightmouse = rightmouse
         
-        while self.accumulator > constants.PHYSICS_TIMESTEP:
-            self.game.update(constants.PHYSICS_TIMESTEP)
-            self.accumulator -= constants.PHYSICS_TIMESTEP
+        # DEBUG quit game with escape
+        if keys[K_ESCAPE]: break
         
-        self.game.render(self.accumulator / constants.PHYSICS_TIMESTEP, dt)
-        self.fpsdisplay.draw()
+        # did we just release the F11 button? if yes, go fullscreen
+        if oldkeys[K_F11] and not keys[K_F11]:
+            fullscreen = not fullscreen
+            if not pygame.display.toggle_fullscreen():
+                window = toggle_fullscreen()
+                game.window = window
+
+        # update the game and render
+        frame_time = clock.tick() / 1000
+        frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
         
-        self.oldkeys = self.keys.copy()
-    
-    def run(self):
-        pyglet.app.run()
-    
+        accumulator += frame_time
+        while accumulator > constants.PHYSICS_TIMESTEP:
+            accumulator -= constants.PHYSICS_TIMESTEP
+            game.update(constants.PHYSICS_TIMESTEP)
+            fps_text = fps_font.render("%d FPS" % clock.get_fps(), True, (255, 255, 255), (159, 182, 205))
+        
+        game.render(accumulator / constants.PHYSICS_TIMESTEP, frame_time)
+        
+        game.window.blit(fps_text, (0, 0))
+        
+        pygame.display.update()
+        
+    # clean up
+    pygame.quit()
+
 def profileGG2():
-    cProfile.run("GG2main().run()", "game_profile")
-    p = pstats.Stats("game_profile")
+    cProfile.run("GG2main()", "game_profile")
+    p = pstats.Stats("game_profile", stream=open("profile.txt", "w"))
     p.sort_stats("cumulative")
     p.print_stats(30)
-        
+    os.remove("game_profile")
+    
 if __name__ == "__main__":
+    # when profiling:
     profileGG2()
-    # GG2main().run()
+    # GG2main()

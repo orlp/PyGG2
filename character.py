@@ -31,14 +31,14 @@ class Character(entity.MovingObject):
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
         
         if game.up:
-            # if self.onground(game, state):
-            self.vspeed = 200
+            if self.onground(game, state):
+                self.vspeed = -200
                 
         # gravitational force
-        self.vspeed -= 300 * frametime
+        self.vspeed += 300 * frametime
 
         # TODO: air resistance, not hard limit
-        self.vspeed = max(-800, self.vspeed)
+        self.vspeed = min(800, self.vspeed)
         
         # TODO: speed limit based on class
         self.hspeed = min(200, max(-200, self.hspeed))
@@ -56,11 +56,11 @@ class Character(entity.MovingObject):
             # but we had to be on the ground
             if onground and not game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y - 6))):
                 while game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y))):
-                    self.y += 1
+                    self.y -= 1
             # but sometimes we are so fast we will need to take two stairs at the same time
             elif onground and not game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y - 12))) and game.map.collision_mask.overlap(self.collision_mask, (int(self.x - 6 * function.sign(self.hspeed)), int(self.y))):
                 while game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y))):
-                    self.y += 1
+                    self.y -= 1
             else:
                 self.x = math.floor(self.x) # move back to a whole pixel - TODO math.floor/math.ceil depending on direction
                 
@@ -87,7 +87,7 @@ class Character(entity.MovingObject):
     
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
-        return game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y - 1)))
+        return game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y + 1)))
 
 
 class ScoutDrawer(entity.EntityDrawer):    
