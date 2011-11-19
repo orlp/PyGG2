@@ -33,7 +33,11 @@ class ShotDrawer(entity.EntityDrawer):
         if shot.max_flight_time - shot.flight_time < shot.fade_time:
             image.set_alpha(255 * (shot.max_flight_time - shot.flight_time) / shot.fade_time)
         else: image.set_alpha(255)
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 8b9d8ae5d0f81378a8c2cbf223a56ba82cc3cfbc
         game.draw_world(image, (shot.x, shot.y))
 
 class Shot(entity.MovingObject):
