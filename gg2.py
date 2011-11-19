@@ -66,7 +66,7 @@ class GG2:
         client.leftmouse = self.leftmouse
         client.middlemouse = self.middlemouse
         client.rightmouse = self.rightmouse
-        client.aimdirection = function.point_direction(int(client.x), int(client.y), self.mouse_x + self.xview, self.mouse_y + self.yview)
+        client.aimdirection = function.point_direction(self.view_width / 2, self.view_height / 2, self.mouse_x, self.mouse_y)
         
     def update(self, frametime):
         self.previous_state = self.current_state.copy()

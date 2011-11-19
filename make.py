@@ -30,6 +30,7 @@ if sys.argv[1] == "build":
         subprocess.call("gcc -I%s -fPIC -O3 -c -o c/_mask.o c/_mask.c" % includes, shell=True)
         subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs, shell=True)
 elif sys.argv[1] == "clean":
+    remove("*.*~")
     remove("*.pyc")
     remove("c/*.pyc")
     remove("*.pyo")
