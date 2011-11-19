@@ -16,30 +16,21 @@ class Character(entity.MovingObject):
         
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
-
-		# Input
-        self.up = False
-        self.down = False
-        self.left = False
-        self.right = False
-        self.leftmouse = False
-        self.middlemouse = False
-        self.rightmouse = False
         
     def step(self, game, state, frametime):
         angle = state.entities[self.weapon].direction % 360
         self.flip = not (angle < 90 or angle > 270)
         
         # if we are holding down movement keys, move
-        if self.left: self.hspeed -= 1000 * frametime
-        if self.right: self.hspeed += 1000 * frametime
+        if game.left: self.hspeed -= 1000 * frametime
+        if game.right: self.hspeed += 1000 * frametime
         
         # if we're not, slow down
-        if not (self.left or self.right):
+        if not (game.left or game.right):
             if abs(self.hspeed) < 10: self.hspeed = 0
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
         
-        if self.up:
+        if game.up:
             if self.onground(game, state):
                 self.vspeed = -200
                 

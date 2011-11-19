@@ -56,7 +56,7 @@ class GG2:
 
     def sendinput(self, game):
 
-        # Set Character input to this, later on we'll also send stuff here to the server.
+    # Set Character input to this, later on we'll also send stuff here to the server.
         self.focus_object_id.up = self.up
         self.focus_object_id.down = self.down
         self.focus_object_id.left = self.left
