@@ -107,7 +107,7 @@ def GG2main():
             fullscreen = not fullscreen
             if not pygame.display.toggle_fullscreen():
                 window = toggle_fullscreen()
-                game.window = window
+                renderer.window = window
 
         # update the game and render
         frame_time = clock.tick()
