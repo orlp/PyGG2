@@ -89,11 +89,16 @@ class Shot(entity.MovingObject):
             self.shot_hitmasks[angle] = mask
         
         if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+            # calculate unit speeds (speeds normalized into the range 0-1)
             h_unit_speed = math.cos(math.radians(self.direction))
             v_unit_speed = -math.sin(math.radians(self.direction))
-            while game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))):
-                self.x -= h_unit_speed
-                self.y -= v_unit_speed
+            
+            x, y = self.x, self.y
+            
+            # move back until we're not colliding anymore - this is the colliding point
+            while game.map.collision_mask.overlap(mask, (int(x), int(y))):
+                x -= h_unit_speed
+                y -= v_unit_speed
                 
             self.destroy(state)
     

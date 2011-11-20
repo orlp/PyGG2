@@ -7,17 +7,11 @@ from __future__ import division, print_function
 class Gamestate(object):
     def __init__(self):
         self.entities = {}
-        self.removed_entities = []
         self.next_entity_id = 0
         self.time = 0.0
     
     def update(self, game, frametime):
         self.time += frametime
-        
-        # first remove entities that should get removed
-        for entity_id in self.removed_entities:
-            del self.entities[entity_id]
-        self.removed_entities = []
         
         for entity in self.entities.values(): entity.beginstep(game, self, frametime)
         for entity in self.entities.values(): entity.step(game, self, frametime)
@@ -37,7 +31,6 @@ class Gamestate(object):
         new = Gamestate()
         
         new.entities = {id:entity.copy() for id, entity in self.entities.items()}
-        new.removed_entities = self.removed_entities[:]
         new.next_entity_id = self.next_entity_id
         new.time = self.time
         
