@@ -6,3 +6,5 @@
 *.o
 build/*
 dist/*
+*game_profile*
+*profile.txt*
