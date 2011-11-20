@@ -6,7 +6,7 @@ import math
 
 import function
 import entity
-import weapons
+import weapon
 import mask
 
 class Character(entity.MovingObject):
@@ -127,4 +127,4 @@ class Scout(Character):
         Character.__init__(self, game, state)
 
         self.hp = self.maxhp
-        self.weapon = weapons.Scattergun(game, state, self.id).id
+        self.weapon = weapon.Scattergun(game, state, self.id).id

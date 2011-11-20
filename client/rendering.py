@@ -6,11 +6,11 @@ import engine.gamestate
 import constants
 import map
 
-import character
-import weapons
-import projectile
+import character_renderer
+import weapon_renderer
+import projectile_renderer
 import engine.character
-import engine.weapons
+import engine.weapon
 import engine.projectile
 
 class GameRenderer(object):
@@ -30,10 +30,10 @@ class GameRenderer(object):
         self.overlayblits = []
         
         self.renderers = {
-            engine.character.Scout: character.ScoutRenderer(),
-            engine.weapons.Scattergun: weapons.ScattergunRenderer(),
-            engine.projectile.Shot: projectile.ShotRenderer(),
-            engine.projectile.Rocket: projectile.RocketRenderer()
+            engine.character.Scout: character_renderer.ScoutRenderer(),
+            engine.weapon.Scattergun: weapon_renderer.ScattergunRenderer(),
+            engine.projectile.Shot: projectile_renderer.ShotRenderer(),
+            engine.projectile.Rocket: projectile_renderer.RocketRenderer()
         }
         
     def render(self, game, alpha, frametime):
