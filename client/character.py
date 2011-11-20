@@ -18,23 +18,14 @@ class ScoutRenderer(entity.EntityRenderer):
             function.load_image("characters/scoutreds/%s" % i) for i in range(4)
         ])
         self.spriteoffset = (-24, -30)
-        
-        # time tracker for the moving of the character's legs
-        self.animoffset = 0.0
 
-    def render(self, renderer, state, frametime):
+    def render(self, renderer, state):
         character = self.get_entity(state)
         
-        anim_frame = 0
-        # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
-        if abs(character.hspeed) > 20: 
-            self.animoffset += frametime * abs(character.hspeed) / 20
-            self.animoffset %= 2
-            anim_frame = int(self.animoffset)
-            
-            if anim_frame == 1 and not character.onground(renderer, state):
-                anim_frame = 1
-                self.animoffset = 1.0
+        anim_frame = int(self.animoffset)
+        if anim_frame == 1 and not character.onground(renderer, state):
+            anim_frame = 1
+            self.animoffset = 1.0
         
         if character.intel:
             anim_frame += 2

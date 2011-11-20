@@ -22,7 +22,11 @@ class Gamestate(object):
         self.time = prev_state.time + (next_state.time - prev_state.time) * alpha
         
         for id, entity in prev_state.entities.items():
-            if not id in next_state.entities: continue
+            if not id in next_state.entities:
+                if id in self.entities:
+                    del self.entities[id]
+                continue
+            
             if not id in self.entities:
                 self.entities[id] = prev_state.entities[id].copy()
             self.entities[id].interpolate(entity, next_state.entities[id], alpha)

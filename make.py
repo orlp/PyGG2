@@ -14,7 +14,7 @@ def remove(patterns):
                 matches.add(os.path.join(root, filename))
     
     for filename in matches:
-        try: os.remove(file)
+        try: os.remove(filename)
         except: pass
         
 if len(sys.argv) == 1: sys.exit()
@@ -39,8 +39,6 @@ elif sys.argv[1] == "clean":
         "*.*~",
         "*.pyc",
         "*.pyo",
-        "mask_extension/*.pyc",
-        "mask_extension/*.o",
         "game_profile",
         "profile.txt"
     ]

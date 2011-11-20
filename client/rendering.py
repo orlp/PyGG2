@@ -13,11 +13,11 @@ import engine.character
 import engine.weapons
 import engine.projectile
 
-renderertypes = {
-    engine.character.Scout: character.ScoutRenderer,
-    engine.weapons.Scattergun: weapons.ScattergunRenderer,
-    engine.projectile.Shot: projectile.ShotRenderer,
-    engine.projectile.Rocket: projectile.RocketRenderer
+renderers = {
+    engine.character.Scout: character.ScoutRenderer(),
+    engine.weapons.Scattergun: weapons.ScattergunRenderer(),
+    engine.projectile.Shot: projectile.ShotRenderer(),
+    engine.projectile.Rocket: projectile.RocketRenderer()
 }
 
 class GameRenderer(object):
@@ -40,11 +40,6 @@ class GameRenderer(object):
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
         self.focus_object_id = game.client_player_id
         
-        # add new renderers
-        for entity_id, entity in self.interpolated_state.entities.items():
-            if not entity_id in self.renderers and type(entity) in renderertypes:
-                self.renderers[entity_id] = renderertypes[type(entity)](self, self.interpolated_state, entity_id)
-        
         # update view
         focus_object = self.interpolated_state.entities[self.focus_object_id]
         self.xview = int(int(focus_object.x) - self.view_width / 2)
@@ -58,18 +53,13 @@ class GameRenderer(object):
         self.map.draw(self)
         
         # draw entities
-        for entity_id in self.interpolated_state.entities:
-            self.renderers[entity_id].render(self, self.interpolated_state, frametime)
+        for entity in self.interpolated_state.entities.values():
+            self.renderers[type(entity)].render(self, self.interpolated_state)
         
         # blit overlay last
         for surface, offset in self.overlayblits:
             self.window.blit(surface, offset)
         self.overlayblits = []
-        
-        # remove unneeded renderers
-        for entity_id in self.renderers:
-            if not entity_id in self.interpolated_state.entities:
-                del self.renderers[entity_id]
     
     # this function is called to draw on the game's window with game world coordinate
     def draw_world(self, surface, offset = (0, 0)):

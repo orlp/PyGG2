@@ -20,7 +20,7 @@ class ShotRenderer(entity.EntityRenderer):
     
         self.shotsprite = function.load_image("projectiles/shots/0")
         
-    def render(self, renderer, state, frametime):
+    def render(self, renderer, state):
         shot = self.get_entity(state)
         angle = int(shot.direction) % 360
         
@@ -44,7 +44,7 @@ class RocketRenderer(entity.EntityRenderer):
     
         self.rocketsprite = function.load_image("projectiles/rockets/0")
     
-    def render(self, renderer, state, frametime):
+    def render(self, renderer, state):
         rocket = self.get_entity(state)
         angle = int(rocket.direction) % 360
         

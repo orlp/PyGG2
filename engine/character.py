@@ -26,7 +26,15 @@ class Character(entity.MovingObject):
         self.rightmouse = False
         self.aimdirection = 0
         
+        # time tracker for the moving of the character's legs
+        self.animoffset = 0.0
+        
     def step(self, game, state, frametime):
+        # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
+        if abs(character.hspeed) > 20: 
+            self.animoffset += frametime * abs(self.hspeed) / 20
+            self.animoffset %= 2
+    
         angle = state.entities[self.weapon].direction % 360
         self.flip = not (angle < 90 or angle > 270)
         
