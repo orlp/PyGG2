@@ -16,7 +16,7 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
 
-		# Input
+		# input
         self.up = False
         self.down = False
         self.left = False
@@ -31,12 +31,11 @@ class Character(entity.MovingObject):
         
     def step(self, game, state, frametime):
         # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
-        if abs(character.hspeed) > 20: 
+        if abs(self.hspeed) > 20: 
             self.animoffset += frametime * abs(self.hspeed) / 20
             self.animoffset %= 2
-    
-        angle = state.entities[self.weapon].direction % 360
-        self.flip = not (angle < 90 or angle > 270)
+            
+        self.flip = not (self.aimdirection < 90 or self.aimdirection > 270)
         
         # if we are holding down movement keys, move
         if self.left: self.hspeed -= 1000 * frametime
@@ -101,6 +100,23 @@ class Character(entity.MovingObject):
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
         return game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y + 1)))
+        
+    def interpolate(self, prev_obj, next_obj, alpha):
+        super(Character, self).interpolate(prev_obj, next_obj, alpha)
+        
+        self.aimdirection = function.interpolate_angle(prev_obj.aimdirection, next_obj.aimdirection, alpha)
+        
+        if alpha > 0.5: refobj = next_obj
+        else: refobj = prev_obj
+        
+        self.up = refobj.up
+        self.down = refobj.down
+        self.left = refobj.left
+        self.right = refobj.right
+        self.leftmouse = refobj.leftmouse
+        self.middlemouse = refobj.middlemouse
+        self.rightmouse = refobj.rightmouse
+        self.flip = refobj.flip
 
 class Scout(Character):
     # width, height of scout - rectangle collision

@@ -15,13 +15,10 @@ class Weapon(entity.Entity):
 
         self.owner = owner
         self.refirealarm = 0.0
-        self.direction = 0.0
         self.ammo = self.maxammo
 
     def step(self, game, state, frametime):
         owner = state.entities[self.owner]
-    
-        self.direction = owner.aimdirection
         
         if self.refirealarm <= 0:
             self.refirealarm = 0.0
@@ -39,7 +36,6 @@ class Weapon(entity.Entity):
     def fire_secondary(self, game, state): pass
     
     def interpolate(self, prev_obj, next_obj, alpha):
-        self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
         self.refirealarm = (1 - alpha) * prev_obj.refirealarm + alpha * next_obj.refirealarm
 
 class Scattergun(Weapon):

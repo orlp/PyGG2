@@ -1,29 +1,20 @@
-#!/usr/bin/env python
-
 from __future__ import division, print_function
 
 import pygame, math
 from pygame.locals import *
 
-import random
-
-import entity
 import function
-import projectile
 
-class ScattergunRenderer(entity.EntityRenderer):
+class ScattergunRenderer(object):
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
     weaponoffset = (12, 13) # where the character should carry it's gun
     weaponoffset_flipped = (6, 8)
     
-    def __init__(self, renderer, state, entity_id):
-        super(ScattergunRenderer, self).__init__(renderer, state, entity_id)
-        
+    def __init__(self):
         self.weaponsprite = function.load_image("weapons/scatterguns/0")
         self.firingsprite = function.load_image("weapons/scatterguns/2")
         
-    def render(self, renderer, state):
-        weapon = state.entities[self.entity_id]
+    def render(self, renderer, state, weapon):
         owner = state.entities[weapon.owner]
         
         image = self.weaponsprite
@@ -45,7 +36,7 @@ class ScattergunRenderer(entity.EntityRenderer):
         xoff, yoff = int(xoff), int(yoff)
         
         # rotate 
-        image, offset = function.rotate_surface_point(image, weapon.direction, self.weapon_rotate_point)
+        image, offset = function.rotate_surface_point(image, owner.aimdirection, self.weapon_rotate_point)
         
         # compensate for rotation
         xoff -= offset[0]

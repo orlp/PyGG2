@@ -1,27 +1,18 @@
-#!/usr/bin/env python
-
 from __future__ import division, print_function
 
 import pygame, math
 from pygame.locals import *
 import random
 
-import entity
-import character
 import function
-import mask
-import Image
 
-class ShotRenderer(entity.EntityRenderer):
+class ShotRenderer(object):
     shotsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
 
-    def __init__(self, renderer, state, entity_id):
-        super(ShotRenderer, self).__init__(renderer, state, entity_id)
-    
+    def __init__(self):
         self.shotsprite = function.load_image("projectiles/shots/0")
         
-    def render(self, renderer, state):
-        shot = self.get_entity(state)
+    def render(self, renderer, state, shot):
         angle = int(shot.direction) % 360
         
         if angle in self.shotsprite_angles:
@@ -36,16 +27,13 @@ class ShotRenderer(entity.EntityRenderer):
 
         renderer.draw_world(image, (shot.x, shot.y))
 
-class RocketRenderer(entity.EntityRenderer):
+class RocketRenderer(object):
     rocketsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
     
-    def __init__(self, renderer, state, entity_id):
-        super(RocketRenderer, self).__init__(renderer, state, entity_id)
-    
+    def __init__(self):
         self.rocketsprite = function.load_image("projectiles/rockets/0")
     
-    def render(self, renderer, state):
-        rocket = self.get_entity(state)
+    def render(self, renderer, state, rocket):
         angle = int(rocket.direction) % 360
         
         if angle in self.rocketsprite_angles:

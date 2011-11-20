@@ -13,13 +13,6 @@ import engine.character
 import engine.weapons
 import engine.projectile
 
-renderers = {
-    engine.character.Scout: character.ScoutRenderer(),
-    engine.weapons.Scattergun: weapons.ScattergunRenderer(),
-    engine.projectile.Shot: projectile.ShotRenderer(),
-    engine.projectile.Rocket: projectile.RocketRenderer()
-}
-
 class GameRenderer(object):
     def __init__(self, window):
         self.window = window
@@ -36,6 +29,13 @@ class GameRenderer(object):
         
         self.overlayblits = []
         
+        self.renderers = {
+            engine.character.Scout: character.ScoutRenderer(),
+            engine.weapons.Scattergun: weapons.ScattergunRenderer(),
+            engine.projectile.Shot: projectile.ShotRenderer(),
+            engine.projectile.Rocket: projectile.RocketRenderer()
+        }
+        
     def render(self, game, alpha, frametime):
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
         self.focus_object_id = game.client_player_id
@@ -50,11 +50,11 @@ class GameRenderer(object):
             self.window.fill(self.backgroundcolor)
             
         # draw background
-        self.map.draw(self)
+        self.map.draw(self, self.interpolated_state)
         
         # draw entities
         for entity in self.interpolated_state.entities.values():
-            self.renderers[type(entity)].render(self, self.interpolated_state)
+            self.renderers[type(entity)].render(self, self.interpolated_state, entity)
         
         # blit overlay last
         for surface, offset in self.overlayblits:

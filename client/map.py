@@ -12,5 +12,5 @@ class MapRenderer(object):
         self.image.set_colorkey(None)
         self.image = self.image.convert()
 
-    def draw(self, renderer):        
+    def draw(self, renderer, state):        
         renderer.window.blit(self.image, (0, 0), (renderer.xview, renderer.yview, renderer.view_width, renderer.view_height))

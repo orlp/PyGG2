@@ -30,7 +30,7 @@ class Shot(entity.MovingObject):
         self.x = srcplayer.x
         self.y = srcplayer.y
         
-        self.direction = srcwep.direction + (7 - random.randint(0, 15))
+        self.direction = srcplayer.aimdirection + (7 - random.randint(0, 15))
         
         # add user speed to bullet speed but don't change direction of the bullet
         playerdir = math.degrees(math.atan2(-srcplayer.vspeed, srcplayer.hspeed))
@@ -101,7 +101,7 @@ class Rocket(entity.MovingObject):
         self.y = srcplayer.y
 
         self.fade = 0
-        self.direction = srcwep.direction
+        self.direction = srcowner.direction
 
         self.speed = 500
         self.hspeed = math.cos(math.radians(self.direction)) * self.speed
