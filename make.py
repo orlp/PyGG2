@@ -45,6 +45,9 @@ elif sys.argv[1] == "clean":
     remove(patterns)
     try: shutil.rmtree("dist")
     except: pass
-elif sys.argv[1] == "test":
-    import main
-    main.GG2main()
+elif sys.argv[1] == "testclient":
+    import client.main
+    client.main.GG2main()
+elif sys.argv[1] == "testserver":
+    import server.main
+    server.main.GG2main()

@@ -17,6 +17,8 @@ import zipfile
 import cStringIO
 import os.path
 
+spritesfolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sprites/")
+
 def sign(x):
     # Returns the sign of the number given
     return cmp(x, 0)
@@ -75,7 +77,7 @@ def load_image(filename):
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
     # this allows users to override sprites, and makes testing/developing easier
     try:
-        image = pygame.image.load("sprites/" + filename + ".png")
+        image = pygame.image.load(spritesfolder + filename + ".png")
     except:
         sprites = zipfile.ZipFile("sprites.zip", "r")
         spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
@@ -97,7 +99,7 @@ def load_mask(filename, give_orig=False):
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
     # this allows users to override sprites, and makes testing/developing easier
     try:
-        bitmask = mask.from_image("sprites/" + filename + ".png")
+        bitmask = mask.from_image(spritesfolder + filename + ".png")
     except:
         sprites = zipfile.ZipFile("sprites.zip", "r")
         spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
