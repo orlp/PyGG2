@@ -77,6 +77,8 @@ class Shot(entity.MovingObject):
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Shot, self).interpolate(prev_obj, next_obj, alpha)
         self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
+        
+        self.flight_time = prev_obj.flight_time + (next_obj.flight_time - prev_obj.flight_time) * alpha
 
 class Rocket(entity.MovingObject):
     fade_time = .3 # seconds of fading when max_flight_time is being reached
@@ -100,7 +102,6 @@ class Rocket(entity.MovingObject):
         self.x = srcplayer.x
         self.y = srcplayer.y
 
-        self.fade = 0
         self.direction = srcowner.direction
 
         self.speed = 500
@@ -108,7 +109,7 @@ class Rocket(entity.MovingObject):
         self.vspeed = math.sin(math.radians(self.direction)) * -self.speed
 
     def destroy(self, game, state):
-        if not self.fade:
+        if not self.max_flight_time - self.flight_time < self.fade_time:
             for obj in state.entities.values():
                 if isinstance(obj, character.Character) and math.hypot(self.x - obj.x, self.y - obj.y) < self.blastradius:
                     force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius))*(self.knockback*frametime)# TODO: Fix Frametime
@@ -145,3 +146,5 @@ class Rocket(entity.MovingObject):
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Rocket, self).interpolate(prev_obj, next_obj, alpha)
         self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
+        
+        self.flight_time = prev_obj.flight_time + (next_obj.flight_time - prev_obj.flight_time) * alpha
