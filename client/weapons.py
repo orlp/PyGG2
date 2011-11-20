@@ -7,11 +7,11 @@ from pygame.locals import *
 
 import random
 
-import renderer
+import entity
 import function
 import projectile
 
-class ScattergunRenderer(renderer.EntityRenderer):
+class ScattergunRenderer(entity.EntityRenderer):
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
     weaponoffset = (12, 13) # where the character should carry it's gun
     weaponoffset_flipped = (6, 8)

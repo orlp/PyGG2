@@ -6,11 +6,11 @@ import math, pygame
 from pygame.locals import *
 
 import function
-import renderer
+import entity
 import weapons
 import mask
 
-class ScoutRenderer(renderer.EntityRenderer):    
+class ScoutRenderer(entity.EntityRenderer):    
     def __init__(self, renderer, state, entity_id):
         super(ScoutRenderer, self).__init__(renderer, state, entity_id)
         

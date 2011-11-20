@@ -1,40 +1,40 @@
-Sun Nov 20 17:00:59 2011    game_profile
+Sun Nov 20 17:13:38 2011    game_profile
 
-         1870443 function calls (1870201 primitive calls) in 14.364 seconds
+         147361 function calls (147119 primitive calls) in 3.962 seconds
 
    Ordered by: cumulative time
-   List reduced from 379 to 30 due to restriction <30>
+   List reduced from 378 to 30 due to restriction <30>
 
    ncalls  tottime  percall  cumtime  percall filename:lineno(function)
-        1    0.006    0.006   14.364   14.364 <string>:1(<module>)
-        1    0.138    0.138   14.358   14.358 main.py:55(GG2main)
-     1794    0.615    0.000    7.827    0.004 c:\Users\Gebruiker\PyGG2\client\rendering.py:49(render)
-     1794    4.007    0.002    4.007    0.002 {pygame.display.update}
-   172755    3.648    0.000    3.648    0.000 {method 'blit' of 'pygame.Surface' objects}
-   238020    1.386    0.000    3.294    0.000 c:\Users\Gebruiker\PyGG2\client\projectile.py:23(render)
-     1794    0.017    0.000    3.012    0.002 c:\Users\Gebruiker\PyGG2\client\map.py:15(draw)
-   241608    0.988    0.000    1.728    0.000 c:\Users\Gebruiker\PyGG2\client\rendering.py:85(draw_world)
-        1    0.862    0.862    0.862    0.862 {pygame.base.init}
-      642    0.024    0.000    0.653    0.001 ../engine\game.py:58(update)
-      642    0.075    0.000    0.465    0.001 ../engine\gamestate.py:13(update)
-     1794    0.114    0.000    0.447    0.000 ../engine\gamestate.py:20(interpolate)
-        1    0.342    0.342    0.342    0.342 {pygame.base.quit}
-    43250    0.138    0.000    0.302    0.000 ../engine\projectile.py:77(interpolate)
-    23892    0.162    0.000    0.221    0.000 ../engine\projectile.py:51(endstep)
-     1795    0.212    0.000    0.212    0.000 {pygame.event.get}
-     1794    0.032    0.000    0.182    0.000 c:\Users\Gebruiker\PyGG2\client\weapons.py:25(render)
-      643    0.008    0.000    0.164    0.000 ../engine\gamestate.py:30(copy)
-      259    0.161    0.001    0.161    0.001 {method 'fill' of 'pygame.Surface' objects}
-   239814    0.152    0.000    0.152    0.000 c:\Users\Gebruiker\PyGG2\client\renderer.py:11(get_entity)
-      643    0.032    0.000    0.150    0.000 ../engine\gamestate.py:33(<dictcomp>)
-    25180    0.051    0.000    0.120    0.000 ../engine\entity.py:13(copy)
-   238020    0.116    0.000    0.116    0.000 {method 'set_alpha' of 'pygame.Surface' objects}
-     1794    0.024    0.000    0.112    0.000 ../function.py:29(rotate_surface_point)
-    23312    0.057    0.000    0.111    0.000 ../engine\projectile.py:44(step)
-   243402    0.103    0.000    0.103    0.000 {method 'get_size' of 'pygame.Surface' objects}
-        1    0.000    0.000    0.099    0.099 c:\Users\Gebruiker\PyGG2\client\rendering.py:34(__init__)
-        1    0.006    0.006    0.099    0.099 c:\Users\Gebruiker\PyGG2\client\map.py:9(__init__)
-    45044    0.098    0.000    0.098    0.000 ../engine\entity.py:46(interpolate)
-     1794    0.031    0.000    0.085    0.000 c:\Users\Gebruiker\PyGG2\client\character.py:25(render)
+        1    0.004    0.004    3.962    3.962 <string>:1(<module>)
+        1    0.033    0.033    3.958    3.958 main.py:55(GG2main)
+      425    0.062    0.000    1.367    0.003 c:\Users\Gebruiker\PyGG2\client\rendering.py:39(render)
+      425    1.016    0.002    1.016    0.002 {pygame.display.update}
+        1    0.852    0.852    0.852    0.852 {pygame.base.init}
+    10417    0.697    0.000    0.697    0.000 {method 'blit' of 'pygame.Surface' objects}
+      425    0.006    0.000    0.655    0.002 c:\Users\Gebruiker\PyGG2\client\map.py:15(draw)
+      425    0.314    0.001    0.314    0.001 {method 'fill' of 'pygame.Surface' objects}
+        1    0.275    0.275    0.275    0.275 {pygame.base.quit}
+    12370    0.083    0.000    0.187    0.000 c:\Users\Gebruiker\PyGG2\client\projectile.py:23(render)
+    13220    0.059    0.000    0.110    0.000 c:\Users\Gebruiker\PyGG2\client\rendering.py:75(draw_world)
+      426    0.110    0.000    0.110    0.000 {pygame.event.get}
+        1    0.000    0.000    0.107    0.107 c:\Users\Gebruiker\PyGG2\client\rendering.py:24(__init__)
+        1    0.003    0.003    0.107    0.107 c:\Users\Gebruiker\PyGG2\client\map.py:9(__init__)
+      425    0.020    0.000    0.075    0.000 ../engine\gamestate.py:20(interpolate)
+      126    0.003    0.000    0.067    0.001 ../engine\game.py:58(update)
+        1    0.019    0.019    0.065    0.065 {pygame.display.set_mode}
+     6505    0.023    0.000    0.049    0.000 ../engine\projectile.py:77(interpolate)
+        1    0.047    0.047    0.047    0.047 {pygame.transform.scale}
+        9    0.047    0.005    0.047    0.005 {method 'convert' of 'pygame.Surface' objects}
+      126    0.008    0.000    0.046    0.000 ../engine\gamestate.py:13(update)
+        1    0.003    0.003    0.045    0.045 c:\Python27\lib\site-packages\pygame\pkgdata.py:18(<module>)
+      425    0.007    0.000    0.045    0.000 c:\Users\Gebruiker\PyGG2\client\weapons.py:25(render)
+        1    0.000    0.000    0.043    0.043 ../engine\game.py:15(__init__)
+        1    0.000    0.000    0.043    0.043 ../engine\map.py:8(__init__)
+        1    0.003    0.003    0.043    0.043 c:\Python27\lib\site-packages\pkg_resources.py:14(<module>)
+      425    0.006    0.000    0.028    0.000 ../function.py:29(rotate_surface_point)
+       57    0.000    0.000    0.022    0.000 ../function.py:71(load_image)
+        1    0.022    0.022    0.022    0.022 {method 'scale' of 'Mask' objects}
+       30    0.000    0.000    0.021    0.001 ../function.py:92(load_mask)
 
 

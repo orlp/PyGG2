@@ -6,13 +6,13 @@ import pygame, math
 from pygame.locals import *
 import random
 
-import renderer
+import entity
 import character
 import function
 import mask
 import Image
 
-class ShotRenderer(renderer.EntityRenderer):
+class ShotRenderer(entity.EntityRenderer):
     shotsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
 
     def __init__(self, renderer, state, entity_id):
@@ -36,7 +36,7 @@ class ShotRenderer(renderer.EntityRenderer):
 
         renderer.draw_world(image, (shot.x, shot.y))
 
-class RocketRenderer(renderer.EntityRenderer):
+class RocketRenderer(entity.EntityRenderer):
     rocketsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
     
     def __init__(self, renderer, state, entity_id):
