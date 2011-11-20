@@ -3,5 +3,6 @@
 *.pyd
 *.*~
 *.pyd
+*.o
 build/*
 dist/*
