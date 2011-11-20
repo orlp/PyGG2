@@ -2,14 +2,20 @@
 
 from __future__ import division, print_function
 
-import math, pygame
-from pygame.locals import *
+import math
 import mask
+
+# make pygame an optional import
+# if we are running the server without pygame everything will work fine
+# as long as we don't call functions in the file that use pygame
+try:
+    import pygame
+    from pygame.locals import *
+except: pass
 
 import zipfile
 import cStringIO
 import os.path
-
 
 def sign(x):
     # Returns the sign of the number given
@@ -66,7 +72,6 @@ def load_image(filename):
     if filename in images:
         return images[filename].copy()
     
-    image = None
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
     # this allows users to override sprites, and makes testing/developing easier
     try:
@@ -89,7 +94,6 @@ def load_mask(filename, give_orig=False):
         if give_orig: return masks[filename]
         else: return masks[filename].copy()
     
-    bitmask = None
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
     # this allows users to override sprites, and makes testing/developing easier
     try:

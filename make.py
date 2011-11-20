@@ -4,14 +4,19 @@ import sys, os, platform, os.path
 import glob, shutil
 import subprocess
 import distutils.sysconfig
+import fnmatch
 
-def remove(name):
-    try:
-        for file in glob.glob(name):
-            try: os.remove(file)
-            except: pass
-    except: pass
-
+def remove(patterns):
+    matches = set()
+    for root, dirs, files in os.walk("."):
+        for pattern in patterns:
+            for filename in fnmatch.filter(files, pattern):
+                matches.add(os.path.join(root, filename))
+    
+    for filename in matches:
+        try: os.remove(file)
+        except: pass
+        
 if len(sys.argv) == 1: sys.exit()
 
 if sys.argv[1] == "build":
@@ -30,13 +35,16 @@ if sys.argv[1] == "build":
         subprocess.call("gcc -I%s -fPIC -O3 -c -o c/_mask.o c/_mask.c" % includes, shell=True)
         subprocess.call("gcc -shared -o c/_mask.pyd c/bitmask.o c/_mask.o -L%s -lpython27" % libs, shell=True)
 elif sys.argv[1] == "clean":
-    remove("*.*~")
-    remove("*.pyc")
-    remove("c/*.pyc")
-    remove("*.pyo")
-    remove("c/*.o")
-    remove("game_profile")
-    remove("profile.txt")
+    patterns = [
+        "*.*~",
+        "*.pyc",
+        "*.pyo",
+        "mask_extension/*.pyc",
+        "mask_extension/*.o",
+        "game_profile",
+        "profile.txt"
+    ]
+    remove(patterns)
     try: shutil.rmtree("dist")
     except: pass
 elif sys.argv[1] == "test":
