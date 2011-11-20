@@ -4,8 +4,8 @@ import pygame
 
 import engine.gamestate
 import constants
-import map
 
+import map_renderer
 import character_renderer
 import weapon_renderer
 import projectile_renderer
@@ -25,7 +25,7 @@ class GameRenderer(object):
         self.view_width = constants.GAME_WIDTH
         self.view_height = constants.GAME_HEIGHT
         
-        self.map = map.MapRenderer(self, "twodforttwo_remix")
+        self.maprenderer = map_renderer.MapRenderer(self, "twodforttwo_remix")
         
         self.overlayblits = []
         
@@ -46,11 +46,11 @@ class GameRenderer(object):
         self.yview = int(int(focus_object.y) - self.view_height / 2)
         
         # clear screen if needed
-        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= self.map.image.get_width() or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= self.map.image.get_height():
+        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= game.map.width or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
             self.window.fill(self.backgroundcolor)
             
         # draw background
-        self.map.draw(self, self.interpolated_state)
+        self.maprenderer.render(self, self.interpolated_state)
         
         # draw entities
         for entity in self.interpolated_state.entities.values():
