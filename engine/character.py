@@ -3,6 +3,7 @@
 from __future__ import division, print_function
 
 import math
+import struct
 
 import function
 import entity
@@ -117,6 +118,14 @@ class Character(entity.MovingObject):
         self.middlemouse = refobj.middlemouse
         self.rightmouse = refobj.rightmouse
         self.flip = refobj.flip
+
+    def serialize(self, game, updatetype):
+        keybyte = 0# TODO: Compress input into this; as well
+        bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed*5, self.vspeed*5, self.hp)# TODO: Ammo and cloak.
+        game.(bytestring)
+
+    def deserialize(self, updatetype):
+        bytestring = receive(serverSocket)
 
 class Scout(Character):
     # width, height of scout - rectangle collision

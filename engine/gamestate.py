@@ -41,9 +41,9 @@ class Gamestate(object):
         return new
     
     # TODO: make serialize functions
-    def serialize_state(self):
+    def serialize(self):
         bytestate = str()
         return bytestate
     
-    def deserialize_state(self, bytestate):
+    def deserialize(self, bytestate):
         pass
