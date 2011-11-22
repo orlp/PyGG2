@@ -15,6 +15,7 @@ except: pass
 
 import precision_timer
 import engine.game
+import engine.player
 import rendering
 import constants
 import function
@@ -52,85 +53,96 @@ def toggle_fullscreen():
 
     return screen
 
-# the main function
-def GG2main():
-    # initialize pygame
-    pygame.init()
+# the main client class
+class Client(object):
+    def __init__(self):
+        # initialize pygame
+        pygame.init()
 
-    # set display mode
-    fullscreen = False # are we fullscreen? pygame doesn't track this
-    window = pygame.display.set_mode((800, 600), (fullscreen * FULLSCREEN) | DOUBLEBUF)
+        # set display mode
+        self.fullscreen = False # are we fullscreen? pygame doesn't track this
+        self.window = pygame.display.set_mode((800, 600), (self.fullscreen * FULLSCREEN) | DOUBLEBUF)
 
-    # keep state of keys stored for one frame so we can detect down/up events
-    keys = pygame.key.get_pressed()
+        # keep state of keys stored for one frame so we can detect down/up events
+        self.keys = pygame.key.get_pressed()
+        self.oldkeys = self.keys
 
-    # create game engine object
-    game = engine.game.Game()
+        # create game engine object
+        self.game = engine.game.Game()
 
-    # create renderer object
-    renderer = rendering.GameRenderer(window)
+        # TODO REMOVE THIS
+        # create player
+        self.our_player = engine.player.Player(self.game, self.game.current_state, 0)
 
-    # pygame time tracking
-    clock = precision_timer.Clock()
-    inputsender_accumulator = 0.0 # this counter will accumulate time to send input at a constant rate
+        # create renderer object
+        self.renderer = rendering.GameRenderer(self)
 
-    # DEBUG code: show fps
-    fps_font = pygame.font.Font(None, 17)
-    fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
+        # pygame time tracking
+        self.clock = precision_timer.Clock()
+        self.inputsender_accumulator = 0.0 # this counter will accumulate time to send input at a constant rate
+        # DEBUG code: show fps
+        self.fps_font = pygame.font.Font(None, 17)
+        self.fps_text = self.fps_font.render("%d FPS" % self.clock.getfps(), True, (255, 255, 255), (159, 182, 205))
 
-    # game loop
-    while True:
-        # check if user exited the game
-        if QUIT in {event.type for event in pygame.event.get()}:
-            break
-        pygame.event.clear()
+    def run(self):
+        # game loop
+        while True:
+            # check if user exited the game
+            if QUIT in {event.type for event in pygame.event.get()}:
+                break
+            pygame.event.clear()
 
-        # handle input
-        oldkeys = keys
-        keys = pygame.key.get_pressed()
-        leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
+            # handle input
+            self.oldkeys = self.keys
+            self.keys = pygame.key.get_pressed()
+            leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
 
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-        game.player.up = keys[K_w]
-        game.player.down = keys[K_s]
-        game.player.left = keys[K_a]
-        game.player.right = keys[K_d]
-        game.player.leftmouse = leftmouse
-        game.player.middlemouse = middlemouse
-        game.player.rightmouse = rightmouse
-        game.player.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, mouse_x, mouse_y)
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            self.our_player.up = self.keys[K_w]
+            self.our_player.down = self.keys[K_s]
+            self.our_player.left = self.keys[K_a]
+            self.our_player.right = self.keys[K_d]
+            self.our_player.leftmouse = leftmouse
+            self.our_player.middlemouse = middlemouse
+            self.our_player.rightmouse = rightmouse
+            self.our_player.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, mouse_x, mouse_y)
 
-        # DEBUG quit game with escape
-        if keys[K_ESCAPE]: break
+            # DEBUG quit game with escape
+            if self.keys[K_ESCAPE]: break
 
-        # did we just release the F11 button? if yes, go fullscreen
-        if oldkeys[K_F11] and not keys[K_F11]:
-            fullscreen = not fullscreen
-            if not pygame.display.toggle_fullscreen():
-                window = toggle_fullscreen()
-                renderer.window = window
+            # did we just release the F11 button? if yes, go fullscreen
+            if self.oldkeys[K_F11] and not self.keys[K_F11]:
+                self.fullscreen = not self.fullscreen
+                if not pygame.display.toggle_fullscreen():
+                    self.window = toggle_fullscreen()
 
-        # update the game and render
-        frame_time = clock.tick()
-        frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
+            # update the game and render
+            frame_time = self.clock.tick()
+            frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
 
-        game.update(frame_time)
-        renderer.render(game, frame_time)
+            self.game.update(frame_time)
+            self.renderer.render(self, self.game, frame_time)
 
-        fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
-        window.blit(fps_text, (0, 0))
+            self.fps_text = self.fps_font.render("%d FPS" % self.clock.getfps(), True, (255, 255, 255), (159, 182, 205))
+            self.window.blit(self.fps_text, (0, 0))
 
-        pygame.display.update()
+            pygame.display.update()
 
-    # clean up
-    pygame.quit()
+        self.quit()
+
+    def quit(self):
+        # clean up
+        pygame.quit()
 
 def profileGG2():
-    cProfile.run("GG2main()", "game_profile")
+    cProfile.run("Client().run()", "game_profile")
     p = pstats.Stats("game_profile", stream=open("profile.txt", "w"))
     p.sort_stats("cumulative")
     p.print_stats(30)
     os.remove("game_profile")
+
+def GG2main():
+    Client().run()
 
 if __name__ == "__main__":
     # when profiling:

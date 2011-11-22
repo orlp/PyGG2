@@ -17,10 +17,9 @@ class Game:
 
         # game states
         self.current_state = gamestate.Gamestate()
+        self.previous_state = self.current_state.copy()
 
         self.players = {}
-
-        self.previous_state = self.current_state.copy()
 
         # this accumulator is used to update the engine in fixed timesteps
         self.accumulator = 0.0

@@ -14,8 +14,8 @@ import engine.weapon
 import engine.projectile
 
 class GameRenderer(object):
-    def __init__(self, window):
-        self.window = window
+    def __init__(self, client):
+        self.window = client.window
         self.backgroundcolor = pygame.Color(0, 0, 0, 255)
 
         self.interpolated_state = engine.gamestate.Gamestate()
@@ -36,11 +36,13 @@ class GameRenderer(object):
             engine.projectile.Rocket: projectile_renderer.RocketRenderer()
         }
 
-    def render(self, game, frametime):
+    def render(self, client, game, frametime):
+        self.window = client.window
+
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        self.focus_object_id = game.player.character.id
+        self.focus_object_id = client.our_player.character_id
 
         # update view
         focus_object = self.interpolated_state.entities[self.focus_object_id]

@@ -4,8 +4,9 @@ import character
 import struct
 
 class Player(object):
-    def __init__(self, game, state):
-        self.id = 0
+    def __init__(self, game, state, id):
+        self.id = id
+        game.players[id] = self
 
         self.up = False
         self.down = False
@@ -16,9 +17,11 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.character = character.Scout(game, state, self)
-        self.character.x = 2300
-        self.character.y = 50
+        self.character_id = character.Scout(game, state, self).id
+        char = state.entities[self.character_id]
+
+        char.x = 2300
+        char.y = 50
 
     def serialize_input(self):
         keybyte = 0
