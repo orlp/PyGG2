@@ -125,18 +125,23 @@ class Character(entity.MovingObject):
     def serialize(self, game, updatetype):
 
         keybyte = 0# The input is compressed per bit into this byte.
+	bytestring = str()# the serialized data gets packed here.
 
-	keybyte |= self.left << 0
-	keybyte |= self.right << 1
-	keybyte |= self.up << 2
-	keybyte |= self.leftmouse << 3
+        keybyte |= self.left << 0
+        keybyte |= self.right << 1
+        keybyte |= self.up << 2
+        keybyte |= self.leftmouse << 3
 	keybyte |= self.rightmouse << 4
 
-        bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed*5, self.vspeed*5, self.hp)# TODO: Ammo and cloak.
-        return bytestring
+	bytestring += struct.pack("!B", keybyte)
+
+	if updatetype == "SNAPSHOT_UPDATE" or updatetype == "COMPLETE_UPDATE":
+	    bytestring += struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp)# TODO: Ammo and cloak.
+
+	return bytestring
 
     def deserialize(self, updatetype):
-        bytestring = receive(serverSocket)
+        bytestring = receive()
 
 class Scout(Character):
     # width, height of scout - rectangle collision
