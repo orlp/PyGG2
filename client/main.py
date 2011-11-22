@@ -122,6 +122,7 @@ def GG2main():
         renderer.render(game, frame_time)
 
         fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
+
         window.blit(fps_text, (0, 0))
 
         pygame.display.update()

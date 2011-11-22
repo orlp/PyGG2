@@ -33,6 +33,8 @@ class Game:
         # if we are a client, then this is our player
         self.client_player_id = None
 
+        self.playerlist = []
+
         # TODO MOVE THIS ELSEWHERE
         # start up by adding entities
         player = character.Scout(self, self.current_state)

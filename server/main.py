@@ -27,12 +27,19 @@ def GG2main():
     # game loop
     while True:
         # update the game and render
-        frame_time = clock.tick()
-        frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
+        frametime = clock.tick()
+        frametime = min(0.25, frametime) # a limit of 0.25 seconds to prevent complete breakdown
 
-        networking_accumulator += frame_time
+        game.update(frametime)
 
-        game.update(frame_time)
+        networking_accumulator += frametime
+        while networking_accumulator > constants.NETWORK_UPDATE_RATE:
+            networking_accumulator -= constants.NETWORK_UPDATE_RATE
+            #send_update()
+
+    def send_update():
+        sendbuffer = str()
+        for player in self.playerlist: sendbuffer += player.serialize()
 
 def profileGG2():
     cProfile.run("GG2main()", "game_profile")

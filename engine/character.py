@@ -3,6 +3,7 @@
 from __future__ import division, print_function
 
 import math
+import struct
 
 import function
 import entity
@@ -12,6 +13,8 @@ import mask
 class Character(entity.MovingObject):
     def __init__(self, game, state):
         super(Character, self).__init__(game, state)
+
+	game.playerlist.append(self)
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
@@ -119,10 +122,18 @@ class Character(entity.MovingObject):
         self.rightmouse = refobj.rightmouse
         self.flip = refobj.flip
 
+    def serialize(self, game, updatetype):
+        keybyte = 0# TODO: Compress input into this; as well
+        bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed*5, self.vspeed*5, self.hp)# TODO: Ammo and cloak.
+        return bytestring
+
+    def deserialize(self, updatetype):
+        bytestring = receive(serverSocket)
+
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
-    
+
     maxhp = 100
     def __init__(self, game, state):
         Character.__init__(self, game, state)
