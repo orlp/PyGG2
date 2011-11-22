@@ -5,6 +5,8 @@ import struct
 
 class Player(object):
     def __init__(self, game, state):
+        self.id = 0
+
         self.up = False
         self.down = False
         self.left = False
@@ -13,7 +15,7 @@ class Player(object):
         self.middlemouse = False
         self.rightmouse = False
         self.aimdirection = 0
-        
+
         self.character = character.Scout(game, state, self)
         self.character.x = 2300
         self.character.y = 50
