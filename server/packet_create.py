@@ -15,4 +15,6 @@ def create_packet(game, state):
     tempbuffer = str()
 
     for player in players:
-        
+        tempbuffer = player.serialize_input()
+        if player.character != None:
+            tempbuffer += struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp)
