@@ -14,7 +14,7 @@ class ScattergunRenderer(object):
         self.weaponsprite = function.load_image("weapons/scatterguns/0")
         self.firingsprite = function.load_image("weapons/scatterguns/2")
         
-    def render(self, renderer, state, weapon):
+    def render(self, renderer, game, state, weapon):
         owner = state.entities[weapon.owner]
         
         image = self.weaponsprite

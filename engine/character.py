@@ -16,7 +16,7 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
 
-		# input
+        # input
         self.up = False
         self.down = False
         self.left = False
@@ -105,6 +105,7 @@ class Character(entity.MovingObject):
         super(Character, self).interpolate(prev_obj, next_obj, alpha)
         
         self.aimdirection = function.interpolate_angle(prev_obj.aimdirection, next_obj.aimdirection, alpha)
+        self.animoffset = prev_obj.animoffset + (next_obj.animoffset - prev_obj.animoffset) * alpha
         
         if alpha > 0.5: refobj = next_obj
         else: refobj = prev_obj

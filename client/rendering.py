@@ -54,7 +54,7 @@ class GameRenderer(object):
         
         # draw entities
         for entity in self.interpolated_state.entities.values():
-            self.renderers[type(entity)].render(self, self.interpolated_state, entity)
+            self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
         
         # blit overlay last
         for surface, offset in self.overlayblits:
