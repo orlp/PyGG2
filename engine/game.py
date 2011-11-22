@@ -65,4 +65,4 @@ class Game:
             self.accumulator -= constants.PHYSICS_TIMESTEP
 
             self.previous_state = self.current_state.copy()
-            self.current_state.update(self, frametime)
+            self.current_state.update(self, constants.PHYSICS_TIMESTEP)
