@@ -14,7 +14,7 @@ class Character(entity.MovingObject):
     def __init__(self, game, state):
         super(Character, self).__init__(game, state)
 
-	game.playerlist.append(self)
+        game.playerlist.append(self)
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
@@ -123,16 +123,16 @@ class Character(entity.MovingObject):
         self.flip = refobj.flip
 
     def serialize(self, game, updatetype):
+        keybyte = 0 # The input is compressed per bit into this byte.
 
-        keybyte = 0# The input is compressed per bit into this byte.
+        keybyte |= self.left << 0
+        keybyte |= self.right << 1
+        keybyte |= self.up << 2
+        keybyte |= self.leftmouse << 3
+        keybyte |= self.rightmouse << 4
 
-	keybyte |= self.left << 0
-	keybyte |= self.right << 1
-	keybyte |= self.up << 2
-	keybyte |= self.leftmouse << 3
-	keybyte |= self.rightmouse << 4
+        bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp) # TODO: Ammo and cloak.
 
-        bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed*5, self.vspeed*5, self.hp)# TODO: Ammo and cloak.
         return bytestring
 
     def deserialize(self, updatetype):
