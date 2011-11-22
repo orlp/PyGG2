@@ -26,26 +26,28 @@ class Game:
 
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
-        
+
         # game states
         self.current_state = gamestate.Gamestate()
-        
+
         # if we are a client, then this is our player
         self.client_player_id = None
-        
+
+        self.playerlist = []
+
         # TODO MOVE THIS ELSEWHERE
         # start up by adding entities
         player = character.Scout(self, self.current_state)
         player.x = 2400
         player.y = 50
         self.client_player_id = player.id
-        
+
         self.previous_state = self.current_state.copy()
 
     def sendinput(self, game, state):
         # Set Character input to this, later on we'll also send stuff here to the server.
         client = state.entities[self.client_player_id]
-        
+
         client.up = self.up
         client.down = self.down
         client.left = self.left
@@ -54,7 +56,7 @@ class Game:
         client.middlemouse = self.middlemouse
         client.rightmouse = self.rightmouse
         client.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, self.mouse_x, self.mouse_y)
-        
+
     def update(self, frametime):
         self.previous_state = self.current_state.copy()
         self.current_state.update(self, frametime)
