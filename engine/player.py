@@ -13,7 +13,7 @@ class Player(object):
         self.middlemouse = False
         self.rightmouse = False
         self.aimdirection = 0
-        
+
         self.character = character.Scout(game, state, self)
         self.character.x = 2300
         self.character.y = 50
@@ -31,7 +31,6 @@ class Player(object):
 
         bytestr = struct.pack("!BH", keybyte, aim)
 
-        return bytestr
 
     def deserialize_input(self, bytestr):
         keybyte, aim = struct.unpack("!BH", bytestr)
@@ -43,3 +42,17 @@ class Player(object):
         self.rightmouse = keybyte & (1 << 4)
 
         self.aimdirection = aim * 360 / 65535
+
+    def serialize_snapshot(self):
+        byte = 0
+
+        byte |= self.left << 0
+        byte |= self.right << 1
+        byte |= self.up << 2
+        byte |= self.leftmouse << 3
+        byte |= self.rightmouse << 4
+        byte |= self.isalive << 5
+
+        aim = int((self.aimdirection % 360) / 360 * 65535)
+
+        bytestr = struct.pack("!BH", keybyte, aim)
