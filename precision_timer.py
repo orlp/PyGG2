@@ -15,16 +15,16 @@ class Clock(object):
         self.lasttime = timerfunc()
         self.curtime = timerfunc()
         self.frametime = 0
-    
+
     def tick(self):
         self.lasttime = self.curtime
         self.curtime = timerfunc()
         dt = self.curtime - self.lasttime
-        
+
         self.frametime = 0.9 * self.frametime + 0.1 * dt
         
         return dt
-    
+
     def getfps(self):
         if self.frametime == 0: return 0
         return 1 / self.frametime
