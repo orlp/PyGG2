@@ -34,8 +34,6 @@ def GG2main():
 
         game.update(frame_time)
 
-        print(clock.getfps())
-
 def profileGG2():
     cProfile.run("GG2main()", "game_profile")
     p = pstats.Stats("game_profile", stream=open("profile.txt", "w"))

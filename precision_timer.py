@@ -21,8 +21,8 @@ class Clock(object):
         self.curtime = timerfunc()
         dt = self.curtime - self.lasttime
 
-        self.frametime = 0.9 * self.frametime + 0.1 * dt
-        
+        self.frametime = 0.99 * self.frametime + 0.01 * dt
+
         return dt
 
     def getfps(self):
