@@ -12,12 +12,11 @@ class ScoutRenderer(object):
         ])
         self.spriteoffset = (-24, -30)
 
-    def render(self, renderer, state, character):
+    def render(self, renderer, game, state, character):
         anim_frame = int(character.animoffset)
 
-        if anim_frame == 1 and not character.onground(renderer, state):
+        if not character.onground(game, state):
             anim_frame = 1
-            character.animoffset = 1.0
 
         if character.intel:
             anim_frame += 2

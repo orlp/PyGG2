@@ -109,7 +109,7 @@ class Character(entity.MovingObject):
 
         self.aimdirection = function.interpolate_angle(prev_obj.aimdirection, next_obj.aimdirection, alpha)
         self.animoffset = prev_obj.animoffset + (next_obj.animoffset - prev_obj.animoffset) * alpha
-        
+
         if alpha > 0.5: refobj = next_obj
         else: refobj = prev_obj
 
@@ -123,7 +123,15 @@ class Character(entity.MovingObject):
         self.flip = refobj.flip
 
     def serialize(self, game, updatetype):
-        keybyte = 0# TODO: Compress input into this; as well
+
+        keybyte = 0# The input is compressed per bit into this byte.
+
+	keybyte |= self.left << 0
+	keybyte |= self.right << 1
+	keybyte |= self.up << 2
+	keybyte |= self.leftmouse << 3
+	keybyte |= self.rightmouse << 4
+
         bytestring = struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed*5, self.vspeed*5, self.hp)# TODO: Ammo and cloak.
         return bytestring
 
