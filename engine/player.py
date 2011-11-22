@@ -44,17 +44,3 @@ class Player(object):
         self.rightmouse = keybyte & (1 << 4)
 
         self.aimdirection = aim * 360 / 65535
-
-    def serialize_snapshot(self):
-        byte = 0
-
-        byte |= self.left << 0
-        byte |= self.right << 1
-        byte |= self.up << 2
-        byte |= self.leftmouse << 3
-        byte |= self.rightmouse << 4
-        byte |= self.isalive << 5
-
-        aim = int((self.aimdirection % 360) / 360 * 65535)
-
-        bytestr = struct.pack("!BH", keybyte, aim)
