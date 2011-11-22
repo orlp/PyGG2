@@ -5,11 +5,9 @@ from __future__ import division, print_function
 import math
 
 import map
-import character
 import gamestate
 import function
 import constants
-import player
 
 # the main engine class
 class Game:
@@ -20,8 +18,8 @@ class Game:
         # game states
         self.current_state = gamestate.Gamestate()
 
-        self.player = player.Player(self, self.current_state)
-        
+        self.players = {}
+
         self.previous_state = self.current_state.copy()
 
         # this accumulator is used to update the engine in fixed timesteps
