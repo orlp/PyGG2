@@ -40,7 +40,7 @@ class GameRenderer(object):
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        self.focus_object_id = game.client_player_id
+        self.focus_object_id = game.player.character.id
 
         # update view
         focus_object = self.interpolated_state.entities[self.focus_object_id]

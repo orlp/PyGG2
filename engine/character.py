@@ -11,23 +11,13 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    def __init__(self, game, state):
+    def __init__(self, game, state, player):
         super(Character, self).__init__(game, state)
 
-        game.playerlist.append(self)
+        self.player = player
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
-
-        # input
-        self.up = False
-        self.down = False
-        self.left = False
-        self.right = False
-        self.leftmouse = False
-        self.middlemouse = False
-        self.rightmouse = False
-        self.aimdirection = 0
 
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
@@ -38,18 +28,18 @@ class Character(entity.MovingObject):
             self.animoffset += frametime * abs(self.hspeed) / 20
             self.animoffset %= 2
 
-        self.flip = not (self.aimdirection < 90 or self.aimdirection > 270)
+        self.flip = not (self.player.aimdirection < 90 or self.player.aimdirection > 270)
 
         # if we are holding down movement keys, move
-        if self.left: self.hspeed -= 1000 * frametime
-        if self.right: self.hspeed += 1000 * frametime
+        if self.player.left: self.hspeed -= 1000 * frametime
+        if self.player.right: self.hspeed += 1000 * frametime
 
         # if we're not, slow down
-        if not (self.left or self.right):
+        if not (self.player.left or self.player.right):
             if abs(self.hspeed) < 10: self.hspeed = 0
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
 
-        if self.up:
+        if self.player.up:
             if self.onground(game, state):
                 self.vspeed = -200
 
@@ -107,50 +97,26 @@ class Character(entity.MovingObject):
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Character, self).interpolate(prev_obj, next_obj, alpha)
 
-        self.aimdirection = function.interpolate_angle(prev_obj.aimdirection, next_obj.aimdirection, alpha)
         self.animoffset = prev_obj.animoffset + (next_obj.animoffset - prev_obj.animoffset) * alpha
 
         if alpha > 0.5: refobj = next_obj
         else: refobj = prev_obj
 
-        self.up = refobj.up
-        self.down = refobj.down
-        self.left = refobj.left
-        self.right = refobj.right
-        self.leftmouse = refobj.leftmouse
-        self.middlemouse = refobj.middlemouse
-        self.rightmouse = refobj.rightmouse
         self.flip = refobj.flip
 
-    def serialize(self, game, updatetype):
-        keybyte = 0 # The input is compressed per bit into this byte.
-
-        keybyte = 0# The input is compressed per bit into this byte.
-	bytestring = str()# the serialized data gets packed here.
-
-        keybyte |= self.left << 0
-        keybyte |= self.right << 1
-        keybyte |= self.up << 2
-        keybyte |= self.leftmouse << 3
-	keybyte |= self.rightmouse << 4
-
-	bytestring += struct.pack("!B", keybyte)
-
-	if updatetype == "SNAPSHOT_UPDATE" or updatetype == "COMPLETE_UPDATE":
-	    bytestring += struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp)# TODO: Ammo and cloak.
-
-	return bytestring
-
-    def deserialize(self, updatetype):
-        bytestring = receive()
+    #def serialize(self, game, updatetype):
+    #    if updatetype == "SNAPSHOT_UPDATE" or updatetype == "COMPLETE_UPDATE":
+    #      bytestring += struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp) # TODO: Ammo and cloak.
+    #
+    #    return bytestring
 
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
 
     maxhp = 100
-    def __init__(self, game, state):
-        Character.__init__(self, game, state)
+    def __init__(self, game, state, player):
+        Character.__init__(self, game, state, player)
 
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id

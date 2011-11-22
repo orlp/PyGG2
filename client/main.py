@@ -17,6 +17,7 @@ import precision_timer
 import engine.game
 import rendering
 import constants
+import function
 
 # DEBUG ONLY
 import cProfile
@@ -89,14 +90,15 @@ def GG2main():
         keys = pygame.key.get_pressed()
         leftmouse, middlemouse, rightmouse = pygame.mouse.get_pressed()
 
-        game.mouse_x, game.mouse_y = pygame.mouse.get_pos()
-        game.up = keys[K_w]
-        game.down = keys[K_s]
-        game.left = keys[K_a]
-        game.right = keys[K_d]
-        game.leftmouse = leftmouse
-        game.middlemouse = middlemouse
-        game.rightmouse = rightmouse
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        game.player.up = keys[K_w]
+        game.player.down = keys[K_s]
+        game.player.left = keys[K_a]
+        game.player.right = keys[K_d]
+        game.player.leftmouse = leftmouse
+        game.player.middlemouse = middlemouse
+        game.player.rightmouse = rightmouse
+        game.player.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, mouse_x, mouse_y)
 
         # DEBUG quit game with escape
         if keys[K_ESCAPE]: break
@@ -112,17 +114,10 @@ def GG2main():
         frame_time = clock.tick()
         frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
 
-        inputsender_accumulator += frame_time
-        while inputsender_accumulator > constants.INPUT_SEND_FPS:
-            inputsender_accumulator -= constants.INPUT_SEND_FPS
-            game.sendinput(game, game.current_state)
-
         game.update(frame_time)
-
         renderer.render(game, frame_time)
 
         fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
-
         window.blit(fps_text, (0, 0))
 
         pygame.display.update()
