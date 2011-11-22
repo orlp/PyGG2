@@ -36,9 +36,9 @@ def GG2main():
             physics_accumulator -= constants.PHYSICS_TIMESTEP
             game.update(constants.PHYSICS_TIMESTEP)
 
-        network_accumulator += frame_time
-        while network_accumulator > constants.NETWORK_UPDATE_RATE:
-            network_accumulator -= constants.NETWORK_UPDATE_RATE
+        networking_accumulator += frame_time
+        while networking_accumulator > constants.NETWORK_UPDATE_RATE:
+            networking_accumulator -= constants.NETWORK_UPDATE_RATE
             #send_update()
 
 
