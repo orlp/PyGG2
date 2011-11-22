@@ -38,7 +38,7 @@ class Game:
         # TODO MOVE THIS ELSEWHERE
         # start up by adding entities
         player = character.Scout(self, self.current_state)
-        player.x = 2400
+        player.x = 2300
         player.y = 50
         self.client_player_id = player.id
 

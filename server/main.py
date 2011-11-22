@@ -22,7 +22,6 @@ def GG2main():
 
     # pygame time tracking
     clock = precision_timer.Clock()
-    physics_accumulator = 0.0 # this counter will accumulate time to be used by the physics
     networking_accumulator = 0.0 # this counter is used for sending networking packets at a constant rate
 
     # game loop
@@ -38,10 +37,9 @@ def GG2main():
             networking_accumulator -= constants.NETWORK_UPDATE_RATE
             #send_update()
 
-
-def send_update():
-    sendbuffer = str()
-    for player in self.playerlist: sendbuffer+=player.serialize()
+    def send_update():
+        sendbuffer = str()
+        for player in self.playerlist: sendbuffer += player.serialize()
 
 def profileGG2():
     cProfile.run("GG2main()", "game_profile")
