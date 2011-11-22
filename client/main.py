@@ -71,7 +71,6 @@ def GG2main():
 
     # pygame time tracking
     clock = precision_timer.Clock()
-    physics_accumulator = 0.0 # this counter will accumulate time to be used by the physics
     inputsender_accumulator = 0.0 # this counter will accumulate time to send input at a constant rate
 
     # DEBUG code: show fps
@@ -118,13 +117,11 @@ def GG2main():
             inputsender_accumulator -= constants.INPUT_SEND_FPS
             game.sendinput(game, game.current_state)
 
-        physics_accumulator += frame_time
-        while physics_accumulator > constants.PHYSICS_TIMESTEP:
-            physics_accumulator -= constants.PHYSICS_TIMESTEP
-            game.update(constants.PHYSICS_TIMESTEP)
-            fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
+        game.update(frame_time)
 
-        renderer.render(game, physics_accumulator / constants.PHYSICS_TIMESTEP, frame_time)
+        renderer.render(game, frame_time)
+
+        fps_text = fps_font.render("%d FPS" % clock.getfps(), True, (255, 255, 255), (159, 182, 205))
 
         window.blit(fps_text, (0, 0))
 

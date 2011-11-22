@@ -23,7 +23,7 @@ def GG2main():
     # pygame time tracking
     clock = precision_timer.Clock()
     physics_accumulator = 0.0 # this counter will accumulate time to be used by the physics
-    network_accumulator = 0.0 # this counter will acumulate time to be used for updating every client.
+    networking_accumulator = 0.0 # this counter is used for sending networking packets at a constant rate
 
     # game loop
     while True:

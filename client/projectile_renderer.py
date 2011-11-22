@@ -12,7 +12,7 @@ class ShotRenderer(object):
     def __init__(self):
         self.shotsprite = function.load_image("projectiles/shots/0")
         
-    def render(self, renderer, state, shot):
+    def render(self, renderer, game, state, shot):
         angle = int(shot.direction) % 360
         
         if angle in self.shotsprite_angles:

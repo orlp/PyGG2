@@ -44,6 +44,9 @@ class Game:
 
         self.previous_state = self.current_state.copy()
 
+        # this accumulator is used to update the engine in fixed timesteps
+        self.accumulator = 0.0
+
     def sendinput(self, game, state):
         # Set Character input to this, later on we'll also send stuff here to the server.
         client = state.entities[self.client_player_id]
@@ -58,5 +61,10 @@ class Game:
         client.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, self.mouse_x, self.mouse_y)
 
     def update(self, frametime):
-        self.previous_state = self.current_state.copy()
-        self.current_state.update(self, frametime)
+        self.accumulator += frametime
+
+        while self.accumulator >= constants.PHYSICS_TIMESTEP:
+            self.accumulator -= constants.PHYSICS_TIMESTEP
+
+            self.previous_state = self.current_state.copy()
+            self.current_state.update(self, constants.PHYSICS_TIMESTEP)

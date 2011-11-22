@@ -4,6 +4,7 @@
 *.*~
 *.pyd
 *.o
+*komodo*
 build/*
 dist/*
 *game_profile*
