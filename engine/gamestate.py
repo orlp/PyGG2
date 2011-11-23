@@ -21,6 +21,9 @@ class Gamestate(object):
         self.next_entity_id = next_state.next_entity_id
         self.time = prev_state.time + (next_state.time - prev_state.time) * alpha
 
+        # remove unnecessary entities
+        self.entities = {id:entity for id, entity in self.entities.items() if id in next_state.entities}
+
         for id, entity in next_state.entities.items():
             if not id in self.entities:
                 self.entities[id] = next_state.entities[id].copy()

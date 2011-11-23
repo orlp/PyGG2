@@ -29,16 +29,24 @@ if sys.argv[1] == "build":
             print(platform.system() + " not supported.")
     else:
         includes = distutils.sysconfig.get_python_inc()
-        libs = os.path.join(includes, "../libs")
 
-        subprocess.call("gcc -fPIC -O3 -c -o mask_extension/bitmask.o mask_extension/bitmask.c", shell=True)
-        subprocess.call("gcc -I%s -fPIC -O3 -c -o mask_extension/_mask.o mask_extension/_mask.c" % includes, shell=True)
-        subprocess.call("gcc -shared -o mask_extension/_mask.pyd mask_extension/bitmask.o mask_extension/_mask.o -L%s -lpython27" % libs, shell=True)
+        if platform.system() == "Linux":
+            subprocess.call("gcc -fPIC -O3 -c -o mask_extension/bitmask.o mask_extension/bitmask.c", shell=True)
+            subprocess.call("gcc -I%s -fPIC -O3 -c -o mask_extension/_mask.o mask_extension/_mask.c" % includes, shell=True)
+            subprocess.call("gcc -shared -o mask_extension/_mask.so mask_extension/bitmask.o mask_extension/_mask.o", shell=True)
+        else:
+            libs = os.path.join(os.path.join(includes, ".."), "libs")
+            subprocess.call("gcc -O3 -c -o mask_extension/bitmask.o mask_extension/bitmask.c", shell=True)
+            subprocess.call("gcc -I%s -O3 -c -o mask_extension/_mask.o mask_extension/_mask.c" % includes, shell=True)
+            subprocess.call("gcc -shared -o mask_extension/_mask.dll mask_extension/bitmask.o mask_extension/_mask.o -L%s -lpython27" % libs, shell=True)
+
+
 elif sys.argv[1] == "clean":
     patterns = [
-        "*.*~",
+        "*~",
         "*.pyc",
         "*.pyo",
+        "*.o",
         "game_profile",
         "profile.txt"
     ]

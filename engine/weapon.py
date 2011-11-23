@@ -50,6 +50,8 @@ class Scattergun(Weapon):
     reloadtime = 1
 
     def fire_primary(self, game, state):
+        random.seed(str(state.entities[self.owner].player.id) + ";" + str(state.time))
+
         for i in range(10):
             projectile.Shot(game, state, self.id)
 
