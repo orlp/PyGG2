@@ -38,7 +38,7 @@ if sys.argv[1] == "build":
             libs = os.path.join(os.path.join(includes, ".."), "libs")
             subprocess.call("gcc -O3 -c -o mask_extension/bitmask.o mask_extension/bitmask.c", shell=True)
             subprocess.call("gcc -I%s -O3 -c -o mask_extension/_mask.o mask_extension/_mask.c" % includes, shell=True)
-            subprocess.call("gcc -shared -o mask_extension/_mask.dll mask_extension/bitmask.o mask_extension/_mask.o -L%s -lpython27" % libs, shell=True)
+            subprocess.call("gcc -shared -o mask_extension/_mask.pyd mask_extension/bitmask.o mask_extension/_mask.o -L%s -lpython27" % libs, shell=True)
 
 
 elif sys.argv[1] == "clean":
