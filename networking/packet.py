@@ -7,7 +7,7 @@ import sys
 sys.path.append("../")
 
 import struct
-import event
+import events
 
 class Packet(object):
     def __init__(self, sender):
@@ -22,6 +22,7 @@ class Packet(object):
         packetstr += struct.pack("!HH", sequence, acksequence)
 
         for event in self.events:
+            packetstr += struct.pack("!B", event.eventid)
             packetstr += event.pack()
 
         return packetstr
@@ -37,9 +38,9 @@ class Packet(object):
             packetstr = packetstr[struct.calcsize("!B"):]
 
             if self.sender == "client":
-                event = object.__new__(event.clientevents[eventid])
+                event = object.__new__(events.clientevents[eventid])
             else:
-                event = object.__new__(event.serverevents[eventid])
+                event = object.__new__(events.serverevents[eventid])
 
             eventsize = event.unpack(packetstr)
             packetstr = packetstr[eventsize:]
