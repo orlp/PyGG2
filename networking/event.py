@@ -39,7 +39,7 @@ class ClientEventHello(object):
 class ServerEventHello(object):
     eventid = constants.EVENT_HELLO
 
-    def __init(self, servername, maxplayers, mapname, version):
+    def __init__(self, servername, maxplayers, mapname, version):
         self.servername = servername
         self.maxplayers = maxplayers
         self.mapname = mapname
@@ -54,3 +54,20 @@ class ServerEventHello(object):
         self.servername, self.maxplayers, self.mapname, self.version = struct.unpack_from("32pB64pH", packetstr)
 
         return struct.calcsize("32pB64pH")
+
+@clientevent
+class ClientEventLeftMousebuttonDown(object):
+    eventid = constants.EVENT_LEFTMOUSEBUTTON_DOWN
+
+    def __init__(self, time):
+        self.time = time
+
+    def pack(self):
+        packetstr = struct.pack("I", time)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.time = struct.unpack("I", packetstr)
+
+        return 0
