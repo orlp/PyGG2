@@ -3,6 +3,8 @@
 *.pyd
 *.*~
 *.pyd
+*.so
+*.dll
 *.o
 *komodo*
 build/*
