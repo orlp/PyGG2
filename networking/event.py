@@ -37,7 +37,7 @@ class ClientEventHello(object):
 
 @serverevent
 class ServerEventHello(object):
-    eventid = cosntants.EVENT_HELLO
+    eventid = constants.EVENT_HELLO
 
     def __init(self, servername, maxplayers, mapname, version):
         self.servername = servername
