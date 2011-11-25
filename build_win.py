@@ -193,10 +193,12 @@ class BuildExe:
         
 
 def build():
+    os.chdir(os.getcwd() + "/client")
     sys.argv.append('py2exe')
     build = BuildExe()
     build.run()
     build.after_building()
+    os.chdir(os.getcwd() + "/..")
 
 if __name__ == '__main__':
     print("Don't run directly - run python make.py build")

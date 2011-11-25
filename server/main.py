@@ -8,8 +8,8 @@ sys.path.append("../")
 
 import precision_timer
 import engine.game
-import engine.player
 import constants
+import networker
 
 # DEBUG ONLY
 import cProfile
@@ -19,29 +19,33 @@ import os
 # the main function
 class Server(object):
     def __init__(self):
+        self.port = 8190
+        self.name = "Gang Garrison Server"
+        self.password = ""
+        
         # create game engine object
         self.game = engine.game.Game()
-
-        # TODO REMOVE THIS
-        # create player
-        self.engine.player.Player(game, game.current_state, 0)
+        
+        # create packet handler
+        self.networker = networker.Networker(self)
 
         # pygame time tracking
         self.clock = precision_timer.Clock()
-        self.networking_accumulator = 0.0 # this counter is used for sending networking packets at a constant rate
-
+        
     def run(self):
         # game loop
         while True:
             # update the game and render
             frametime = self.clock.tick()
             frametime = min(0.25, frametime) # a limit of 0.25 seconds to prevent complete breakdown
-
+            
+            self.networker.recieve(self, self.game)
+            
             self.game.update(frametime)
-
-            self.networking_accumulator += frametime
-            while self.networking_accumulator > constants.NETWORK_UPDATE_RATE:
-                self.networking_accumulator -= constants.NETWORK_UPDATE_RATE
+            
+            self.networker.send(self, self.game, frametime)
+            
+            
 
 def profileGG2():
     cProfile.run("Server().run()", "game_profile")
