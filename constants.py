@@ -15,7 +15,7 @@ PHYSICS_TIMESTEP = 1/60 # always update physics in these steps
 # networking
 INPUT_SEND_FPS = 1/30 # we send input to the server at this rate
 NETWORK_UPDATE_RATE = 1/20
-MAX_PACKET_SIZE
+MAX_PACKET_SIZE = 500 # pulled out of the air; TODO
 
 # Networked Events
 EVENT_HELLO = 0
