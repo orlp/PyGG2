@@ -71,3 +71,37 @@ class ClientEventLeftMousebuttonDown(object):
         self.time = struct.unpack("I", packetstr)
 
         return 0
+
+@clientevent
+class ClientEventRightMousebuttonDown(object):
+    eventid = constants.EVENT_RIGHTMOUSEBUTTON_DOWN
+
+    def __init__(self, time):
+        self.time = time
+
+    def pack(self):
+        packetstr = struct.pack("I", time)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.time = struct.unpack("I", packetstr)
+
+        return 0
+
+@clientevent
+class ClientEventJump(object):
+    eventid = constants.EVENT_JUMP
+
+    def __init__(self, time):
+        self.time = time
+
+    def pack(self):
+        packetstr = struct.pack("I", time)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.time = struct.unpack("I", packetstr)
+
+        return 0
