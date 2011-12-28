@@ -8,50 +8,61 @@ import socket
 import constants
 import networking.packet
 import event_handler
+import player
 
 class Networker(object):
     def __init__(self, port):
-        self.send_accumulator = 0.0
         self.port = port
-
-        self.sequence = 0
-
+        
         self.players = {}
-        self.update_counters = {}
-
+        
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
         self.socket.setblocking(False)
-
-    def send(self, server, game, frametime):
+        
+    def update(self, server, game, frametime):
+        # generate events
+    
+        # send packets if necessary
         for address, player in self.players.items():
-            self.update_counters[player.id] += frametime
-
-            if self.update_counters[player.id] > constants.NETWORK_UPDATE_RATE:
-                self.update_counters[player.id] %= constants.NETWORK_UPDATE_RATE
-
-                player.sendupdate()
-
-    def receive(self, server, game):
-        packet = networking.packet.Packet("client")
-
+            player.update(self, game, frametime)
+    
+    def recieve(self, server, game):        
         # recieve all packets
         while True:
+            packet = networking.packet.Packet("client")
+            
             try:
                 data, sender = self.socket.recvfrom(constants.MAX_PACKET_SIZE)
             except socket.error:
                 # recvfrom throws socket.error if there was no packet to read
                 break
-
+            
             try:
                 packet.unpack(data)
             except:
                 # parse error, don't throw exception but print it
                 print("Parse error: %s" % sys.exc_info()[1])
-
-            # only handle this packet if we know the player or the first event is a hello
+                continue # drop packet
+            
+            # only handle this packet if we know the player
             if sender in self.players:
                 for event in packet.events:
                     event_handler.eventhandlers[type(event)](self, game, self.players[sender])
             # or if someone wants to shake hands
             elif packet.events[0].eventid == constants.EVENT_HELLO:
+                if packet.password == server.password:
+                    newplayer = player.Player(self, game, packet.name, sender)
+                    
+                    for player in self.players.items():
+                        if player == newplayer:
+                            pass # TODO ADD SERVER_EVENT_HELLO
+                        else:
+                            pass # TODO ADD PLAYER_JOIN
+            # otherwise drop the packet
+            else:
+                continue
+            
+            # ack the packet
+            self.players[sender].acksequence = packet.sequence
+                    

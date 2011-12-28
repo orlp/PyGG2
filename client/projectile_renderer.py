@@ -33,7 +33,7 @@ class RocketRenderer(object):
     def __init__(self):
         self.rocketsprite = function.load_image("projectiles/rockets/0")
     
-    def render(self, renderer, state, rocket):
+    def render(self, renderer, game, state, rocket):
         angle = int(rocket.direction) % 360
         
         if angle in self.rocketsprite_angles:

@@ -5,23 +5,40 @@ import sys
 sys.path.append("../")
 
 import networking
+import engine.player
 
 class Player(object):
-    def __init__(self, networker, name, address):
+    def __init__(self, networker, game, name, address):
+        # generate id
         potentialids = set(range(len(networker.players) + 1))
         takenids = {player.id for player in networker.players.items()}
-        
-        self.address = address
         self.id = (potentialids - takenids).pop()
         
+        # communication data
+        self.address = address
         self.events = []
         self.sequence = 0
         self.acksequence = 0
+        self.time_since_update = 0.0
         
+        # register in networker
         networker.players[address] = self
-        networker.update_counters[self.id] = 0.0
+        
+        # and at last add to engine
+        engine.player.Player(networker.game, networker.game.current_state, self)
     
-    def sendupdate(self, networker):
+    def update(self, networker, game frametime):
+        if frametime == "force":
+            self.time_since_update = 0
+            self.send_packet(networker)
+        else:
+            self.time_since_update += frametime
+            
+            if self.time_since_update > constants.NETWORK_UPDATE_RATE:
+                self.time_since_update %= constants.NETWORK_UPDATE_RATE
+                self.send_packet(networker)
+    
+    def send_packet(self, networker):
         packet = networking.packet.Packet("server")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence

@@ -43,7 +43,7 @@ class Server(object):
             
             self.game.update(frametime)
             
-            self.networker.send(self, self.game, frametime)
+            self.networker.update(self, self.game, frametime)
             
             
 
