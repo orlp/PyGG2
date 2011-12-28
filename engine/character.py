@@ -18,6 +18,7 @@ class Character(entity.MovingObject):
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
+        self.can_doublejump = False
 
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
@@ -40,8 +41,8 @@ class Character(entity.MovingObject):
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
 
         if self.player.up:
-            if self.onground(game, state):
-                self.vspeed = -200
+            self.jump(game, state)
+            print(self.can_doublejump)
 
         # gravitational force
         self.vspeed += 300 * frametime
@@ -110,6 +111,11 @@ class Character(entity.MovingObject):
     #
     #    return bytestring
 
+    def jump(self, game, state):
+        if self.player.up:
+            if self.onground(game, state):
+                self.vspeed = -200
+
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
@@ -120,3 +126,12 @@ class Scout(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id
+        self.can_doublejump = True
+
+    def jump(self, game, state):
+        if self.onground(game, state):
+             self.vspeed = -200
+    	     self.can_doublejump = True
+        elif self.can_doublejump:
+            self.vspeed = -200
+            self.can_doublejump = False
