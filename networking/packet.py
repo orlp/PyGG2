@@ -22,6 +22,7 @@ class Packet(object):
         packetstr += struct.pack("!HH", sequence, acksequence)
 
         for event in self.events:
+            packetstr += struct.pack("!B", event.eventid)
             packetstr += event.pack()
 
         return packetstr

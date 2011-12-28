@@ -135,7 +135,7 @@ class Client(object):
         pygame.quit()
 
 def profileGG2():
-    cProfile.run("Client().run()", "game_profile")
+    cProfile.run("client.main.GG2main()", "game_profile")
     p = pstats.Stats("game_profile", stream=open("profile.txt", "w"))
     p.sort_stats("cumulative")
     p.print_stats(30)

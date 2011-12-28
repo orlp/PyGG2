@@ -85,7 +85,7 @@ class Rocket(entity.MovingObject):
     max_flight_time = 20
     damage = 35
     blastradius = 65
-    knockback = 8/30
+    knockback = 3000
 
     rocket_hitmasks = {}
 
@@ -102,13 +102,13 @@ class Rocket(entity.MovingObject):
         self.x = srcchar.x
         self.y = srcchar.y
 
-        self.direction = srcowner.direction
+        self.direction = srcwep.direction
 
         self.speed = 500
         self.hspeed = math.cos(math.radians(self.direction)) * self.speed
         self.vspeed = math.sin(math.radians(self.direction)) * -self.speed
 
-    def destroy(self, game, state):
+    def destroy(self, game, state, frametime):
         if not self.max_flight_time - self.flight_time < self.fade_time:
             for obj in state.entities.values():
                 if isinstance(obj, character.Character) and math.hypot(self.x - obj.x, self.y - obj.y) < self.blastradius:
@@ -141,7 +141,7 @@ class Rocket(entity.MovingObject):
             self.rocket_hitmasks[angle] = mask
 
         if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
-            self.destroy(game, state)
+            self.destroy(game, state, frametime)
 
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Rocket, self).interpolate(prev_obj, next_obj, alpha)

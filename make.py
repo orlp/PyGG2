@@ -55,7 +55,7 @@ elif sys.argv[1] == "clean":
     except: pass
 elif sys.argv[1] == "testclient":
     import client.main
-    client.main.GG2main()
+    client.main.profileGG2()
 elif sys.argv[1] == "testserver":
     import server.main
     server.main.GG2main()
