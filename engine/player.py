@@ -20,8 +20,25 @@ class Player(object):
         self.character_id = character.Scout(game, state, self).id
         char = state.entities[self.character_id]
 
+        # FIXME remove
         char.x = 2300
         char.y = 50
+
+    def copy(self):
+        new = Player.__new__(Player) # create class without invoking __init__
+
+        new.id = self.id
+        new.up = self.up
+        new.left = self.left
+        new.right = self.right
+        new.leftmouse = self.leftmouse
+        new.middlemouse = self.middlemouse
+        new.rightmouse = self.rightmouse
+        new.aimdirection = self.aimdirection
+
+        new.character_id = self.character_id
+
+        return new
 
     def serialize_input(self):
         keybyte = 0

@@ -12,15 +12,16 @@ import constants
 # the main engine class
 class Game:
     def __init__(self):
+        # players
+        self.players = {}
+        self.maxplayers = 8
+
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
 
         # game states
         self.current_state = gamestate.Gamestate()
         self.previous_state = self.current_state.copy()
-
-        self.players = {}
-        self.maxplayers = 8
 
         # this accumulator is used to update the engine in fixed timesteps
         self.accumulator = 0.0
