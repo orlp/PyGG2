@@ -85,7 +85,7 @@ class Rocket(entity.MovingObject):
     max_flight_time = 20
     damage = 35
     blastradius = 65
-    knockback = 3000
+    knockback = 70000
 
     rocket_hitmasks = {}
 
@@ -115,6 +115,7 @@ class Rocket(entity.MovingObject):
                     force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius))*(self.knockback*frametime)# TODO: Fix Frametime
                     obj.hspeed += force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y))
                     obj.vspeed += force*((obj.y-self.y)/math.hypot(self.x - obj.x, self.y - obj.y))/3
+                    print (force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y)))
 
         super(Rocket, self).destroy(state)
 
