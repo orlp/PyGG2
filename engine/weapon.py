@@ -56,3 +56,12 @@ class Scattergun(Weapon):
             projectile.Shot(game, state, self.id)
 
         self.refirealarm = self.refiretime
+
+class Rocketlauncher(Weapon):
+    maxammo = 4
+    refiretime = 1
+    reloadtime = 5/6
+
+    def fire_primary(self, game, state):
+        projectile.Rocket(game, state, self.id)
+        self.refirealarm = self.refiretime

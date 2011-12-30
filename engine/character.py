@@ -135,3 +135,14 @@ class Scout(Character):
         elif self.can_doublejump:
             self.vspeed = -200
             self.can_doublejump = False
+
+class Soldier(Character):
+    # width, height of scout - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+
+    maxhp = 150
+    def __init__(self, game, state, player):
+        Character.__init__(self, game, state, player)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Rocketlauncher(game, state, self.id).id
