@@ -84,15 +84,15 @@ class RocketlauncherRenderer(object):
 
         renderer.draw_world(image, (xoff, yoff))
 
-class PistolRenderer(object):
+class RevolverRenderer(object):
     # TODO ONCE SPY DONE:
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
     weaponoffset = (12, 13) # where the character should carry it's gun
     weaponoffset_flipped = (6, 8)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/pistols/0")
-        self.firingsprite = function.load_image("weapons/pistols/2")
+        self.weaponsprite = function.load_image("weapons/revolvers/0")
+        self.firingsprite = function.load_image("weapons/revolvers/2")
 
     def render(self, renderer, game, state, weapon):
         owner = state.entities[weapon.owner]
