@@ -17,8 +17,8 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.nextclass = character.Soldier
-        self.character_id = character.Soldier(game, state, self).id
+        self.nextclass = character.Scout
+        self.character_id = character.Scout(game, state, self).id
         char = state.entities[self.character_id]
 
         # FIXME remove
