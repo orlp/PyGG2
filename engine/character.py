@@ -11,6 +11,9 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
+
+    acceleration = 500
+
     def __init__(self, game, state, player):
         super(Character, self).__init__(game, state)
 
@@ -32,8 +35,8 @@ class Character(entity.MovingObject):
         self.flip = not (self.player.aimdirection < 90 or self.player.aimdirection > 270)
 
         # if we are holding down movement keys, move
-        if self.player.left: self.hspeed -= self.walkingspeed * frametime
-        if self.player.right: self.hspeed += self.walkingspeed * frametime
+        if self.player.left: self.hspeed -= self.acceleration * frametime
+        if self.player.right: self.hspeed += self.acceleration * frametime
 
         # if we're not, slow down
         if not (self.player.left or self.player.right):
@@ -42,7 +45,6 @@ class Character(entity.MovingObject):
 
         if self.player.up:
             self.jump(game, state)
-            print(self.can_doublejump)
 
         # gravitational force
         self.vspeed += 300 * frametime
@@ -51,7 +53,7 @@ class Character(entity.MovingObject):
         self.vspeed = min(800, self.vspeed)
 
         # TODO: speed limit based on class
-        self.hspeed = min(self.walkingspeed, max(-self.walkingspeed, self.hspeed))
+        self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
 
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
@@ -127,7 +129,7 @@ class Scout(Character):
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id
         self.can_doublejump = True
-	self.walkingspeed = 252
+	self.max_speed = 252
 
     def jump(self, game, state):
         if self.onground(game, state):
@@ -140,7 +142,7 @@ class Scout(Character):
 class Soldier(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
-    walkingspeed = 162
+    max_speed = 162
 
     maxhp = 150
     def __init__(self, game, state, player):
