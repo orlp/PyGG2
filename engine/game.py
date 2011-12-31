@@ -12,8 +12,6 @@ import constants
 # the main engine class
 class Game:
     def __init__(self):
-        # players
-        self.players = {}
         self.maxplayers = 8
 
         # map data

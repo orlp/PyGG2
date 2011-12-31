@@ -14,8 +14,6 @@ class Gamestate(object):
     def update(self, game, frametime):
         self.time += frametime
 
-        self.players = game.players
-
         for entity in self.entities.values(): entity.beginstep(game, self, frametime)
         for entity in self.entities.values(): entity.step(game, self, frametime)
         for entity in self.entities.values(): entity.endstep(game, self, frametime)

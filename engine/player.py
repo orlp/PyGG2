@@ -6,7 +6,7 @@ import struct
 class Player(object):
     def __init__(self, game, state, id):
         self.id = id
-        game.players[id] = self
+        state.players[id] = self
 
         self.up = False
         self.down = False
@@ -26,18 +26,7 @@ class Player(object):
 
     def copy(self):
         new = Player.__new__(Player) # create class without invoking __init__
-
-        new.id = self.id
-        new.up = self.up
-        new.left = self.left
-        new.right = self.right
-        new.leftmouse = self.leftmouse
-        new.middlemouse = self.middlemouse
-        new.rightmouse = self.rightmouse
-        new.aimdirection = self.aimdirection
-
-        new.character_id = self.character_id
-
+        new.__dict__.update(self.__dict__)
         return new
 
     def serialize_input(self):
