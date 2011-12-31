@@ -11,7 +11,6 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-
     acceleration = 500
 
     def __init__(self, game, state, player):
@@ -121,15 +120,15 @@ class Character(entity.MovingObject):
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
-
+    max_speed = 252
     maxhp = 100
+    
     def __init__(self, game, state, player):
         Character.__init__(self, game, state, player)
 
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id
         self.can_doublejump = True
-	self.max_speed = 252
 
     def jump(self, game, state):
         if self.onground(game, state):
@@ -143,8 +142,8 @@ class Soldier(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 162
-
     maxhp = 150
+    
     def __init__(self, game, state, player):
         Character.__init__(self, game, state, player)
 
