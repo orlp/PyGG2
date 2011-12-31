@@ -11,7 +11,7 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    acceleration = 500
+    acceleration = 5000
 
     def __init__(self, game, state, player):
         super(Character, self).__init__(game, state)
@@ -122,7 +122,7 @@ class Scout(Character):
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 252
     maxhp = 100
-    
+
     def __init__(self, game, state, player):
         Character.__init__(self, game, state, player)
 
@@ -143,7 +143,7 @@ class Soldier(Character):
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 162
     maxhp = 150
-    
+
     def __init__(self, game, state, player):
         Character.__init__(self, game, state, player)
 
