@@ -32,8 +32,8 @@ class Character(entity.MovingObject):
         self.flip = not (self.player.aimdirection < 90 or self.player.aimdirection > 270)
 
         # if we are holding down movement keys, move
-        if self.player.left: self.hspeed -= 1000 * frametime
-        if self.player.right: self.hspeed += 1000 * frametime
+        if self.player.left: self.hspeed -= self.walkingspeed * frametime
+        if self.player.right: self.hspeed += self.walkingspeed * frametime
 
         # if we're not, slow down
         if not (self.player.left or self.player.right):
@@ -51,7 +51,7 @@ class Character(entity.MovingObject):
         self.vspeed = min(800, self.vspeed)
 
         # TODO: speed limit based on class
-        self.hspeed = min(200, max(-200, self.hspeed))
+        self.hspeed = min(self.walkingspeed, max(-self.walkingspeed, self.hspeed))
 
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
@@ -127,6 +127,7 @@ class Scout(Character):
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id
         self.can_doublejump = True
+	self.walkingspeed = 252
 
     def jump(self, game, state):
         if self.onground(game, state):
@@ -135,3 +136,15 @@ class Scout(Character):
         elif self.can_doublejump:
             self.vspeed = -200
             self.can_doublejump = False
+
+class Soldier(Character):
+    # width, height of scout - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    walkingspeed = 162
+
+    maxhp = 150
+    def __init__(self, game, state, player):
+        Character.__init__(self, game, state, player)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Rocketlauncher(game, state, self.id).id
