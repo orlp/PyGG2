@@ -32,8 +32,10 @@ class GameRenderer(object):
         self.renderers = {
             engine.character.Scout: character_renderer.ScoutRenderer(),
             engine.character.Soldier: character_renderer.SoldierRenderer(),
+            engine.character.Engineer: character_renderer.EngineerRenderer(),
             engine.weapon.Scattergun: weapon_renderer.ScattergunRenderer(),
             engine.weapon.Rocketlauncher: weapon_renderer.RocketlauncherRenderer(),
+            engine.weapon.Shotgun: weapon_renderer.ShotgunRenderer(),
             engine.weapon.Revolver: weapon_renderer.RevolverRenderer(),
             engine.projectile.Shot: projectile_renderer.ShotRenderer(),
             engine.projectile.Rocket: projectile_renderer.RocketRenderer()

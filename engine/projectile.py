@@ -15,14 +15,14 @@ class Shot(entity.MovingObject):
 
     fade_time = 0.8 # seconds of fading when max_flight_time is being reached
     max_flight_time = 1.5
-    damage = 8
 
-    def __init__(self, game, state, sourceweapon):
+    def __init__(self, game, state, sourceweapon, damage):
         super(Shot, self).__init__(game, state)
 
         self.direction = 0.0
         self.flight_time = 0.0
         self.sourceweapon = sourceweapon
+        self.damage = damage
 
         srcwep = state.entities[sourceweapon]
         srcchar = state.entities[srcwep.owner]
