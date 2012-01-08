@@ -11,7 +11,7 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    acceleration = 1500
+    acceleration = 1200
 
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
@@ -39,10 +39,9 @@ class Character(entity.MovingObject):
         if player.left: self.hspeed -= self.acceleration * frametime
         if player.right: self.hspeed += self.acceleration * frametime
 
-        # if we're not, slow down
-        if not (player.left or player.right):
-            if abs(self.hspeed) < 10: self.hspeed = 0
-            else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
+        # Friction:
+        if abs(self.hspeed) < 10: self.hspeed = 0
+        else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
 
         if player.up:
             self.jump(game, state)
@@ -114,8 +113,8 @@ class Character(entity.MovingObject):
         if player.up:
             if self.onground(game, state):
                 self.vspeed = -200
-
-    def die(self, game, state):
+                
+    def death(self, game, state):
         # first we must unregister ourselves from our player
         self.get_player(game, state).character_id = None
 
@@ -156,3 +155,15 @@ class Soldier(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
+
+class Engineer(Character):
+    # width, height of scout - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 180
+    maxhp = 120
+
+    def __init__(self, game, state, player):
+        Character.__init__(self, game, state, player)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Shotgun(game, state, self.id).id

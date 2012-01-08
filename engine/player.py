@@ -17,10 +17,17 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.nextclass = character.Scout
-        self.character_id = character.Scout(game, state, self.id).id
-        char = state.entities[self.character_id]
+        self.nextclass = character.Engineer
+        self.character_id = None
+        self.spawn(game, state)
 
+    def spawn(self, game, state):
+        if self.character_id != None:
+            # There is already a character on the field. This should never happen.
+            print("Tryed to spawn character while old one was still alive.")
+
+        self.character_id = self.nextclass(game, state, self).id
+        char = state.entities[self.character_id]
         # FIXME remove
         char.x = 2300
         char.y = 50
