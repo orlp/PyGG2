@@ -171,3 +171,16 @@ class Engineer(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Shotgun(game, state, self.id).id
+
+class Spy(Character):
+    # FIXME: width, height of spy - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 194.4
+    maxhp = 100
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Revolver(game, state, self.id).id
+	self.cloaking = False

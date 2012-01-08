@@ -47,3 +47,15 @@ class EngineerRenderer(ClassRenderer):
             function.load_image("characters/engineerreds/%s" % i) for i in range(4)
         ])
         self.spriteoffset = (-24, -30)
+
+class SpyRenderer(ClassRenderer):
+    def __init__(self):
+        self.sprites = list([
+            function.load_image("characters/spyreds/%s" % i) for i in range(4)
+        ])
+        self.spriteoffset = (-24, -30)
+
+    def render(self, renderer, game, state, character):
+        if not character.cloaking:
+            ClassRenderer.render(self, renderer, game, state, character)
+            # Why is the character still getting drawn on the screen?

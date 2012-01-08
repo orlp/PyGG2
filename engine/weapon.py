@@ -85,6 +85,12 @@ class Revolver(Weapon):
     reloadtime = .5
 
     def fire_primary(self, game, state):
-        random.seed(str(state.entities[self.owner].player.id) + ";" + str(state.time))
-        projectile.Shot(game, state, self.id)
-        self.refirealarm = self.refiretime
+        print("Cloaking: ", state.entities[self.owner].cloaking, "| is very unresponsive; print statement in line 89 of weapon.py")
+        if not state.entities[self.owner].cloaking:
+            random.seed(str(state.entities[self.owner].player_id) + ";" + str(state.time))
+            projectile.Shot(game, state, self.id, 28) # 28 == damage
+            self.refirealarm = self.refiretime
+        #else: Stab
+
+    def fire_secondary(self, game, state):
+        state.entities[self.owner].cloaking = not state.entities[self.owner].cloaking# Any ideas how to add a good gradient?

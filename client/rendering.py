@@ -34,6 +34,7 @@ class GameRenderer(object):
             engine.character.Scout: character_renderer.ScoutRenderer(),
             engine.character.Soldier: character_renderer.SoldierRenderer(),
             engine.character.Engineer: character_renderer.EngineerRenderer(),
+            engine.character.Spy: character_renderer.SpyRenderer(),
             engine.weapon.Scattergun: weapon_renderer.ScattergunRenderer(),
             engine.weapon.Rocketlauncher: weapon_renderer.RocketlauncherRenderer(),
             engine.weapon.Shotgun: weapon_renderer.ShotgunRenderer(),

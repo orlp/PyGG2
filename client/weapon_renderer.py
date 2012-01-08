@@ -68,11 +68,16 @@ class ShotgunRenderer(WeaponRenderer):
         self.firingsprite = function.load_image("weapons/shotguns/2")
 
 class RevolverRenderer(WeaponRenderer):
-    # TODO ONCE SPY DONE:
     weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
-    weaponoffset = (12, 13) # where the character should carry it's gun
-    weaponoffset_flipped = (6, 8)
+    weaponoffset = (11, 14) # where the character should carry it's gun
+    weaponoffset_flipped = (8, 8)
 
     def __init__(self):
         self.weaponsprite = function.load_image("weapons/revolvers/0")
         self.firingsprite = function.load_image("weapons/revolvers/2")
+
+    def render(self, renderer, game, state, weapon):
+        if not state.entities[weapon.owner].cloaking:#FIXME: or player.team == out team
+            WeaponRenderer.render(self, renderer, game, state, weapon)
+        else:
+            pass# TODO: Transparent drawing
