@@ -144,7 +144,7 @@ class Scout(Character):
             self.can_doublejump = False
 
 class Soldier(Character):
-    # width, height of scout - rectangle collision
+    # width, height of soldier - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 162
     maxhp = 150
@@ -156,7 +156,7 @@ class Soldier(Character):
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
 
 class Engineer(Character):
-    # width, height of scout - rectangle collision
+    # width, height of engineer - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 180
     maxhp = 120
