@@ -1,49 +1,40 @@
 from __future__ import division, print_function
 
-import pygame, math
-from pygame.locals import *
+import math
+import pygrafix
 import random
 
 import function
 
 class ShotRenderer(object):
-    shotsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
-
     def __init__(self):
         self.shotsprite = function.load_image("projectiles/shots/0")
-        
-    def render(self, renderer, game, state, shot):
-        angle = int(shot.direction) % 360
-        
-        if angle in self.shotsprite_angles:
-            image = self.shotsprite_angles[angle]
-        else:
-            image = pygame.transform.rotate(self.shotsprite, angle)
-            self.shotsprite_angles[angle] = image
-        
-        if shot.max_flight_time - shot.flight_time < shot.fade_time:
-            image.set_alpha(255 * (shot.max_flight_time - shot.flight_time) / shot.fade_time)
-        else: image.set_alpha(255)
 
-        renderer.draw_world(image, (shot.x, shot.y))
+    def render(self, renderer, game, state, shot):
+        sprite = pygrafix.sprite.Sprite(self.shotsprite)
+        sprite.rotation = shot.direction
+
+        if shot.max_flight_time - shot.flight_time < shot.fade_time:
+            sprite.alpha = (shot.max_flight_time - shot.flight_time) / shot.fade_time
+
+        sprite.position = renderer.get_screen_coords(shot.x, shot.y)
+
+        renderer.world_sprites.add_sprite(sprite)
 
 class RocketRenderer(object):
     rocketsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
-    
+
     def __init__(self):
         self.rocketsprite = function.load_image("projectiles/rockets/0")
-    
+
     def render(self, renderer, game, state, rocket):
-        angle = int(rocket.direction) % 360
-        
-        if angle in self.rocketsprite_angles:
-            image = self.rocketsprite_angles[angle]
-        else:
-            image = pygame.transform.rotate(self.rocketsprite, angle)
-            self.rocketsprite_angles[angle] = image
-        
+        sprite = pygrafix.sprite.Sprite(self.rocketsprite)
+        sprite.rotation = rocket.direction
+
         if rocket.max_flight_time - rocket.flight_time < rocket.fade_time:
-            image.set_alpha(255 * (rocket.max_flight_time - rocket.flight_time) / rocket.fade_time)
-        else: image.set_alpha(255)
-        
-        renderer.draw_world(image, (rocket.x, rocket.y))
+            sprite.alpha (rocket.max_flight_time - rocket.flight_time) / rocket.fade_time
+
+        sprite.x = rocket.x
+        sprite.y = rocket.y
+
+        renderer.world_sprites.add_sprite(sprite)

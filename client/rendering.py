@@ -1,9 +1,11 @@
 from __future__ import division, print_function
 
-import pygame
+import pygrafix
 
 import engine.gamestate
 import constants
+
+import function
 
 import map_renderer
 import character_renderer
@@ -17,7 +19,6 @@ import engine.projectile
 class GameRenderer(object):
     def __init__(self, client):
         self.window = client.window
-        self.backgroundcolor = pygame.Color(0, 0, 0, 255)
 
         self.interpolated_state = engine.gamestate.Gamestate()
         self.renderers = {}
@@ -43,13 +44,19 @@ class GameRenderer(object):
             engine.projectile.Rocket: projectile_renderer.RocketRenderer()
         }
 
-    def render(self, client, game, frametime):
-        self.window = client.window
+        self.world_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
+        self.hud_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
 
+    def render(self, client, game, frametime):
+        # reset spritegroups
+        self.world_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
+        self.hud_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
+
+        self.window = client.window
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        self.focus_object_id = client.our_player.character_id
+        self.focus_object_id = game.current_state.players[client.our_player_id].character_id
 
         if self.focus_object_id != None:
             focus_object = self.interpolated_state.entities[self.focus_object_id]
@@ -62,7 +69,7 @@ class GameRenderer(object):
 
         # clear screen if needed
         if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= game.map.width or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
-            self.window.fill(self.backgroundcolor)
+            self.window.clear()
 
         # draw background
         self.maprenderer.render(self, self.interpolated_state)
@@ -71,26 +78,12 @@ class GameRenderer(object):
         for entity in self.interpolated_state.entities.values():
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
 
-        # blit overlay last
-        for surface, offset in self.overlayblits:
-            self.window.blit(surface, offset)
-        self.overlayblits = []
+        self.world_sprites.draw()
+        self.hud_sprites.draw()
 
-    # this function is called to draw on the game's window with game world coordinate
-    def draw_world(self, surface, offset = (0, 0)):
-        width, height = surface.get_size()
-
+    def get_screen_coords(self, x, y):
         # calculate drawing position
-        draw_x = int(offset[0] - self.xview)
-        draw_y = int(offset[1] - self.yview)
+        draw_x = int(x - self.xview)
+        draw_y = int(y - self.yview)
 
-        # even if we see a tiny little bit of the object, blit it - otherwise don't even blit
-        if draw_x + width >= 0 and draw_x - width < self.view_width and draw_y + height >= 0 and draw_y - height < self.view_height:
-            self.window.blit(surface, (draw_x, draw_y))
-
-    # this function is called to draw over the game world with screen coordinates
-    def draw_overlay(self, surface, offset = (0, 0)):
-        width, height = surface.get_size()
-
-        if offset[0] + width >= 0 and offset[0] - width < self.view_width and offset[1] + height >= 0 and offset[1] - height < self.view_height:
-            self.overlayblits.append((surface, offset))
+        return draw_x, draw_y

@@ -1,7 +1,6 @@
 from __future__ import division, print_function
 
-import math, pygame
-from pygame.locals import *
+import math, pygrafix
 
 import function
 
@@ -18,42 +17,42 @@ class ClassRenderer(object):
         if character.intel:
             anim_frame += 2
 
-        image = self.sprites[anim_frame]
+        sprite = pygrafix.sprite.Sprite(self.sprites[anim_frame])
 
-        if character.flip: image = pygame.transform.flip(image, 1, 0)
+        #if character.flip: image = pygame.transform.flip(image, 1, 0)
+        # FIXME PYGRAFIX FLIPPING
 
-        xoff = character.x + self.spriteoffset[0]
-        yoff = character.y + self.spriteoffset[1]
+        sprite.anchor_x = self.spriteoffset[0]
+        sprite.anchor_y = self.spriteoffset[1]
 
-        renderer.draw_world(image, (xoff, yoff))
+        sprite.position = renderer.get_screen_coords(character.x, character.y)
+
+        renderer.world_sprites.add_sprite(sprite)
+
 
 class ScoutRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = list([
-            function.load_image("characters/scoutreds/%s" % i) for i in range(4)
-        ])
-        self.spriteoffset = (-24, -30)
+        self.sprites = [function.load_image("characters/scoutreds/%s" % i) for i in range(4)]
+
+        self.spriteoffset = (24, 30)
 
 class SoldierRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = list([
-            function.load_image("characters/soldierreds/%s" % i) for i in range(4)
-        ])
-        self.spriteoffset = (-24, -30)
+        self.sprites = [function.load_image("characters/soldierreds/%s" % i) for i in range(4)]
+
+        self.spriteoffset = (-24, 30)
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = list([
-            function.load_image("characters/engineerreds/%s" % i) for i in range(4)
-        ])
-        self.spriteoffset = (-24, -30)
+        self.sprites = [function.load_image("characters/engineerreds/%s" % i) for i in range(4)]
+
+        self.spriteoffset = (-24, 30)
 
 class SpyRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = list([
-            function.load_image("characters/spyreds/%s" % i) for i in range(4)
-        ])
-        self.spriteoffset = (-24, -30)
+        self.sprites = [function.load_image("characters/spyreds/%s" % i) for i in range(4)]
+
+        self.spriteoffset = (-24, 30)
 
     def render(self, renderer, game, state, character):
         if not character.cloaking:

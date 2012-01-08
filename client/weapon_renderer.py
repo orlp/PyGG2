@@ -1,7 +1,7 @@
 from __future__ import division, print_function
 
-import pygame, math
-from pygame.locals import *
+import math
+import pygrafix
 
 import function
 
@@ -20,25 +20,20 @@ class WeaponRenderer(object):
         if weapon.refiretime - weapon.refirealarm < 0.02:
             image = self.firingsprite
 
-        if owner.flip:
-            image = pygame.transform.flip(image, 0, 1)
-            offset = self.weaponoffset_flipped
+        sprite = pygrafix.sprite.Sprite(image)
 
-        # get starting offset
-        xoff, yoff = owner.x, owner.y
-        xoff += offset[0]
-        yoff += offset[1]
+        # FIXME PYGRAFIX FLIPPING
+        #if owner.flip:
+        #    image = pygame.transform.flip(image, 0, 1)
+        #    offset = self.weaponoffset_flipped
 
-        xoff, yoff = int(xoff), int(yoff)
+        sprite.anchor_x = offset[0]
+        sprite.anchor_y = offset[1]
 
-        # rotate
-        image, offset = function.rotate_surface_point(image, weapon.direction, self.weapon_rotate_point)
+        sprite.rotation = weapon.direction
+        sprite.position = renderer.get_screen_coords(owner.x, owner.y)
 
-        # compensate for rotation
-        xoff -= offset[0]
-        yoff -= offset[1]
-
-        renderer.draw_world(image, (xoff, yoff))
+        renderer.world_sprites.add_sprite(sprite)
 
 class ScattergunRenderer(WeaponRenderer):
     weapon_rotate_point = (4, 8) # where is the handle of the gun, where to rotate around
