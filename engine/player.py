@@ -18,7 +18,7 @@ class Player(object):
         self.aimdirection = 0
 
         self.nextclass = character.Scout
-        self.character_id = character.Scout(game, state, self).id
+        self.character_id = character.Scout(game, state, self.id).id
         char = state.entities[self.character_id]
 
         # FIXME remove

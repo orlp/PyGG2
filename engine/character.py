@@ -11,12 +11,12 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    acceleration = 500
+    acceleration = 1500
 
-    def __init__(self, game, state, player):
+    def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
 
-        self.player = player
+        self.player_id = player_id
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
@@ -26,23 +26,25 @@ class Character(entity.MovingObject):
         self.animoffset = 0.0
 
     def step(self, game, state, frametime):
+        player = self.get_player(game, state)
+
         # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
         if abs(self.hspeed) > 20:
             self.animoffset += frametime * abs(self.hspeed) / 20
             self.animoffset %= 2
 
-        self.flip = not (self.player.aimdirection < 90 or self.player.aimdirection > 270)
+        self.flip = not (player.aimdirection < 90 or player.aimdirection > 270)
 
         # if we are holding down movement keys, move
-        if self.player.left: self.hspeed -= self.acceleration * frametime
-        if self.player.right: self.hspeed += self.acceleration * frametime
+        if player.left: self.hspeed -= self.acceleration * frametime
+        if player.right: self.hspeed += self.acceleration * frametime
 
         # if we're not, slow down
-        if not (self.player.left or self.player.right):
+        if not (player.left or player.right):
             if abs(self.hspeed) < 10: self.hspeed = 0
             else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
 
-        if self.player.up:
+        if player.up:
             self.jump(game, state)
 
         # gravitational force
@@ -106,25 +108,30 @@ class Character(entity.MovingObject):
 
         self.flip = refobj.flip
 
-    #def serialize(self, game, updatetype):
-    #    if updatetype == "SNAPSHOT_UPDATE" or updatetype == "COMPLETE_UPDATE":
-    #      bytestring += struct.pack("!BHffffB", keybyte, self.aimdirection, self.x, self.y, self.hspeed, self.vspeed, self.hp) # TODO: Ammo and cloak.
-    #
-    #    return bytestring
-
     def jump(self, game, state):
-        if self.player.up:
+        player = self.get_player(game, state)
+
+        if player.up:
             if self.onground(game, state):
                 self.vspeed = -200
+
+    def die(self, game, state):
+        # first we must unregister ourselves from our player
+        self.get_player(game, state).character_id = None
+
+        self.destroy()
+
+    def get_player(self, game, state):
+        return state.players[self.player_id]
 
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 252
     maxhp = 100
-    
-    def __init__(self, game, state, player):
-        Character.__init__(self, game, state, player)
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
 
         self.hp = self.maxhp
         self.weapon = weapon.Scattergun(game, state, self.id).id
@@ -143,9 +150,9 @@ class Soldier(Character):
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 162
     maxhp = 150
-    
-    def __init__(self, game, state, player):
-        Character.__init__(self, game, state, player)
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
 
         self.hp = self.maxhp
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id

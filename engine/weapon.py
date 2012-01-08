@@ -16,11 +16,11 @@ class Weapon(entity.Entity):
         self.owner = owner
         self.refirealarm = 0.0
         self.ammo = self.maxammo
-        self.direction = state.entities[self.owner].player.aimdirection
+        self.direction = state.entities[self.owner].get_player(game, state).aimdirection
 
     def beginstep(self, game, state, frametime):
         owner = state.entities[self.owner]
-        self.direction = owner.player.aimdirection
+        self.direction = owner.get_player(game, state).aimdirection
 
     def step(self, game, state, frametime):
         owner = state.entities[self.owner]
@@ -30,10 +30,10 @@ class Weapon(entity.Entity):
         else:
             self.refirealarm -= frametime
 
-        if owner.player.leftmouse and self.refirealarm == 0:
+        if owner.get_player(game, state).leftmouse and self.refirealarm == 0:
             self.fire_primary(game, state)
 
-        if owner.player.rightmouse and self.refirealarm == 0:
+        if owner.get_player(game, state).rightmouse and self.refirealarm == 0:
             self.fire_secondary(game, state)
 
     # override this
@@ -50,7 +50,7 @@ class Scattergun(Weapon):
     reloadtime = 1
 
     def fire_primary(self, game, state):
-        random.seed(str(state.entities[self.owner].player.id) + ";" + str(state.time))
+        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
 
         for i in range(10):
             projectile.Shot(game, state, self.id)
