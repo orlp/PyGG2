@@ -30,7 +30,7 @@ class Shot(entity.MovingObject):
         self.x = srcchar.x
         self.y = srcchar.y
 
-        self.direction = srcchar.player.aimdirection + (7 - random.randint(0, 15))
+        self.direction = srcchar.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
 
         # add user speed to bullet speed but don't change direction of the bullet
         playerdir = math.degrees(math.atan2(-srcchar.vspeed, srcchar.hspeed))
