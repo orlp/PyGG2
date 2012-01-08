@@ -9,6 +9,7 @@ import map_renderer
 import character_renderer
 import weapon_renderer
 import projectile_renderer
+import spectator
 import engine.character
 import engine.weapon
 import engine.projectile
@@ -49,8 +50,12 @@ class GameRenderer(object):
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
         self.focus_object_id = client.our_player.character_id
 
+        if self.focus_object_id != None:
+            focus_object = self.interpolated_state.entities[self.focus_object_id]
+        else:
+            focus_object = spectator.Spectator(client.our_player)
+
         # update view
-        focus_object = self.interpolated_state.entities[self.focus_object_id]
         self.xview = int(int(focus_object.x) - self.view_width / 2)
         self.yview = int(int(focus_object.y) - self.view_height / 2)
 

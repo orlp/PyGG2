@@ -20,6 +20,16 @@ class Player(object):
         self.nextclass = character.Scout
         self.character_id = None
         self.spawn(game, state)
+        self.respawntimer = 0
+
+    # FIXME: Make this actually get executed
+    def step(self, game, state, frametime):
+        if self.character_id == None:# If the character is dead
+            if self.respawntimer <= 0:
+                self.spawn(self, game, state)# Respawn
+            else:
+                self.respawntimer -= frametime
+                print(self.respawntimer)
 
     def spawn(self, game, state):
         if self.character_id != None:

@@ -107,9 +107,9 @@ class Client(object):
             self.our_player.rightmouse = rightmouse
             self.our_player.aimdirection = function.point_direction(constants.GAME_WIDTH / 2, constants.GAME_HEIGHT / 2, mouse_x, mouse_y)
 
-            if self.keys[K_l]:
+            if self.keys[K_l] and self.our_player.character_id != None:
                 # Kill ourself. FIXME: Remove
-                self.game.current_state.entities[self.our_player.character_id].death(self.game, self.game.current_state)
+                self.game.current_state.entities[self.our_player.character_id].die(self.game, self.game.current_state)
 
             # DEBUG quit game with escape
             if self.keys[K_ESCAPE]: break

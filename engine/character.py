@@ -113,12 +113,16 @@ class Character(entity.MovingObject):
         if player.up:
             if self.onground(game, state):
                 self.vspeed = -200
-                
-    def death(self, game, state):
+
+    def die(self, game, state):
         # first we must unregister ourselves from our player
         self.get_player(game, state).character_id = None
+        self.get_player(game, state).respawntimer = 1# in seconds
 
-        self.destroy()
+	# Then we have to destroy our weapon
+	state.entities[self.weapon].destroy(state)
+
+        self.destroy(state)
 
     def get_player(self, game, state):
         return state.players[self.player_id]
