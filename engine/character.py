@@ -149,7 +149,7 @@ class Scout(Character):
             self.can_doublejump = False
 
 class Soldier(Character):
-    # width, height of soldier - rectangle collision
+    # FIXME: width, height of soldier - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 162
     maxhp = 150
@@ -161,13 +161,13 @@ class Soldier(Character):
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
 
 class Engineer(Character):
-    # width, height of engineer - rectangle collision
+    # FIXME: width, height of engineer - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 180
     maxhp = 120
 
-    def __init__(self, game, state, player):
-        Character.__init__(self, game, state, player)
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
 
         self.hp = self.maxhp
         self.weapon = weapon.Shotgun(game, state, self.id).id

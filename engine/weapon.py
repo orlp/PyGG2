@@ -74,6 +74,7 @@ class Shotgun(Weapon):
     shotdamage = 7
 
     def fire_primary(self, game, state):
+        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
         for i in range(5):
             projectile.Shot(game, state, self.id, self.shotdamage)
 
