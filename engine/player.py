@@ -26,7 +26,7 @@ class Player(object):
             # There is already a character on the field. This should never happen.
             print("Tryed to spawn character while old one was still alive.")
 
-        self.character_id = self.nextclass(game, state, self).id
+        self.character_id = self.nextclass(game, state, self.id).id
         char = state.entities[self.character_id]
         # FIXME remove
         char.x = 2300
