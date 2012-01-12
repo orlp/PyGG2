@@ -9,42 +9,53 @@ import constants
 import networking.packet
 import event_handler
 import player
+import lobby
 
 class Networker(object):
     def __init__(self, port):
         self.port = port
-        
+
         self.players = {}
-        
+
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
         self.socket.setblocking(False)
-        
+
+        self.lobbytimer = constants.LOBBY_UPDATE_TIMER
+        self.lobbyconnector = lobby.Lobbyconnector(server)
+
     def update(self, server, game, frametime):
         # generate events
-    
+
         # send packets if necessary
         for address, player in self.players.items():
             player.update(self, game, frametime)
-    
-    def recieve(self, server, game):        
+
+        # send stuff to lobby if necessary
+        if self.lobbytimer <= 0:
+            self.lobbyconnector.update(server)
+            self.lobbytimer = constants.LOBBY_UPDATE_TIMER
+        else:
+            self.lobbytimer -= frametime# -1 unit per second
+
+    def recieve(self, server, game):
         # recieve all packets
         while True:
             packet = networking.packet.Packet("client")
-            
+
             try:
                 data, sender = self.socket.recvfrom(constants.MAX_PACKET_SIZE)
             except socket.error:
                 # recvfrom throws socket.error if there was no packet to read
                 break
-            
+
             try:
                 packet.unpack(data)
             except:
                 # parse error, don't throw exception but print it
                 print("Parse error: %s" % sys.exc_info()[1])
                 continue # drop packet
-            
+
             # only handle this packet if we know the player
             if sender in self.players:
                 for event in packet.events:
@@ -53,7 +64,7 @@ class Networker(object):
             elif packet.events[0].eventid == constants.EVENT_HELLO:
                 if packet.password == server.password:
                     newplayer = player.Player(self, game, packet.name, sender)
-                    
+
                     for player in self.players.items():
                         if player == newplayer:
                             pass # TODO ADD SERVER_EVENT_HELLO
@@ -62,7 +73,6 @@ class Networker(object):
             # otherwise drop the packet
             else:
                 continue
-            
+
             # ack the packet
             self.players[sender].acksequence = packet.sequence
-                    
