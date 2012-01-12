@@ -13,25 +13,17 @@ class WeaponRenderer(object):
     def render(self, renderer, game, state, weapon):
         owner = state.entities[weapon.owner]
 
-        image = self.weaponsprite
-        offset = self.weaponoffset
-        rotate_point = self.weapon_rotate_point
-
         if weapon.refiretime - weapon.refirealarm < 0.02:
-            image = self.firingsprite
+            sprite = pygrafix.sprite.Sprite(self.firingsprite)
+        else:
+            sprite = pygrafix.sprite.Sprite(self.weaponsprite)
 
-        sprite = pygrafix.sprite.Sprite(image)
+        if owner.flip:
+            sprite.flip_y = True
 
-        # FIXME PYGRAFIX FLIPPING
-        #if owner.flip:
-        #    image = pygame.transform.flip(image, 0, 1)
-        #    offset = self.weaponoffset_flipped
-
-        sprite.anchor_x = offset[0]
-        sprite.anchor_y = offset[1]
-
-        sprite.rotation = weapon.direction
-        sprite.position = renderer.get_screen_coords(owner.x, owner.y)
+        sprite.anchor = self.weapon_rotate_point
+        sprite.rotation = 360 - weapon.direction
+        sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset[0], owner.y + self.weaponoffset[1])
 
         renderer.world_sprites.add_sprite(sprite)
 

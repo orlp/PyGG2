@@ -12,7 +12,7 @@ class ShotRenderer(object):
 
     def render(self, renderer, game, state, shot):
         sprite = pygrafix.sprite.Sprite(self.shotsprite)
-        sprite.rotation = shot.direction
+        sprite.rotation = 360 - shot.direction
 
         if shot.max_flight_time - shot.flight_time < shot.fade_time:
             sprite.alpha = (shot.max_flight_time - shot.flight_time) / shot.fade_time

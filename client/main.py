@@ -101,7 +101,7 @@ class Client(object):
 
             if self.fpscounter_accumulator > 0.5:
                 self.window.set_title("PyGG2 - %d FPS" % self.window.get_fps())
-                self.fpscounter_accumulator -= 0.5
+                self.fpscounter_accumulator = 0.0
 
             self.window.flip()
 
