@@ -30,7 +30,7 @@ class Gamestate(object):
                 self.entities[id] = next_state.entities[id].copy()
 
             if id in prev_state.entities:
-                prev_entity = next_state.entities[id]
+                prev_entity = prev_state.entities[id]
             else:
                 prev_entity = entity
 

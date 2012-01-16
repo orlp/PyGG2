@@ -15,8 +15,10 @@ except: pass
 import zipfile
 import cStringIO
 import os.path
+import sys
 
-spritesfolder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sprites/")
+spritesfolder = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "sprites/")
+spriteszip = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), "sprites.zip")
 
 def sign(x):
     # Returns the sign of the number given
@@ -47,9 +49,9 @@ def load_image(filename):
     try:
         image = pygrafix.image.load(spritesfolder + filename + ".png")
     except:
-        sprites = zipfile.ZipFile("sprites.zip", "r")
+        sprites = zipfile.ZipFile(spriteszip, "r")
         spritefile = cStringIO.StringIO(sprites.open("sprites/" + filename + ".png", "r").read())
-        image = pygrafix.image.load(spritefile, filename + ".png")
+        image = pygrafix.image.load("sprites/" + filename + ".png", spritefile)
         spritefile.close()
 
     images[filename] = image
@@ -65,10 +67,10 @@ def load_mask(filename, give_orig=False):
     # first try to load the sprite from the sprite folder, fall back to our zipped sprites
     # this allows users to override sprites, and makes testing/developing easier
     try:
-        bitmask = mask.from_image(spritesfolder + filename + ".png")
+        bitmask = mask.from_image(spritesfolder +  filename + ".png")
     except:
-        sprites = zipfile.ZipFile("sprites.zip", "r")
-        spritefile = cStringIO.StringIO(sprites.open(filename + ".png", "r").read())
+        sprites = zipfile.ZipFile(spriteszip, "r")
+        spritefile = cStringIO.StringIO(sprites.open("sprites/" + filename + ".png", "r").read())
         bitmask = mask.from_image(spritefile)
         spritefile.close()
 
