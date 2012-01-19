@@ -20,10 +20,13 @@ class WeaponRenderer(object):
 
         if owner.flip:
             sprite.flip_y = True
+            sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset_flipped[0], owner.y + self.weaponoffset_flipped[1])
+        else:
+            sprite.flip_y = False
+            sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset[0], owner.y + self.weaponoffset[1])
 
         sprite.anchor = self.weapon_rotate_point
         sprite.rotation = 360 - weapon.direction
-        sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset[0], owner.y + self.weaponoffset[1])
 
         renderer.world_sprites.add_sprite(sprite)
 
