@@ -52,7 +52,6 @@ class Character(entity.MovingObject):
         # TODO: air resistance, not hard limit
         self.vspeed = min(800, self.vspeed)
 
-        # TODO: speed limit based on class
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
 
     def endstep(self, game, state, frametime):
@@ -159,6 +158,23 @@ class Soldier(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
+
+class Heavy(Character):
+    # FIXME: width, height of heavy - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 144
+    maxhp = 200
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Minigun(game, state, self.id).id
+
+    def step(self, game, state, frametime):
+	Character.step(self, game, state, frametime)
+	if self.get_player(game, state).leftmouse:
+	    self.hspeed = min(54, max(-54, self.hspeed))
 
 class Engineer(Character):
     # FIXME: width, height of engineer - rectangle collision

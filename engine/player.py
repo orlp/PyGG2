@@ -17,7 +17,7 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.nextclass = character.Scout
+        self.nextclass = character.Heavy
         self.character_id = None
         self.spawn(game, state)
         self.respawntimer = 0

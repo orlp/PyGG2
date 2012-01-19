@@ -42,6 +42,12 @@ class SoldierRenderer(ClassRenderer):
 
         self.spriteoffset = (24, 30)
 
+class HeavyRenderer(ClassRenderer):
+    def __init__(self):
+        self.sprites = [function.load_image("characters/heavyreds/%s" % i) for i in range(4)]
+
+        self.spriteoffset = (14, 30)
+
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/engineerreds/%s" % i) for i in range(4)]

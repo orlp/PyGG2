@@ -67,6 +67,18 @@ class Rocketlauncher(Weapon):
         projectile.Rocket(game, state, self.id)
         self.refirealarm = self.refiretime
 
+class Minigun(Weapon):
+    maxammo = 200
+    refiretime = 1/15
+    reloadtime = 1/2
+    shotdamage = 8
+
+    def fire_primary(self, game, state):
+        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
+        projectile.Shot(game, state, self.id, self.shotdamage)
+
+        self.refirealarm = self.refiretime
+
 class Shotgun(Weapon):
     maxammo = 4
     refiretime = 2/3
