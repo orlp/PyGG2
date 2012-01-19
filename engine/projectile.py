@@ -28,7 +28,7 @@ class Shot(entity.MovingObject):
         srcchar = state.entities[srcwep.owner]
 
         self.x = srcchar.x
-        self.y = srcchar.y
+        self.y = srcchar.y+8
 
         self.direction = srcchar.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
 

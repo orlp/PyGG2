@@ -22,19 +22,16 @@ class ShotRenderer(object):
         renderer.world_sprites.add_sprite(sprite)
 
 class RocketRenderer(object):
-    rocketsprite_angles = {} # rotating is expensive, we save each rotated sprite per angle (integers)
-
     def __init__(self):
         self.rocketsprite = function.load_image("projectiles/rockets/0")
 
     def render(self, renderer, game, state, rocket):
         sprite = pygrafix.sprite.Sprite(self.rocketsprite)
-        sprite.rotation = rocket.direction
+        sprite.rotation = 360 - rocket.direction
 
         if rocket.max_flight_time - rocket.flight_time < rocket.fade_time:
             sprite.alpha (rocket.max_flight_time - rocket.flight_time) / rocket.fade_time
 
-        sprite.x = rocket.x
-        sprite.y = rocket.y
+        sprite.position = renderer.get_screen_coords(rocket.x, rocket.y)
 
         renderer.world_sprites.add_sprite(sprite)
