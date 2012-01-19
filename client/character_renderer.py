@@ -19,11 +19,13 @@ class ClassRenderer(object):
 
         sprite = pygrafix.sprite.Sprite(self.sprites[anim_frame])
 
-        if character.flip: sprite.flip_x = 1
-        # FIXME PYGRAFIX FLIPPING
-
-        sprite.anchor_x = self.spriteoffset[0]
-        sprite.anchor_y = self.spriteoffset[1]
+        if character.flip:
+            sprite.flip_x = True
+            sprite.anchor_x = self.spriteoffset_flipped[0]
+            sprite.anchor_y = self.spriteoffset_flipped[1]
+        else:
+            sprite.anchor_x = self.spriteoffset[0]
+            sprite.anchor_y = self.spriteoffset[1]
 
         sprite.position = renderer.get_screen_coords(character.x, character.y)
 
@@ -35,30 +37,35 @@ class ScoutRenderer(ClassRenderer):
         self.sprites = [function.load_image("characters/scoutreds/%s" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
+        self.spriteoffset_flipped = (28, 30)
 
 class SoldierRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/soldierreds/%s" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
+        self.spriteoffset_flipped = (28, 30)
 
 class HeavyRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/heavyreds/%s" % i) for i in range(4)]
 
         self.spriteoffset = (14, 30)
+        self.spriteoffset_flipped = (36, 30)
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/engineerreds/%s" % i) for i in range(4)]
 
-        self.spriteoffset = (24, 30)
+        self.spriteoffset = (26, 30)
+        self.spriteoffset_flipped = (26, 30)
 
 class SpyRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/spyreds/%s" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
+        self.spriteoffset_flipped = (28, 30)
 
     def render(self, renderer, game, state, character):
         if not character.cloaking:
