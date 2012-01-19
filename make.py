@@ -54,8 +54,9 @@ elif sys.argv[1] == "clean":
     try: shutil.rmtree("dist")
     except: pass
 elif sys.argv[1] == "testclient":
-    import client
-    client.profileGG2()
+    import client_main
+#    client_main.profileGG2()
+    client_main.GG2main()
 elif sys.argv[1] == "testserver":
     import server.main
     server.main.GG2main()
