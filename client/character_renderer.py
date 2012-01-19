@@ -19,7 +19,7 @@ class ClassRenderer(object):
 
         sprite = pygrafix.sprite.Sprite(self.sprites[anim_frame])
 
-        #if character.flip: image = pygame.transform.flip(image, 1, 0)
+        if character.flip: sprite.flip_x = 1
         # FIXME PYGRAFIX FLIPPING
 
         sprite.anchor_x = self.spriteoffset[0]
