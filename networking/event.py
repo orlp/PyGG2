@@ -1,9 +1,5 @@
 from __future__ import division, print_function
 
-# add our main folder as include dir
-import sys
-sys.path.append("../")
-
 import constants
 import struct
 
@@ -22,17 +18,17 @@ def serverevent(cls):
 @serverevent
 class ServerEventPlayerJoin(object):
     eventid = constants.EVENT_PLAYER_JOIN
-    
+
     def __init__(self, id, name):
         self.id = id
         self.name = name
-    
+
     def pack(self):
         return struct.pack("H32p", self.id, self.name)
-    
+
     def unpack(self, packetstr):
         self.id, self.name = struct.unpack_from("H32p", packetstr)
-        
+
         return struct.calcsize("H32p")
 
 @clientevent

@@ -2,10 +2,6 @@
 
 from __future__ import division, print_function
 
-# add our main folder as include dir
-import sys
-sys.path.append("../")
-
 import pygrafix
 from pygrafix.window import key
 from pygrafix.window import mouse

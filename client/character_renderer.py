@@ -1,6 +1,7 @@
 from __future__ import division, print_function
 
-import math, pygrafix
+import math
+import pygrafix
 
 import function
 
