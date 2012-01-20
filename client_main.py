@@ -11,6 +11,7 @@ from pygrafix.window import key
 from pygrafix.window import mouse
 
 import precision_timer
+import client.spectator
 import engine.game
 import engine.player
 import client.rendering
@@ -46,6 +47,7 @@ class Client(object):
         # TODO REMOVE THIS
         # create player
         self.our_player_id = engine.player.Player(self.game, self.game.current_state, 0).id
+        self.spectator = client.spectator.Spectator(self.game.current_state.entities[self.our_player_id])
 
         # create renderer object
         self.renderer = client.rendering.GameRenderer(self)

@@ -58,19 +58,18 @@ class GameRenderer(object):
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        self.focus_object_id = game.current_state.players[client.our_player_id].character_id
+        focus_object = self.interpolated_state.entities[self.interpolated_state.players[client.our_player_id].character_id]
 
-        if self.focus_object_id != None:
-            focus_object = self.interpolated_state.entities[self.focus_object_id]
-        else:
-            focus_object = spectator.Spectator(client.our_player)
+        if focus_object != None:
+            client.spectator.x = focus_object.x
+            client.spectator.y = focus_object.y
 
         # update view
-        self.xview = int(int(focus_object.x) - self.view_width / 2)
-        self.yview = int(int(focus_object.y) - self.view_height / 2)
+        self.xview = int(int(client.spectator.x) - self.view_width / 2)
+        self.yview = int(int(client.spectator.y) - self.view_height / 2)
 
         # clear screen if needed
-        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= game.map.width or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
+        if client.spectator.x <= self.view_width / 2 or client.spectator.x + self.view_width >= game.map.width or client.spectator.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
             self.window.clear()
 
         # draw background
