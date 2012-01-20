@@ -63,6 +63,16 @@ class GameRenderer(object):
         if focus_object_id != None:
             client.spectator.x = self.interpolated_state.entities[focus_object_id].x
             client.spectator.y = self.interpolated_state.entities[focus_object_id].y
+        else:
+            player = game.current_state.players[client.our_player_id]
+            if player.left:
+                client.spectator.x -= 800*frametime
+            elif player.right:
+                client.spectator.x += 800*frametime
+            if player.up:
+                client.spectator.y -= 800*frametime
+            elif player.down:
+                client.spectator.y += 800*frametime
 
         # update view
         self.xview = int(int(client.spectator.x) - self.view_width / 2)
