@@ -58,11 +58,11 @@ class GameRenderer(object):
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        focus_object = self.interpolated_state.entities[self.interpolated_state.players[client.our_player_id].character_id]
+        focus_object_id = game.current_state.players[client.our_player_id].character_id
 
-        if focus_object != None:
-            client.spectator.x = focus_object.x
-            client.spectator.y = focus_object.y
+        if focus_object_id != None:
+            client.spectator.x = self.interpolated_state.entities[focus_object_id].x
+            client.spectator.y = self.interpolated_state.entities[focus_object_id].y
 
         # update view
         self.xview = int(int(client.spectator.x) - self.view_width / 2)
