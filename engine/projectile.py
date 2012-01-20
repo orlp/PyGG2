@@ -16,7 +16,7 @@ class Shot(entity.MovingObject):
     fade_time = 0.8 # seconds of fading when max_flight_time is being reached
     max_flight_time = 1.5
 
-    def __init__(self, game, state, sourceweapon, damage):
+    def __init__(self, game, state, sourceweapon, damage, direction, speed):
         super(Shot, self).__init__(game, state)
 
         self.direction = 0.0
@@ -30,13 +30,7 @@ class Shot(entity.MovingObject):
         self.x = srcchar.x
         self.y = srcchar.y+8
 
-        self.direction = srcchar.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
-
-        # add user speed to bullet speed but don't change direction of the bullet
-        playerdir = math.degrees(math.atan2(-srcchar.vspeed, srcchar.hspeed))
-        diffdir = self.direction - playerdir
-        playerspeed = math.hypot(srcchar.hspeed, srcchar.vspeed)
-        speed = 330 + random.randint(0, 4)*30 + math.cos(math.radians(diffdir)) * playerspeed
+        self.direction = direction
 
         self.hspeed = math.cos(math.radians(self.direction)) * speed
         self.vspeed = math.sin(math.radians(self.direction)) * -speed

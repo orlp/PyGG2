@@ -51,10 +51,19 @@ class Scattergun(Weapon):
     shotdamage = 8
 
     def fire_primary(self, game, state):
-        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
+        owner = state.entities[self.owner]
+        random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
 
         for i in range(10):
-            projectile.Shot(game, state, self.id, self.shotdamage)
+            direction = owner.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
+
+            # add user speed to bullet speed but don't change direction of the bullet
+            playerdir = math.degrees(math.atan2(-owner.vspeed, owner.hspeed))
+            diffdir = direction - playerdir
+            playerspeed = math.hypot(owner.hspeed, owner.vspeed)
+            speed = 330 + random.randint(0, 4)*30 + math.cos(math.radians(diffdir)) * playerspeed
+
+            projectile.Shot(game, state, self.id, self.shotdamage, direction, speed)
 
         self.refirealarm = self.refiretime
 
@@ -74,8 +83,13 @@ class Minigun(Weapon):
     shotdamage = 8
 
     def fire_primary(self, game, state):
-        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
-        projectile.Shot(game, state, self.id, self.shotdamage)
+        owner = state.entities[self.owner]
+        random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
+
+        direction = owner.get_player(game, state).aimdirection + (7 - random.randint(0, 14))
+        speed = 360 + random.randint(0, 1)*30
+
+        projectile.Shot(game, state, self.id, self.shotdamage, direction, speed)
 
         self.refirealarm = self.refiretime
 
@@ -86,9 +100,18 @@ class Shotgun(Weapon):
     shotdamage = 7
 
     def fire_primary(self, game, state):
-        random.seed(str(state.entities[self.owner].get_player(game, state).id) + ";" + str(state.time))
+        owner = state.entities[self.owner]
+        random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
         for i in range(5):
-            projectile.Shot(game, state, self.id, self.shotdamage)
+            direction = owner.get_player(game, state).aimdirection + (5 - random.randint(0, 11))
+
+            # add user speed to bullet speed but don't change direction of the bullet
+            playerdir = math.degrees(math.atan2(-owner.vspeed, owner.hspeed))
+            diffdir = direction - playerdir
+            playerspeed = math.hypot(owner.hspeed, owner.vspeed)
+            speed = 330 + random.randint(0, 4)*30 + math.cos(math.radians(diffdir)) * playerspeed
+
+            projectile.Shot(game, state, self.id, self.shotdamage, direction, speed)
 
         self.refirealarm = self.refiretime
 
@@ -98,10 +121,12 @@ class Revolver(Weapon):
     reloadtime = .5
 
     def fire_primary(self, game, state):
-        print("Cloaking: ", state.entities[self.owner].cloaking, "| is very unresponsive; print statement in line 89 of weapon.py")
-        if not state.entities[self.owner].cloaking:
-            random.seed(str(state.entities[self.owner].player_id) + ";" + str(state.time))
-            projectile.Shot(game, state, self.id, 28) # 28 == damage
+        owner = state.entities[self.owner]
+        print("Cloaking: ", owner.cloaking, "| is very unresponsive; print statement in line 89 of weapon.py")
+        if not owner.cloaking:
+            random.seed(str(owner.player_id) + ";" + str(state.time))
+            direction = owner.get_player(game, state).aimdirection + (1 - random.randint(0, 2))
+            projectile.Shot(game, state, self.id, damage=28, direction=direction, speed=630)
             self.refirealarm = self.refiretime
         #else: Stab
 
