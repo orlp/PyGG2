@@ -14,6 +14,7 @@ import precision_timer
 import client.spectator
 import engine.game
 import engine.player
+import engine.character
 import client.rendering
 import constants
 import function
@@ -84,9 +85,31 @@ class Client(object):
             our_player.rightmouse = rightmouse
             our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
 
-            if self.window.is_key_pressed(key.L) and our_player.character_id != None:
-                # Kill ourself. FIXME: Remove
-                self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+            if self.window.is_key_pressed(key._1):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Scout # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
+            elif self.window.is_key_pressed(key._3):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Soldier # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
+            elif self.window.is_key_pressed(key._4):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Heavy # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
+            elif self.window.is_key_pressed(key._7):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Engineer # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
+            elif self.window.is_key_pressed(key._8):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Spy # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
 
             # did we just release the F11 button? if yes, go fullscreen
             if self.window.is_key_pressed(key.F11):
