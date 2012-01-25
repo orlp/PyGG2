@@ -9,9 +9,21 @@ GAME_HEIGHT = 600
 
 PHYSICS_TIMESTEP = 1/60 # always update physics in these steps
 
-# networking
+GAME_VERSION_STRING = "py-2.5"
+GAME_URL = "http://www.ganggarrison.com/forums/index.php?topic=29530.0"
+
+# Networking
 INPUT_SEND_FPS = 1/30 # we send input to the server at this rate
 MAX_PACKET_SIZE = 2048
+
+# Lobby
+LOBBY_HOST = "ganggarrison.com"
+LOBBY_PORT = 29944
+
+# UUIDs
+LOBBY_MESSAGE_TYPE_UUID = "b5dae2e8-424f-9ed0-0fcb-8c21c7ca1352"
+GG2_LOBBY_UUID = "1ccf16b1-436d-856f-504d-cc1af306aaa7"
+PYGG2_COMPATIBILITY_PROTOCOL = "e8b036bf-409d-a71b-2702-c7e443b1fdbe"
 
 # Networked Events
 EVENT_HELLO = 0
