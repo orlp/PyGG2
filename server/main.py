@@ -3,7 +3,7 @@
 from __future__ import division, print_function
 
 # add our main folder as include dir
-import sys
+import sys, uuid
 sys.path.append("../")
 
 import precision_timer
@@ -23,6 +23,7 @@ class Server(object):
         self.port = 8190
         self.name = "Gang Garrison 2 Server"
         self.password = ""
+        self.ID = uuid.uuid4()
 
         # create game engine object
         self.game = engine.game.Game()
@@ -50,6 +51,9 @@ class Server(object):
             #self.networker.update(self, self.game, frametime)
 
             self.lobbyannouncer.update(self, frametime)
+
+    def __del__(self):
+        self.lobbyannouncer.destroy(self)
 
 
 
