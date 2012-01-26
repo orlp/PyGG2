@@ -58,19 +58,28 @@ class GameRenderer(object):
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
 
         self.interpolated_state.interpolate(game.previous_state, game.current_state, alpha)
-        self.focus_object_id = game.current_state.players[client.our_player_id].character_id
+        focus_object_id = game.current_state.players[client.our_player_id].character_id
 
-        if self.focus_object_id != None:
-            focus_object = self.interpolated_state.entities[self.focus_object_id]
+        if focus_object_id != None:
+            client.spectator.x = self.interpolated_state.entities[focus_object_id].x
+            client.spectator.y = self.interpolated_state.entities[focus_object_id].y
         else:
-            focus_object = spectator.Spectator(client.our_player)
+            player = game.current_state.players[client.our_player_id]
+            if player.left:
+                client.spectator.x -= 800*frametime
+            elif player.right:
+                client.spectator.x += 800*frametime
+            if player.up:
+                client.spectator.y -= 800*frametime
+            elif player.down:
+                client.spectator.y += 800*frametime
 
         # update view
-        self.xview = int(int(focus_object.x) - self.view_width / 2)
-        self.yview = int(int(focus_object.y) - self.view_height / 2)
+        self.xview = int(int(client.spectator.x) - self.view_width / 2)
+        self.yview = int(int(client.spectator.y) - self.view_height / 2)
 
         # clear screen if needed
-        if focus_object.x <= self.view_width / 2 or focus_object.x + self.view_width >= game.map.width or focus_object.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
+        if client.spectator.x <= self.view_width / 2 or client.spectator.x + self.view_width >= game.map.width or client.spectator.y <= self.view_height / 2 or self.yview + self.view_height >= game.map.height:
             self.window.clear()
 
         # draw background
