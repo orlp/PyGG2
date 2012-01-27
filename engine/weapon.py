@@ -46,12 +46,12 @@ class Weapon(entity.Entity):
 
     def serialize(self, state):
         packetstr = ""
-        packetstr += struct.pack("B", self.ammo)
+        packetstr += struct.pack(">B", self.ammo)
         return packetstr
 
     def deserialize(self, state, packetstr):
         try:
-            self.ammo = struct.unpack("B", packetstr)
+            self.ammo = struct.unpack(">B", packetstr)
             return 0
         except struct.error:
             print("Error while deserializing weapon")

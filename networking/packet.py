@@ -19,10 +19,10 @@ class Packet(object):
     def pack(self):
         packetstr = ""
 
-        packetstr += struct.pack("!HH", sequence, acksequence)
+        packetstr += struct.pack(">HH", sequence, acksequence)
 
         for event in self.events:
-            packetstr += struct.pack("!B", event.eventid)
+            packetstr += struct.pack(">B", event.eventid)
             packetstr += event.pack()
 
         return packetstr
@@ -30,12 +30,12 @@ class Packet(object):
     def unpack(self, packetstr):
         self.events = []
 
-        self.sequence, self.acksequence = struct.unpack_from("!HH", packetstr)
-        packetstr = packetstr[struct.calcsize("!HH"):]
+        self.sequence, self.acksequence = struct.unpack_from(">HH", packetstr)
+        packetstr = packetstr[struct.calcsize(">HH"):]
 
         while packetstr:
-            eventid = struct.unpack_from("!B", packetstr)
-            packetstr = packetstr[struct.calcsize("!B"):]
+            eventid = struct.unpack_from(">B", packetstr)
+            packetstr = packetstr[struct.calcsize(">B"):]
 
             if self.sender == "client":
                 event = object.__new__(event.clientevents[eventid])
