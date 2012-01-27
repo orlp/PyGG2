@@ -17,7 +17,7 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.nextclass = character.Engineer
+        self.nextclass = character.Scout
         self.character_id = None
         self.spawn(game, state)
         self.respawntimer = 0
@@ -58,10 +58,10 @@ class Player(object):
 
         aim = int((self.aimdirection % 360) / 360 * 65535)
 
-        bytestr = struct.pack("!BH", keybyte, aim)
+        bytestr = struct.pack(">BH", keybyte, aim)
 
     def deserialize_input(self, bytestr):
-        keybyte, aim = struct.unpack("!BH", bytestr)
+        keybyte, aim = struct.unpack(">BH", bytestr)
 
         self.left = keybyte & (1 << 0)
         self.right = keybyte & (1 << 1)

@@ -118,13 +118,41 @@ class Character(entity.MovingObject):
         self.get_player(game, state).character_id = None
         self.get_player(game, state).respawntimer = 1# in seconds
 
-	# Then we have to destroy our weapon
-	state.entities[self.weapon].destroy(state)
+        # Then we have to destroy our weapon
+        state.entities[self.weapon].destroy(state)
 
         self.destroy(state)
 
     def get_player(self, game, state):
         return state.players[self.player_id]
+
+    def serialize(self, state):
+        packetstr = ""
+        packetstr += struct.pack(">IIii", self.x, self.y, self.hspeed, self.vspeed)
+
+        # Serialize intel, doublejump, etc... in one byte. Should we merge this with the input serialization in Player? Move the input ser. here?
+        byte = 0
+        byte |= self.intel << 0
+        byte |= self.can_doublejump << 1
+        #byte |= self.sentry << 2
+        packetstr += struct.pack(">B", byte)
+
+        packetstr += state.entites[self.weapon].serialize(state)
+
+        return packetstr
+
+    def deserialize(self, state, packetstr):
+        try:
+            self.x, self.y, self.hspeed, self.vspeed = struct.unpack(">IIii", packetstr)
+            byte = struct.unpack(">B", packetstr)
+            self.intel = byte & (1 << 0)
+            self.can_doublejump = byte & (1 << 1)
+            #self.sentry = byte & (1 << 2)
+            state.entites[self.weapon].deserialize(state, packetstr)
+            return 0
+        except struct.error:
+            print("Error while deserializing character")
+            return 1
 
 class Scout(Character):
     # width, height of scout - rectangle collision
@@ -141,8 +169,8 @@ class Scout(Character):
 
     def jump(self, game, state):
         if self.onground(game, state):
-             self.vspeed = -200
-    	     self.can_doublejump = True
+            self.vspeed = -200
+            self.can_doublejump = True
         elif self.can_doublejump:
             self.vspeed = -200
             self.can_doublejump = False
@@ -172,9 +200,9 @@ class Heavy(Character):
         self.weapon = weapon.Minigun(game, state, self.id).id
 
     def step(self, game, state, frametime):
-	Character.step(self, game, state, frametime)
-	if self.get_player(game, state).leftmouse:
-	    self.hspeed = min(54, max(-54, self.hspeed))
+        Character.step(self, game, state, frametime)
+        if self.get_player(game, state).leftmouse:
+            self.hspeed = min(54, max(-54, self.hspeed))
 
 class Engineer(Character):
     # FIXME: width, height of engineer - rectangle collision
@@ -199,4 +227,4 @@ class Spy(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Revolver(game, state, self.id).id
-	self.cloaking = False
+        self.cloaking = False
