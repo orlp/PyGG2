@@ -28,15 +28,11 @@ class Player(object):
         engine.player.Player(networker.game, networker.game.current_state, self)
 
     def update(self, networker, game, frametime):
-        if frametime == "force":
-            self.time_since_update = 0
-            self.send_packet(networker)
-        else:
-            self.time_since_update += frametime
+        self.time_since_update += frametime
 
-            if self.time_since_update > constants.NETWORK_UPDATE_RATE:
-                self.time_since_update %= constants.NETWORK_UPDATE_RATE
-                self.send_packet(networker)
+        if self.time_since_update > constants.NETWORK_UPDATE_RATE:
+            self.time_since_update %= constants.NETWORK_UPDATE_RATE
+            self.send_packet(networker)
 
     def send_packet(self, networker):
         packet = networking.packet.Packet("server")
