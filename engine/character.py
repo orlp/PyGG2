@@ -132,14 +132,21 @@ class Character(entity.MovingObject):
 
         # Serialize intel, doublejump, etc... in one byte. Should we merge this with the input serialization in Player? Move the input ser. here?
         byte = 0
-        if self.intel:
-            byte |= 1
-        if self.can_doublejump:
-            byte |= 2
-        #if self.sentry:
-        #    byte |= 4
+        byte |= self.intel << 0
+        byte |= self.can_doublejump << 1
+        #byte |= self.sentry << 2
         packetstr += struct.pack("B", byte)
 
+    def deserialize(self, packetstr):
+        try:
+            self.x, self.y, self.hspeed, self.vspeed = struct.unpack("IIii")
+            byte = struct.unpack("B")
+            self.intel = byte & (1 << 0)
+            self.can_doublejump = byte & (1 << 1)
+            #self.sentry = byte & (1 << 2)
+            return 0
+        except struct.error:
+            print("ERROR WHILE DESERIALIZING CHARACTER")
 
 class Scout(Character):
     # width, height of scout - rectangle collision
