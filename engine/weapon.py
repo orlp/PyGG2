@@ -69,7 +69,7 @@ class Scattergun(Weapon):
 
 class Rocketlauncher(Weapon):
     maxammo = 4
-    refiretime = 1
+    refiretime = 1/100
     reloadtime = 5/6
 
     def fire_primary(self, game, state):

@@ -31,17 +31,17 @@ class WeaponRenderer(object):
         renderer.world_sprites.add_sprite(sprite)
 
 class ScattergunRenderer(WeaponRenderer):
-    weapon_rotate_point = (4, 8) # where is the handle of the gun, where to rotate around
-    weaponoffset = (12, 13) # where the character should carry it's gun
-    weaponoffset_flipped = (4, 8)
+    weapon_rotate_point = (8, -2) # where is the handle of the gun, where to rotate around
+    weaponoffset = (11, 3) # where the character should carry it's gun
+    weaponoffset_flipped = (6, 10)
 
     def __init__(self):
         self.weaponsprite = function.load_image("weapons/scatterguns/0")
         self.firingsprite = function.load_image("weapons/scatterguns/2")
 
 class RocketlauncherRenderer(WeaponRenderer):
-    weapon_rotate_point = (8, 8) # where is the handle of the gun, where to rotate around
-    weaponoffset = (-1, 8) # where the character should carry it's gun
+    weapon_rotate_point = (10, 6) # where is the handle of the gun, where to rotate around
+    weaponoffset = (0, 8) # where the character should carry it's gun
     weaponoffset_flipped = (18, 8)
 
     def __init__(self):
@@ -50,7 +50,7 @@ class RocketlauncherRenderer(WeaponRenderer):
 
 class MinigunRenderer(WeaponRenderer):
     # FIXME: Give values here that actually look correct
-    weapon_rotate_point = (18, 8) # where is the handle of the gun, where to rotate around
+    weapon_rotate_point = (14, 3) # where is the handle of the gun, where to rotate around
     weaponoffset = (13, 17) # where the character should carry it's gun
     weaponoffset_flipped = (6, 8)
 
@@ -59,7 +59,7 @@ class MinigunRenderer(WeaponRenderer):
         self.firingsprite = function.load_image("weapons/miniguns/2")
 
 class ShotgunRenderer(WeaponRenderer):
-    weapon_rotate_point = (2, 8) # where is the handle of the gun, where to rotate around
+    weapon_rotate_point = (10, -1) # where is the handle of the gun, where to rotate around
     weaponoffset = (12, 17) # where the character should carry it's gun
     weaponoffset_flipped = (6, 8)
 
@@ -68,7 +68,7 @@ class ShotgunRenderer(WeaponRenderer):
         self.firingsprite = function.load_image("weapons/shotguns/2")
 
 class RevolverRenderer(WeaponRenderer):
-    weapon_rotate_point = (6, 8) # where is the handle of the gun, where to rotate around
+    weapon_rotate_point = (8, -1) # where is the handle of the gun, where to rotate around
     weaponoffset = (11, 14) # where the character should carry it's gun
     weaponoffset_flipped = (8, 8)
 

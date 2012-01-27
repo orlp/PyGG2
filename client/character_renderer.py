@@ -52,7 +52,7 @@ class HeavyRenderer(ClassRenderer):
         self.sprites = [function.load_image("characters/heavyreds/%s" % i) for i in range(4)]
 
         self.spriteoffset = (14, 30)
-        self.spriteoffset_flipped = (36, 30)
+        self.spriteoffset_flipped = (14, 30)
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
