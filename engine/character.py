@@ -126,7 +126,7 @@ class Character(entity.MovingObject):
     def get_player(self, game, state):
         return state.players[self.player_id]
 
-    def serialize(self):
+    def serialize(self, state):
         packetstr = ""
         packetstr += struct.pack("IIii", self.x, self.y, self.hspeed, self.vspeed)
 
@@ -137,15 +137,18 @@ class Character(entity.MovingObject):
         #byte |= self.sentry << 2
         packetstr += struct.pack("B", byte)
 
+        packetstr += state.entites[self.weapon].serialize(state)
+
         return packetstr
 
-    def deserialize(self, packetstr):
+    def deserialize(self, state, packetstr):
         try:
             self.x, self.y, self.hspeed, self.vspeed = struct.unpack("IIii", packetstr)
             byte = struct.unpack("B", packetstr)
             self.intel = byte & (1 << 0)
             self.can_doublejump = byte & (1 << 1)
             #self.sentry = byte & (1 << 2)
+            state.entites[self.weapon].deserialize(state, packetstr)
             return 0
         except struct.error:
             print("Error while deserializing character")
