@@ -15,6 +15,22 @@ def serverevent(cls):
     serverevents[cls.eventid] = cls
     return cls
 
+@serverevent
+class ServerEventPlayerJoin(object):
+    eventid = constants.EVENT_PLAYER_JOIN
+
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+
+    def pack(self):
+        return struct.pack(">H32p", self.id, self.name)
+
+    def unpack(self, packetstr):
+        self.id, self.name = struct.unpack_from(">H32p", packetstr)
+
+        return struct.calcsize(">H32p")
+
 @clientevent
 class ClientEventHello(object):
     eventid = constants.EVENT_HELLO
