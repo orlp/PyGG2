@@ -137,16 +137,19 @@ class Character(entity.MovingObject):
         #byte |= self.sentry << 2
         packetstr += struct.pack("B", byte)
 
+        return packetstr
+
     def deserialize(self, packetstr):
         try:
-            self.x, self.y, self.hspeed, self.vspeed = struct.unpack("IIii")
-            byte = struct.unpack("B")
+            self.x, self.y, self.hspeed, self.vspeed = struct.unpack("IIii", packetstr)
+            byte = struct.unpack("B", packetstr)
             self.intel = byte & (1 << 0)
             self.can_doublejump = byte & (1 << 1)
             #self.sentry = byte & (1 << 2)
             return 0
         except struct.error:
-            print("ERROR WHILE DESERIALIZING CHARACTER")
+            print("Error while deserializing character")
+            return 1
 
 class Scout(Character):
     # width, height of scout - rectangle collision

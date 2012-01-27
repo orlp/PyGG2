@@ -44,6 +44,18 @@ class Weapon(entity.Entity):
         self.refirealarm = (1 - alpha) * prev_obj.refirealarm + alpha * next_obj.refirealarm
         self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
 
+    def serialize(self):
+        packetstr = ""
+        packetstr += struct.pack("B", self.ammo)
+        return packetstr
+
+    def deserialize(self, packetstr):
+        try:
+            self.ammo = struct.unpack("B", packetstr)
+            return 0
+        except struct.error:
+            print("Error while deserializing weapon")
+
 class Scattergun(Weapon):
     maxammo = 6
     refiretime = .05
