@@ -82,4 +82,39 @@ class ClientEventLeftMousebuttonDown(object):
     def unpack(self, packetstr):
         self.time = struct.unpack("I", packetstr)
 
-        return 0
+        return struct.calcsize("I")
+
+@serverevent
+class ServerEventChangeclass(object):
+    eventid = constants.EVENT_CHANGECLASS
+
+    def __init__(self, playerid, newclass):
+        self.playerid = playerid
+        self.newclass = newclass
+
+    def pack(self):
+        packetstr = struct.pack("HB", self.playerid, self.newclass)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.playerid, self.newclass = struct.unpack_from("HB", packetstr)
+
+        return struct.calc_size("HB", packetstr)
+
+@clientevent
+class ClientEventChangeclass(object):
+    eventid = constants.EVENT_CHANGECLASS
+
+    def __init__(self, newclass):
+        self.newclass = newclass
+
+    def pack(self):
+        packetstr = struct.pack("B", self.newclass)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.newclass = struct.unpack_from("B", packetstr)
+
+        return struct.calcsize("B")
