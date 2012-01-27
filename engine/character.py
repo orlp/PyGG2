@@ -126,6 +126,21 @@ class Character(entity.MovingObject):
     def get_player(self, game, state):
         return state.players[self.player_id]
 
+    def serialize(self):
+        packetstr = ""
+        packetstr += struct.pack("IIii", self.x, self.y, self.hspeed, self.vspeed)
+
+        # Serialize intel, doublejump, etc... in one byte. Should we merge this with the input serialization in Player? Move the input ser. here?
+        byte = 0
+        if self.intel:
+            byte |= 1
+        if self.can_doublejump:
+            byte |= 2
+        #if self.sentry:
+        #    byte |= 4
+        packetstr += struct.pack("B", byte)
+
+
 class Scout(Character):
     # width, height of scout - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
