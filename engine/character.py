@@ -175,6 +175,18 @@ class Scout(Character):
             self.vspeed = -200
             self.can_doublejump = False
 
+class Pyro(Character):
+    #FIXME: width, height of pyro - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 198
+    maxhp = 120
+    
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+        
+        self.hp = self.maxhp
+        self.weapon = weapon.Flamethrower(game, state, self.id).id
+        
 class Soldier(Character):
     # FIXME: width, height of soldier - rectangle collision
     collision_mask = mask.Mask(12, 33, True)

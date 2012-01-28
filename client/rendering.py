@@ -33,16 +33,19 @@ class GameRenderer(object):
 
         self.renderers = {
             engine.character.Scout: character_renderer.ScoutRenderer(),
+            engine.character.Pyro: character_renderer.PyroRenderer(),
             engine.character.Soldier: character_renderer.SoldierRenderer(),
             engine.character.Heavy: character_renderer.HeavyRenderer(),
             engine.character.Engineer: character_renderer.EngineerRenderer(),
             engine.character.Spy: character_renderer.SpyRenderer(),
             engine.weapon.Scattergun: weapon_renderer.ScattergunRenderer(),
+            engine.weapon.Flamethrower: weapon_renderer.FlamethrowerRenderer(),
             engine.weapon.Rocketlauncher: weapon_renderer.RocketlauncherRenderer(),
             engine.weapon.Minigun: weapon_renderer.MinigunRenderer(),
             engine.weapon.Shotgun: weapon_renderer.ShotgunRenderer(),
             engine.weapon.Revolver: weapon_renderer.RevolverRenderer(),
             engine.projectile.Shot: projectile_renderer.ShotRenderer(),
+            engine.projectile.Flame: projectile_renderer.FlameRenderer(),
             engine.projectile.Rocket: projectile_renderer.RocketRenderer()
         }
 
