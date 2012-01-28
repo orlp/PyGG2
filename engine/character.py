@@ -32,6 +32,8 @@ class Character(entity.MovingObject):
         if abs(self.hspeed) > 20:
             self.animoffset += frametime * abs(self.hspeed) / 20
             self.animoffset %= 2
+        if abs(self.hspeed) == 0:
+            self.animoffset =0
 
         self.flip = not (player.aimdirection < 90 or player.aimdirection > 270)
 
