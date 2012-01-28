@@ -40,6 +40,13 @@ class ScoutRenderer(ClassRenderer):
         self.spriteoffset = (24, 30)
         self.spriteoffset_flipped = (28, 30)
 
+class PyroRenderer(ClassRenderer):
+    def __init__(self):
+        self.sprites = [function.load_image("characters/pyroreds/%s" % i) for i in range(4)]
+        
+        self.spriteoffset = (24, 30)
+        self.spriteoffset_flipped = (28, 30)
+
 class SoldierRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/soldierreds/%s" % i) for i in range(4)]

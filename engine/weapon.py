@@ -79,6 +79,15 @@ class Scattergun(Weapon):
 
         self.refirealarm = self.refiretime
 
+class Flamethrower(Weapon):
+    maxammo = 200
+    refiretime = 1/30
+    reloadtime = 3/4
+    
+    def fire_primary(self, game, state):
+        projectile.Flame(game, state, self.id)
+        self.refirealarm = self.refiretime
+        
 class Rocketlauncher(Weapon):
     maxammo = 4
     refiretime = 1
