@@ -172,11 +172,10 @@ class Flame(entity.MovingObject):
     def step(self, game, state, frametime):
         self.speed += 30 # Copied from GMK-GG2; should simulate some very basic acceleration+air resistance.
         #Gravitational force
-        self.speed += 4.5 * frametime
+        self.vspeed -= 4.5
         
         #calculate direction
         self.direction = function.point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
-        print (self.direction)
     
     def endstep(self, game, state, frametime):
         super(Flame, self).endstep(game, state, frametime)
