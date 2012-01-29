@@ -147,7 +147,7 @@ class Rocket(entity.MovingObject):
 
 class Flame(entity.MovingObject):
     flame_hitmasks = {}
-    max_flight_time = 0.3 #I have no idea what the actual value is :P
+    max_flight_time = 0.5 #I have no idea what the actual value is :P
     damage = 3.3
 	
     def __init__(self, game, state, sourceweapon):
