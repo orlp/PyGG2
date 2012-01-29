@@ -47,6 +47,15 @@ class Player(object):
         new.__dict__.update(self.__dict__)
         return new
 
+    def destroy(self, game, state):
+        try:
+            character = state.entities[self.character_id]
+            character.die(game, state)
+        except KeyError:
+            # Character is already dead
+            pass
+        del state.players[self.id]
+
     def serialize_input(self):
         keybyte = 0
 
