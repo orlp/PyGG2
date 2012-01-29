@@ -72,8 +72,8 @@ class SpyRenderer(ClassRenderer):
     def __init__(self):
         self.sprites = [function.load_image("characters/spyreds/%s" % i) for i in range(4)]
 
-        self.spriteoffset = (24, 30)
-        self.spriteoffset_flipped = (28, 30)
+        self.spriteoffset = (22, 30)
+        self.spriteoffset_flipped = (30, 30)
 
     def render(self, renderer, game, state, character):
         if not character.cloaking:
