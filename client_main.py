@@ -86,6 +86,11 @@ class Client(object):
                     self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
                 our_player.nextclass = engine.character.Scout # Change class
                 our_player.spawn(self.game, self.game.current_state) # Spawn
+            elif self.window.is_key_pressed(key._2):
+                if our_player.character_id != None: # Kill ourself if not dead yet
+                    self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
+                our_player.nextclass = engine.character.Pyro # Change class
+                our_player.spawn(self.game, self.game.current_state) # Spawn
             elif self.window.is_key_pressed(key._3):
                 if our_player.character_id != None: # Kill ourself if not dead yet
                     self.game.current_state.entities[our_player.character_id].die(self.game, self.game.current_state)
