@@ -23,14 +23,14 @@ class ShotRenderer(object):
 
 class FlameRenderer(object):
     def __init__(self):
-        
+
         self.currentindex = -1
         self.flamesprite = [0,1,2]
-        
+
         self.flamesprite[0] = function.load_image("projectiles/flames/0")
         self.flamesprite[1] = function.load_image("projectiles/flames/1")
         self.flamesprite[2] = function.load_image("projectiles/flames/2")
-        
+
     def render(self, renderer, game, state, flame):
         #sprite animation
         if self.currentindex == -1:
@@ -40,11 +40,11 @@ class FlameRenderer(object):
                 self.currentindex = 0
             else:
                 self.currentindex += 1
-            
+
         sprite = pygrafix.sprite.Sprite(self.flamesprite[self.currentindex])
-        
+
         sprite.position = renderer.get_screen_coords(flame.x,flame.y)
-        
+
         renderer.world_sprites.add_sprite(sprite)
 
 class RocketRenderer(object):
@@ -55,8 +55,7 @@ class RocketRenderer(object):
         sprite = pygrafix.sprite.Sprite(self.rocketsprite)
         sprite.rotation = 360 - rocket.direction
 
-        if rocket.max_flight_time - rocket.flight_time < rocket.fade_time:
-            sprite.alpha (rocket.max_flight_time - rocket.flight_time) / rocket.fade_time
+        sprite.alpha = min((rocket.max_flight_time - rocket.flight_time) / rocket.fade_time, 1)
 
         sprite.position = renderer.get_screen_coords(rocket.x, rocket.y)
 
