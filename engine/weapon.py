@@ -52,9 +52,11 @@ class Weapon(entity.Entity):
     def deserialize(self, state, packetstr):
         try:
             self.ammo = struct.unpack(">B", packetstr)
+            packetstr = packetstr[1:]
             return 0
         except struct.error:
             print("Error while deserializing weapon")
+            return 1
 
 class Scattergun(Weapon):
     maxammo = 6

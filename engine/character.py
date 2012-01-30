@@ -146,12 +146,14 @@ class Character(entity.MovingObject):
     def deserialize(self, state, packetstr):
         try:
             self.x, self.y, self.hspeed, self.vspeed = struct.unpack(">IIii", packetstr)
+            packetstr = packetstr[16:]
             byte = struct.unpack(">B", packetstr)
+            packetstr = packetstr[1:]
             self.intel = byte & (1 << 0)
             self.can_doublejump = byte & (1 << 1)
             #self.sentry = byte & (1 << 2)
-            state.entites[self.weapon].deserialize(state, packetstr)
-            return 0
+            error = state.entites[self.weapon].deserialize(state, packetstr)
+            return error
         except struct.error:
             print("Error while deserializing character")
             return 1
@@ -182,13 +184,13 @@ class Pyro(Character):
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 198
     maxhp = 120
-    
+
     def __init__(self, game, state, player_id):
         Character.__init__(self, game, state, player_id)
-        
+
         self.hp = self.maxhp
         self.weapon = weapon.Flamethrower(game, state, self.id).id
-        
+
 class Soldier(Character):
     # FIXME: width, height of soldier - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
