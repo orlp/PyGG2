@@ -15,6 +15,7 @@ class Networker(object):
         self.port = port
 
         self.players = {}
+        self.sendbuffer = []
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
@@ -48,7 +49,7 @@ class Networker(object):
             # only handle this packet if we know the player
             if sender in self.players:
                 for event in packet.events:
-                    event_handler.eventhandlers[type(event)](self, game, self.players[sender])
+                    event_handler.eventhandlers[type(event)](self, game, self.players[sender], event)
             # or if someone wants to shake hands
             elif packet.events[0].eventid == constants.EVENT_HELLO:
                 if packet.password == server.password:

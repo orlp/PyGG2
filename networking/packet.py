@@ -21,9 +21,9 @@ class Packet(object):
 
         packetstr += struct.pack(">HH", sequence, acksequence)
 
-        for event in self.events:
-            packetstr += struct.pack(">B", event.eventid)
-            packetstr += event.pack()
+        for packet_event in self.events:
+            packetstr += struct.pack(">B", packet_event.eventid)
+            packetstr += packet_event.pack()
 
         return packetstr
 
@@ -38,11 +38,11 @@ class Packet(object):
             packetstr = packetstr[struct.calcsize(">B"):]
 
             if self.sender == "client":
-                event = object.__new__(event.clientevents[eventid])
+                packet_event = object.__new__(event.clientevents[eventid])
             else:
-                event = object.__new__(event.serverevents[eventid])
+                packet_event = object.__new__(event.serverevents[eventid])
 
-            eventsize = event.unpack(packetstr)
+            eventsize = packet_event.unpack(packetstr)
             packetstr = packetstr[eventsize:]
 
-            self.events.append(event)
+            self.events.append(packet_event)
