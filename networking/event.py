@@ -67,23 +67,6 @@ class Server_Event_Hello(object):
         return struct.calcsize(">32pB64pH")
 
 @clientevent
-class Client_Event_Left_Mousebutton_Down(object):
-    eventid = constants.EVENT_LEFTMOUSEBUTTON_DOWN
-
-    def __init__(self, time):
-        self.time = time
-
-    def pack(self):
-        packetstr = struct.pack(">I", time)
-
-        return packetstr
-
-    def unpack(self, packetstr):
-        self.time = struct.unpack(">I", packetstr)
-
-        return struct.calcsize(">I")
-
-@clientevent
 class Client_Event_Jump(object):
     eventid = constants.EVENT_JUMP
 
@@ -132,5 +115,41 @@ class Client_Event_Changeclass(object):
 
     def unpack(self, packetstr):
         self.newclass = struct.unpack_from(">B", packetstr)
+
+        return struct.calcsize(">B")
+
+@serverevent
+class Server_Event_Spawn(object):
+    eventid = constants.EVENT_PLAYER_SPAWN
+
+    def __init__(self, playerid, x, y):
+        self.playerid = playerid
+        self.x = x
+        self.y = y
+
+    def pack(self):
+        packetstr = struct.pack(">BII", self.playerid, self.x, self.y)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.playerid, self.x, self.y = struct.unpack_from(">BII", packetstr)
+
+        return struct.calcsize(">BII")
+
+@serverevent
+class Server_Event_Die(object):
+    eventid = constants.EVENT_PLAYER_DIE
+
+    def __init__(self, playerid):
+        self.playerid = playerid
+
+    def pack(self):
+        packetstr = struct.pack(">B", self.playerid)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.playerid = struct.unpack_from(">B", packetstr)
 
         return struct.calcsize(">B")
