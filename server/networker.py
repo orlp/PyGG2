@@ -20,7 +20,7 @@ class Networker(object):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
         self.socket.setblocking(False)
-
+        
 
     def update(self, server, game, frametime):
         # update everyone

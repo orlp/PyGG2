@@ -4,6 +4,8 @@ from __future__ import division, print_function
 
 import math
 import mask
+import engine.character
+import constants
 
 # make pygrafix an optional import
 # if we are running the server without pygrafix everything will work fine
@@ -78,3 +80,40 @@ def load_mask(filename, give_orig=False):
 
     if give_orig: return bitmask
     else: return bitmask.copy()
+
+def convert_class(class_object):
+    if type(class_object) == 'instance':
+        # Convert the class to it's constant
+        if isinstance(class_object, engine.character.Scout):
+            return constants.CLASS_SCOUT
+        elif isinstance(class_object, engine.character.Pyro):
+            return constants.CLASS_PYRO
+        elif isinstance(class_object, engine.character.Soldier):
+            return constants.CLASS_SOLDIER
+        elif isinstance(class_object, engine.character.Heavy):
+            return constants.CLASS_HEAVY
+        elif isinstance(class_object, engine.character.Engineer):
+            return constants.CLASS_ENGINEER
+        elif isinstance(class_object, engine.character.Spy):
+            return constants.CLASS_SPY
+        else:
+            print("ERROR: UNKNOWN CLASS IN Functions.get_class().")
+            return constants.CLASS_SCOUT
+
+    else:
+        # Convert the constant to it's class
+        if class_object == constants.CLASS_SCOUT:
+            return engine.character.Scout
+        elif class_object == constants.CLASS_PYRO:
+            return engine.character.Pyro
+        elif class_object == constants.CLASS_SOLDIER:
+            return engine.character.Soldier
+        elif class_object == constants.CLASS_HEAVY:
+            return engine.character.Heavy
+        elif class_object == constants.CLASS_ENGINEER:
+            return engine.character.Engineer
+        elif class_object == constants.CLASS_SPY:
+            return engine.character.Spy
+        else:
+            print("ERROR: UNKNOWN CLASS IN Functions.get_class().")
+            return engine.character.Scout

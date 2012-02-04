@@ -21,6 +21,7 @@ class Player(object):
         self.character_id = None
         self.spawn(game, state)
         self.respawntimer = 0
+        self.name = ""
 
     # FIXME: Make this actually get executed
     def step(self, game, state, frametime):
