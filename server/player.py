@@ -32,15 +32,17 @@ class Player(object):
 
         if self.time_since_update > constants.NETWORK_UPDATE_RATE:
             self.time_since_update %= constants.NETWORK_UPDATE_RATE
-            self.send_packet(networker)
+            self.send_packet(networker, game)
 
-    def send_packet(self, networker):
+    def send_packet(self, networker, game):
         packet = networking.packet.Packet("server")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
         packet.events = self.events
 
-        data = packet.pack()
+        # Put state data before event data, for better compression
+        data = networker.generate_statedata(game)
+        data += packet.pack()
 
         numbytes = self.socket.sendto(data, self.address)
         if len(data) != numbytes:

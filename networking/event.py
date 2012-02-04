@@ -153,3 +153,22 @@ class Server_Event_Die(object):
         self.playerid = struct.unpack_from(">B", packetstr)
 
         return struct.calcsize(">B")
+
+@clientevent
+class Client_Event_Inputstate(object):
+    eventid = constants.INPUTSTATE
+
+    def __init__(self, bytestr):
+        self.bytestr = bytestr
+
+    def pack(self):
+        packetstr += struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
+        packetstr += bytestr
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        length = struct.unpack_from(">H", packetstr)
+        bytestr = packetstr[:length]
+
+        return struct.calcsize(">H")+length

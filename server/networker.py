@@ -21,12 +21,24 @@ class Networker(object):
         self.socket.bind(("", self.port))
         self.socket.setblocking(False)
 
-    def update(self, server, game, frametime):
-        # generate events
 
-        # send packets if necessary
+    def update(self, server, game, frametime):
+        # update everyone
         for address, player in self.players.items():
             player.update(self, game, frametime)
+
+
+    def generate_statedata(self, game):
+        packetstr = ""
+        state = game.current_state
+
+        for playerid, player in state.players.items():
+            packetstr += player.serialize_input()
+            character = state.entities[player.character_id]
+            packetstr += character.serialize(state)
+
+        return packetstr
+
 
     def recieve(self, server, game):
         # recieve all packets

@@ -9,7 +9,7 @@ sys.path.append("../")
 import precision_timer
 import engine.game
 import constants
-#import networker
+import networker
 import lobby
 
 # DEBUG ONLY
@@ -29,7 +29,7 @@ class Server(object):
         self.game = engine.game.Game()
 
         # create packet handler
-        #self.networker = networker.Networker(self)
+        self.networker = networker.Networker(self)
 
         # create lobby announcer
         self.lobbyannouncer = lobby.Lobby()
