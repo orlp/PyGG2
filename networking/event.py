@@ -85,7 +85,7 @@ class Client_Event_Jump(object):
 
 @serverevent
 class Server_Event_Changeclass(object):
-    eventid = constants.EVENT_CHANGECLASS
+    eventid = constants.EVENT_PLAYER_CHANGECLASS
 
     def __init__(self, playerid, newclass):
         self.playerid = playerid
@@ -103,7 +103,7 @@ class Server_Event_Changeclass(object):
 
 @clientevent
 class Client_Event_Changeclass(object):
-    eventid = constants.EVENT_CHANGECLASS
+    eventid = constants.EVENT_PLAYER_CHANGECLASS
 
     def __init__(self, newclass):
         self.newclass = newclass

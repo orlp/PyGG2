@@ -4,12 +4,8 @@ from __future__ import division, print_function
 import sys
 sys.path.append("../")
 
-import constants, event
-
-eventhandlers = {}
-# No need for classes here, functions can do the job, since execution is instant and only now.
-eventhandlers[constants.PLAYER_CHANGECLASS] = Client_Event_Changeclass
-eventhandlers[constants.INPUTSTATE] = Client_Inputstate
+import constants
+from networking import event
 
 def Client_Event_Changeclass(self, networker, game, senderplayer, event):
     player = game.current_state.entities[senderplayer.id]
@@ -26,3 +22,10 @@ def Client_Event_Jump(self, networker, game, senderplayer, event):
 def Client_Inputstate(self, networker, game, senderplayer, event):
     player = game.current_state.entities[senderplayer.id]
     player.deserialize_input(event.bytestr)
+
+
+eventhandlers = {}
+# No need for classes here, functions can do the job, since execution is instant and only now.
+eventhandlers[constants.EVENT_PLAYER_CHANGECLASS] = Client_Event_Changeclass
+eventhandlers[constants.EVENT_JUMP] = Client_Event_Jump
+eventhandlers[constants.INPUTSTATE] = Client_Inputstate

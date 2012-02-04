@@ -21,7 +21,7 @@ import os
 class Server(object):
     def __init__(self):
         self.port = 8190
-        self.name = "Gang Garrison 2 Server"
+        self.name = "Testing Server"
         self.password = ""
         self.ID = uuid.uuid4()
 
@@ -29,7 +29,7 @@ class Server(object):
         self.game = engine.game.Game()
 
         # create packet handler
-        self.networker = networker.Networker(self)
+        self.networker = networker.Networker(self.port)
 
         # create lobby announcer
         self.lobbyannouncer = lobby.Lobby()
@@ -51,9 +51,6 @@ class Server(object):
             #self.networker.update(self, self.game, frametime)
 
             self.lobbyannouncer.update(self, frametime)
-
-    def __del__(self):
-        self.lobbyannouncer.destroy(self)
 
 
 
