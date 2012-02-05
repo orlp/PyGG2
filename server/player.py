@@ -16,7 +16,7 @@ class Player(object):
 
         # communication data
         self.address = address
-        self.events = []
+        self.events = {}
         self.sequence = 0
         self.acksequence = 0
         self.time_since_update = 0.0
@@ -28,6 +28,11 @@ class Player(object):
         engine.player.Player(networker.game, networker.game.current_state, self.id)
 
     def update(self, networker, game, frametime):
+        # Check whether anything has been acked in the mean-time
+        while min(self.events) >= self.acksequence:
+            # Remove the event that's outdated
+            del self.events[min(self.events)]
+
         self.time_since_update += frametime
 
         if self.time_since_update > constants.NETWORK_UPDATE_RATE:
@@ -38,7 +43,7 @@ class Player(object):
         packet = networking.packet.Packet("server")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
-        packet.events = self.events
+        packet.events = self.events.values()
 
         # Put state data before event data, for better compression
         data = networker.generate_statedata(game)

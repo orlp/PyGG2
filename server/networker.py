@@ -20,11 +20,18 @@ class Networker(object):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
         self.socket.setblocking(False)
-        
+
 
     def update(self, server, game, frametime):
         # update everyone
         for address, player in self.players.items():
+
+            # Stick all the events to everyone
+            for event in self.sendbuffer:
+                player.events[player.acksequence] = event
+            self.sendbuffer = []# Clear the slate afterwards
+
+            # Let each of the players decide whether to send something
             player.update(self, game, frametime)
 
 

@@ -29,6 +29,7 @@ class Packet(object):
 
     def unpack(self, packetstr):
         self.events = []
+        statedata = []
 
         self.sequence, self.acksequence = struct.unpack_from(">HH", packetstr)
         packetstr = packetstr[struct.calcsize(">HH"):]
@@ -45,4 +46,11 @@ class Packet(object):
             eventsize = packet_event.unpack(packetstr)
             packetstr = packetstr[eventsize:]
 
-            self.events.append(packet_event)
+            # Separate states and events
+            if eventid in (constants.INPUTSTATE, constants.SNAPSHOT_UPDATE, constants.FULL_UPDATE):
+                statedata.append(packet_event)
+            else:
+                self.events.append(packet_event)
+
+            # Append the state updates to the end of the normal event list.
+            self.events += statedata
