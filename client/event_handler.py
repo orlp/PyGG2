@@ -5,7 +5,7 @@ import sys
 sys.path.append("../")
 
 import function, constants
-from networking import event
+from networking import event_serialize
 
 
 def Server_Event_Changeclass(networker, game, event):

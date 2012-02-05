@@ -7,7 +7,7 @@ import sys
 sys.path.append("../")
 
 import struct
-import event
+import event_serialize
 
 class Packet(object):
     def __init__(self, sender):
@@ -39,9 +39,9 @@ class Packet(object):
             packetstr = packetstr[struct.calcsize(">B"):]
 
             if self.sender == "client":
-                packet_event = object.__new__(event.clientevents[eventid])
+                packet_event = object.__new__(event_serialize.clientevents[eventid])
             else:
-                packet_event = object.__new__(event.serverevents[eventid])
+                packet_event = object.__new__(event_serialize.serverevents[eventid])
 
             eventsize = packet_event.unpack(packetstr)
             packetstr = packetstr[eventsize:]

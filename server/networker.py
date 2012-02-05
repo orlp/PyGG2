@@ -83,7 +83,7 @@ class Networker(object):
                         if player == newplayer:
                             self.service_new_player(self, server, game, player)
                         else:
-                            join_event = event.Server_Event_Player_Join(player.id, player.name)
+                            join_event = event_serialize.Server_Event_Player_Join(player.id, player.name)
                             player.events.append((player.acksequence, join_event))
             # otherwise drop the packet
             else:
