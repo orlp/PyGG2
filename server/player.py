@@ -53,7 +53,7 @@ class Player(object):
         packet.events = [event[1] for event in self.events]
 
         # Put state data before event data, for better compression
-        data = networker.generate_statedata(game)
+        data = networker.generate_snapshot_update(game)
         data += packet.pack()
 
         numbytes = self.socket.sendto(data, self.address)

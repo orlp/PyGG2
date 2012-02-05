@@ -29,7 +29,7 @@ class Networker(object):
             player.update(self, game, frametime)
 
 
-    def generate_statedata(self, game):
+    def generate_snapshot_update(self, game):
         packetstr = ""
         state = game.current_state
 
@@ -40,9 +40,31 @@ class Networker(object):
 
         return packetstr
 
+    def generate_full_update(self, game):
+        packetstr = ""
+        state = game.current_state
+        packetstr += struct.pack(">B", len(state.players))
+
+        for player_id, player in state.players:
+            try:
+                current_class = state.entities[player.character_id]
+                current_class = function.convert_class(current_class)
+            except KeyError:
+                # The character does not exist yet.
+                # Send nextclass instead
+                current_class = player.nextclass
+
+            packetstr += struct.pack(">32pB", player.name, current_class)
+
+        packetstr += self.generate_snapshot_update(game)
+
 
     def service_new_player(self, server, game, player):
-        pass
+        hello_event = event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
+        player.events.append(hello_event)
+
+        update = self.generate_full_update(game)
+        player.events.append(update)
 
 
     def recieve(self, server, game):
