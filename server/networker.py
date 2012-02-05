@@ -25,12 +25,6 @@ class Networker(object):
     def update(self, server, game, frametime):
         # update everyone
         for address, player in self.players.items():
-
-            # Stick all the events to everyone
-            for event in self.sendbuffer:
-                player.events[player.acksequence] = event
-            self.sendbuffer = []# Clear the slate afterwards
-
             # Let each of the players decide whether to send something
             player.update(self, game, frametime)
 
@@ -45,6 +39,10 @@ class Networker(object):
             packetstr += character.serialize(state)
 
         return packetstr
+
+
+    def service_new_player(self, server, game, player):
+        pass
 
 
     def recieve(self, server, game):
@@ -69,16 +67,24 @@ class Networker(object):
             if sender in self.players:
                 for event in packet.events:
                     event_handler.eventhandlers[type(event)](self, game, self.players[sender], event)
+
+                # Stick the new events to everyone
+                for event in self.sendbuffer:
+                    player.events.append((player.acksequence, event))
+                self.sendbuffer = []# Clear the slate afterwards
+
             # or if someone wants to shake hands
             elif packet.events[0].eventid == constants.EVENT_HELLO:
                 if packet.password == server.password:
                     newplayer = player.Player(self, game, packet.name, sender)
+                    player.name = packet.name
 
                     for player in self.players.items():
                         if player == newplayer:
-                            pass # TODO ADD SERVER_EVENT_HELLO
+                            self.service_new_player(self, server, game, player)
                         else:
-                            pass # TODO ADD PLAYER_JOIN
+                            join_event = event.Server_Event_Player_Join(player.id, player.name)
+                            player.events.append((player.acksequence, join_event))
             # otherwise drop the packet
             else:
                 continue

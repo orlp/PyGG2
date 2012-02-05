@@ -13,10 +13,9 @@ class Networker(object):
     def __init__(self, port, server_address):
         self.server_address = server_address
 
-        self.events = {}
+        self.events = []
         self.sequence = 0
         self.acksequence = 0
-        self.sendbuffer = []
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", self.port))
@@ -50,10 +49,17 @@ class Networker(object):
             # ack the packet
             self.acksequence = packet.sequence
 
-            # Check whether anything has been acked
-            while min(self.events) >= self.acksequence:
-                # Remove the event that's outdated
-                del self.events[min(self.events)]
+            # Clear the acked stuff from the history
+            index = 0
+            while index < len(self.events):
+                seq, event = self.events[index]
+                if seq > self.acksequence:
+                    # This (and all the following events) weren't acked yet. We're done.
+                    break
+                else:
+                    del self.events[index]
+                    index -= 1
+                index += 1
 
 
     def generate_inputdata(self, client):
@@ -65,7 +71,7 @@ class Networker(object):
         packet = networking.packet.Packet("client")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
-        packet.events = self.events.values()
+        packet.events = [event[1] for event in self.events]
 
         packetstr = ""
         packetstr += self.generate_inputdata(client)
