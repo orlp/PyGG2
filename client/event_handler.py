@@ -46,5 +46,7 @@ def Server_Full_Update(networker, game, event):
 # Gather the functions together to easily be called by the event ID
 eventhandlers = {}
 eventhandlers[constants.EVENT_PLAYER_CHANGECLASS] = Server_Event_Changeclass
+eventhandlers[constants.EVENT_DIE] = Server_Event_Die
+eventhandlers[constants.EVENT_SPAWN] = Server_Event_Spawn
 eventhandlers[constants.SNAPSHOT_UPDATE] = Server_Snapshot_Update
 eventhandlers[constants.FULL_UPDATE] = Server_Full_Update
