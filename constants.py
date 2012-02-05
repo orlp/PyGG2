@@ -9,6 +9,7 @@ GAME_HEIGHT = 600
 
 PHYSICS_TIMESTEP = 1/60 # always update physics in these steps
 
+GAME_VERSION_NUMBER = 25000
 GAME_VERSION_STRING = "2.5"
 GAME_URL = "http://www.ganggarrison.com/forums/index.php?topic=29530.0"
 
