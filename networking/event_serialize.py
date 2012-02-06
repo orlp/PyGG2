@@ -58,6 +58,8 @@ class Server_Event_Hello(object):
 
     def pack(self):
         packetstr = struct.pack(">32pB64pH", self.servername, self.maxplayers, self.mapname, self.version)
+        print("Server Event Hello serialize; packet size:", len(packetstr), struct.calcsize(">32pB64pH"))
+        a = raw_input()
 
         return packetstr
 

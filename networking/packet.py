@@ -22,9 +22,9 @@ class Packet(object):
 
         packetstr += struct.pack(">HH", self.sequence, self.acksequence)
 
-        for packet_event in self.events:
-            packetstr += struct.pack(">B", packet_event.eventid)
-            packetstr += packet_event.pack()
+        for event in self.events:
+            packetstr += struct.pack(">B", event.eventid)
+            packetstr += event.pack()
 
         return packetstr
 

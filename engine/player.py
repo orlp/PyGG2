@@ -69,6 +69,7 @@ class Player(object):
         aim = int((self.aimdirection % 360) / 360 * 65535)
 
         bytestr = struct.pack(">BH", keybyte, aim)
+        return bytestr
 
     def deserialize_input(self, bytestr):
         keybyte, aim = struct.unpack(">BH", bytestr)

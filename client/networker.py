@@ -71,12 +71,12 @@ class Networker(object):
                 # recvfrom throws socket.error if there was no packet to read
                 break
 
-            try:
-                packet.unpack(data)
-            except:
-                # parse error, don't throw exception but print it
-                print("Parse error: %s" % sys.exc_info()[1])
-                continue # drop packet
+            #try:
+            packet.unpack(data)
+            #except:
+            #    # parse error, don't throw exception but print it
+            #    print("Parse error: %s" % sys.exc_info()[1])
+            #    continue # drop packet
 
             # only accept the packet if the sender is the server
             if sender == self.server_address:

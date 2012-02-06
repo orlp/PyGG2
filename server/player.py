@@ -6,6 +6,7 @@ sys.path.append("../")
 
 import networking
 import engine.player
+import constants
 
 class Player(object):
     def __init__(self, networker, game, name, address):
@@ -36,7 +37,7 @@ class Player(object):
                 # This (and all the following events) weren't acked yet. We're done.
                 break
             else:
-                del self.events[index]
+                self.events.pop(index)
                 index -= 1
             index += 1
 
@@ -56,7 +57,7 @@ class Player(object):
         data = networker.generate_snapshot_update(game)
         data += packet.pack()
 
-        numbytes = self.socket.sendto(data, self.address)
+        numbytes = networker.socket.sendto(data, self.address)
         if len(data) != numbytes:
             # TODO sane error handling
             print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE")

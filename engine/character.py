@@ -139,7 +139,7 @@ class Character(entity.MovingObject):
         #byte |= self.sentry << 2
         packetstr += struct.pack(">B", byte)
 
-        packetstr += state.entites[self.weapon].serialize(state)
+        packetstr += state.entities[self.weapon].serialize(state)
 
         return packetstr
 

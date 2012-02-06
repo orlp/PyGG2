@@ -62,13 +62,16 @@ class Networker(object):
 
         packetstr += self.generate_snapshot_update(game)
 
+        event = networking.event_serialize.Server_Event_Full_Update(packetstr)
+        return event
+
 
     def service_new_player(self, server, game, newplayer):
         hello_event = networking.event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
-        newplayer.events.append(hello_event)
+        newplayer.events.append((newplayer.acksequence, hello_event))
 
         update = self.generate_full_update(game)
-        newplayer.events.append(update)
+        newplayer.events.append((newplayer.acksequence, update))
 
 
     def recieve(self, server, game):
