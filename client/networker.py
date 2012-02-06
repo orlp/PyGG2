@@ -40,12 +40,13 @@ class Networker(object):
             print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE AT HELLO")
 
 
-    def recieve(self, game):
+    def recieve(self, game, client):
         # If we haven't received confirmation that we're connected yet, see if we should try again:
         if not self.has_connected:
             self.connection_timeout_timer -= 1
+
             if self.connection_timeout_timer <= 0:
-                self.connection_timeout_timer = 0
+                self.connection_timeout_timer = constants.CLIENT_TIMEOUT
                 # Send a reminder, in case the first packet was lost
                 packet = networking.packet.Packet("client")
                 packet.sequence = 0

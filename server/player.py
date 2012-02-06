@@ -25,7 +25,7 @@ class Player(object):
         networker.players[address] = self
 
         # and at last add to engine
-        engine.player.Player(networker.game, networker.game.current_state, self.id)
+        engine.player.Player(game, game.current_state, self.id)
 
     def update(self, networker, game, frametime):
         # Clear the acked stuff from the history

@@ -82,26 +82,21 @@ def load_mask(filename, give_orig=False):
     else: return bitmask.copy()
 
 def convert_class(class_object):
-    if type(class_object) == 'instance':
-        # Convert the class to it's constant
-        if isinstance(class_object, engine.character.Scout):
+        # Try converting the class to it's constant first
+        if class_object == engine.character.Scout:
             return constants.CLASS_SCOUT
-        elif isinstance(class_object, engine.character.Pyro):
+        elif class_object == engine.character.Pyro:
             return constants.CLASS_PYRO
-        elif isinstance(class_object, engine.character.Soldier):
+        elif class_object == engine.character.Soldier:
             return constants.CLASS_SOLDIER
-        elif isinstance(class_object, engine.character.Heavy):
+        elif class_object == engine.character.Heavy:
             return constants.CLASS_HEAVY
-        elif isinstance(class_object, engine.character.Engineer):
+        elif class_object == engine.character.Engineer:
             return constants.CLASS_ENGINEER
-        elif isinstance(class_object, engine.character.Spy):
+        elif class_object == engine.character.Spy:
             return constants.CLASS_SPY
-        else:
-            print("ERROR: UNKNOWN CLASS IN Functions.get_class().")
-            return constants.CLASS_SCOUT
 
-    else:
-        # Convert the constant to it's class
+        # Didn't work, try converting the constant to it's class
         if class_object == constants.CLASS_SCOUT:
             return engine.character.Scout
         elif class_object == constants.CLASS_PYRO:
@@ -115,5 +110,5 @@ def convert_class(class_object):
         elif class_object == constants.CLASS_SPY:
             return engine.character.Spy
         else:
-            print("ERROR: UNKNOWN CLASS IN Functions.get_class().")
-            return engine.character.Scout
+            print("ERROR: UNKNOWN CLASS ARGUMENT IN Functions.get_class().", class_object)
+            return constants.CLASS_SCOUT

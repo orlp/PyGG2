@@ -5,8 +5,11 @@ import sys
 sys.path.append("../")
 
 import socket
+import struct
 import constants
+import function
 import networking.packet
+import networking.event_serialize
 import event_handler
 import player
 
@@ -33,19 +36,20 @@ class Networker(object):
         packetstr = ""
         state = game.current_state
 
-        for playerid, player in state.players.items():
-            packetstr += player.serialize_input()
-            character = state.entities[player.character_id]
+        for playerid, player_obj in state.players.items():
+            packetstr += player_obj.serialize_input()
+            character = state.entities[player_obj.character_id]
             packetstr += character.serialize(state)
 
         return packetstr
+
 
     def generate_full_update(self, game):
         packetstr = ""
         state = game.current_state
         packetstr += struct.pack(">B", len(state.players))
 
-        for player_id, player_obj in state.players:
+        for player_id, player_obj in state.players.items():
             try:
                 current_class = state.entities[player_obj.character_id]
                 current_class = function.convert_class(current_class)
@@ -60,7 +64,7 @@ class Networker(object):
 
 
     def service_new_player(self, server, game, newplayer):
-        hello_event = event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
+        hello_event = networking.event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
         newplayer.events.append(hello_event)
 
         update = self.generate_full_update(game)
@@ -96,8 +100,9 @@ class Networker(object):
                         print("WARNING: Client sent invalid event.")
 
                 # Stick the new events to everyone
-                for event in self.sendbuffer:
-                    player.events.append((player.acksequence, event))
+                for player_obj in self.players:
+                    for event in self.sendbuffer:
+                        player_obj.events.append((player_obj.acksequence, event))
                 self.sendbuffer = []# Clear the slate afterwards
 
             # or if someone wants to shake hands
@@ -105,14 +110,14 @@ class Networker(object):
                 event = packet.events[0]
                 if event.password == server.password:
                     newplayer = player.Player(self, game, event.name, sender)
-                    player.name = packet.name
+                    newplayer.name = event.name
 
-                    for player in self.players.items():
-                        if player == newplayer:
-                            self.service_new_player(self, server, game, player)
+                    for player_obj in self.players.values():
+                        if player_obj == newplayer:
+                            self.service_new_player(server, game, newplayer)
                         else:
-                            join_event = event_serialize.Server_Event_Player_Join(player.id, player.name)
-                            player.events.append((player.acksequence, join_event))
+                            join_event = networking.event_serialize.Server_Event_Player_Join(newplayer.id, newplayer.name)
+                            player_obj.events.append((player_obj.acksequence, join_event))
             # otherwise drop the packet
             else:
                 continue

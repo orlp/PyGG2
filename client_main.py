@@ -69,6 +69,7 @@ class Client(object):
     def run(self):
         # game loop
         while True:
+            self.networker.recieve(self.game, self)
             if self.networker.has_connected:
                 self.window.poll_events()
 
