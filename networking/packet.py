@@ -8,6 +8,7 @@ sys.path.append("../")
 
 import struct
 import event_serialize
+import constants
 
 class Packet(object):
     def __init__(self, sender):
@@ -19,7 +20,7 @@ class Packet(object):
     def pack(self):
         packetstr = ""
 
-        packetstr += struct.pack(">HH", sequence, acksequence)
+        packetstr += struct.pack(">HH", self.sequence, self.acksequence)
 
         for packet_event in self.events:
             packetstr += struct.pack(">B", packet_event.eventid)
@@ -35,7 +36,7 @@ class Packet(object):
         packetstr = packetstr[struct.calcsize(">HH"):]
 
         while packetstr:
-            eventid = struct.unpack_from(">B", packetstr)
+            eventid = struct.unpack_from(">B", packetstr)[0]
             packetstr = packetstr[struct.calcsize(">B"):]
 
             if self.sender == "client":

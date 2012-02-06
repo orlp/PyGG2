@@ -24,9 +24,9 @@ class Networker(object):
 
     def update(self, server, game, frametime):
         # update everyone
-        for address, player in self.players.items():
+        for address, player_obj in self.players.items():
             # Let each of the players decide whether to send something
-            player.update(self, game, frametime)
+            player_obj.update(self, game, frametime)
 
 
     def generate_snapshot_update(self, game):
@@ -45,26 +45,26 @@ class Networker(object):
         state = game.current_state
         packetstr += struct.pack(">B", len(state.players))
 
-        for player_id, player in state.players:
+        for player_id, player_obj in state.players:
             try:
-                current_class = state.entities[player.character_id]
+                current_class = state.entities[player_obj.character_id]
                 current_class = function.convert_class(current_class)
             except KeyError:
                 # The character does not exist yet.
                 # Send nextclass instead
-                current_class = player.nextclass
+                current_class = player_obj.nextclass
 
-            packetstr += struct.pack(">32pB", player.name, current_class)
+            packetstr += struct.pack(">32pB", player_obj.name, current_class)
 
         packetstr += self.generate_snapshot_update(game)
 
 
-    def service_new_player(self, server, game, player):
+    def service_new_player(self, server, game, newplayer):
         hello_event = event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
-        player.events.append(hello_event)
+        newplayer.events.append(hello_event)
 
         update = self.generate_full_update(game)
-        player.events.append(update)
+        newplayer.events.append(update)
 
 
     def recieve(self, server, game):
@@ -87,8 +87,13 @@ class Networker(object):
 
             # only handle this packet if we know the player
             if sender in self.players:
+                print(sender)
                 for event in packet.events:
-                    event_handler.eventhandlers[type(event)](self, game, self.players[sender], event)
+                    try:
+                        event_handler.eventhandlers[type(event)](self, game, self.players[sender], event)
+                    except KeyError:
+                        # Invalid event; ignore
+                        print("WARNING: Client sent invalid event.")
 
                 # Stick the new events to everyone
                 for event in self.sendbuffer:
@@ -97,8 +102,9 @@ class Networker(object):
 
             # or if someone wants to shake hands
             elif packet.events[0].eventid == constants.EVENT_HELLO:
-                if packet.password == server.password:
-                    newplayer = player.Player(self, game, packet.name, sender)
+                event = packet.events[0]
+                if event.password == server.password:
+                    newplayer = player.Player(self, game, event.name, sender)
                     player.name = packet.name
 
                     for player in self.players.items():

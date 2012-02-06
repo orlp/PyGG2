@@ -4,9 +4,24 @@ from __future__ import division, print_function
 import sys
 sys.path.append("../")
 
+import engine.map
+import engine.player
 import function, constants
 from networking import event_serialize
 
+
+def Server_Event_Hello(networker, game, event):
+    # Stop saying hello
+    networker.has_connected = True
+    # TODO: Some version check using event.version and constants.GAME_VERSION_NUMBER
+    # Set all the important values to the game
+    game.servername = event.servername
+    game.maxplayers = event.maxplayers
+    game.map = engine.map.Map(game, event.mapname)
+
+def Server_Event_Player_Join(networker, game, event):
+    newplayer = engine.player.Player(game, game.current_state, event.id)
+    newplayer.name = event.name
 
 def Server_Event_Changeclass(networker, game, event):
     player = game.current_state.players[event.playerid]
@@ -17,7 +32,7 @@ def Server_Event_Die(networker, game, event):
     character = game.current_state.enities[player.character_id]
     character.die(game, game.current_state)
 
-def Server_Event_Spawn(network, game, event):
+def Server_Event_Spawn(networker, game, event):
     player = game.current_state.players[event.playerid]
     player.spawn(game, state)
 
@@ -45,8 +60,10 @@ def Server_Full_Update(networker, game, event):
 
 # Gather the functions together to easily be called by the event ID
 eventhandlers = {}
+eventhandlers[constants.EVENT_HELLO] = Server_Event_Hello
+eventhandlers[constants.EVENT_PLAYER_JOIN] = Server_Event_Player_Join
 eventhandlers[constants.EVENT_PLAYER_CHANGECLASS] = Server_Event_Changeclass
-eventhandlers[constants.EVENT_DIE] = Server_Event_Die
-eventhandlers[constants.EVENT_SPAWN] = Server_Event_Spawn
+eventhandlers[constants.EVENT_PLAYER_DIE] = Server_Event_Die
+eventhandlers[constants.EVENT_PLAYER_SPAWN] = Server_Event_Spawn
 eventhandlers[constants.SNAPSHOT_UPDATE] = Server_Snapshot_Update
 eventhandlers[constants.FULL_UPDATE] = Server_Full_Update

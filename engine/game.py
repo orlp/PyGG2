@@ -13,6 +13,7 @@ import constants
 class Game:
     def __init__(self):
         self.maxplayers = 8
+        self.servername = ""
 
         # map data
         self.map = map.Map(self, "twodforttwo_remix")

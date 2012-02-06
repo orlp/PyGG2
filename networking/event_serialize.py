@@ -40,7 +40,7 @@ class Client_Event_Hello(object):
         self.password = password
 
     def pack(self):
-        return struct.pack(">32p32p", name, password)
+        return struct.pack(">32p32p", self.name, self.password)
 
     def unpack(self, packetstr):
         self.name, self.password = struct.unpack_from(">32p32p", packetstr)

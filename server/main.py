@@ -27,6 +27,7 @@ class Server(object):
 
         # create game engine object
         self.game = engine.game.Game()
+        self.game.servername = self.name
 
         # create packet handler
         self.networker = networker.Networker(self.port)
@@ -52,6 +53,8 @@ class Server(object):
 
             self.lobbyannouncer.update(self, frametime)
 
+
+# TODO: CALL LOBBY DESTRUCTION WHEN SERVER IS KILLED
 
 
 def profileGG2():
