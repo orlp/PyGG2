@@ -26,6 +26,10 @@ class Packet(object):
             packetstr += struct.pack(">B", event.eventid)
             packetstr += event.pack()
 
+        text = open("data_sent", "w")
+        text.write(packetstr)
+        text.close()
+
         return packetstr
 
     def unpack(self, packetstr):
@@ -34,6 +38,10 @@ class Packet(object):
 
         self.sequence, self.acksequence = struct.unpack_from(">HH", packetstr)
         packetstr = packetstr[struct.calcsize(">HH"):]
+
+        text = open("data", "w")
+        text.write(packetstr)
+        text.close()
 
         while packetstr:
             eventid = struct.unpack_from(">B", packetstr)[0]

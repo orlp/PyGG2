@@ -41,7 +41,9 @@ class Networker(object):
             character = state.entities[player_obj.character_id]
             packetstr += character.serialize(state)
 
-        return packetstr
+        event = networking.event_serialize.Server_Event_Snapshot_Update(packetstr)
+
+        return event.pack()
 
 
     def generate_full_update(self, game):
@@ -51,7 +53,7 @@ class Networker(object):
 
         for player_id, player_obj in state.players.items():
             try:
-                current_class = state.entities[player_obj.character_id]
+                current_class = state.entities[player_obj.character_id].__class__
                 current_class = function.convert_class(current_class)
             except KeyError:
                 # The character does not exist yet.
@@ -68,11 +70,10 @@ class Networker(object):
 
     def service_new_player(self, server, game, newplayer):
         hello_event = networking.event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
-        newplayer.events.append((newplayer.acksequence, hello_event))
+        newplayer.events.append((newplayer.sequence, hello_event))
 
         update = self.generate_full_update(game)
-        newplayer.events.append((newplayer.acksequence, update))
-
+        newplayer.events.append((newplayer.sequence, update))
 
     def recieve(self, server, game):
         # recieve all packets
@@ -94,18 +95,17 @@ class Networker(object):
 
             # only handle this packet if we know the player
             if sender in self.players:
-                print(sender)
                 for event in packet.events:
                     try:
-                        event_handler.eventhandlers[type(event)](self, game, self.players[sender], event)
+                        event_handler.eventhandlers[event.eventid](self, game, self.players[sender], event)
                     except KeyError:
                         # Invalid event; ignore
-                        print("WARNING: Client sent invalid event.")
+                        print("WARNING: Client sent invalid event:", type(event), event.eventid)
 
                 # Stick the new events to everyone
                 for player_obj in self.players:
                     for event in self.sendbuffer:
-                        player_obj.events.append((player_obj.acksequence, event))
+                        player_obj.events.append((player_obj.sequence, event))
                 self.sendbuffer = []# Clear the slate afterwards
 
             # or if someone wants to shake hands

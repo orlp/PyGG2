@@ -18,7 +18,7 @@ class Player(object):
         # communication data
         self.address = address
         self.events = []
-        self.sequence = 0
+        self.sequence = 1
         self.acksequence = 0
         self.time_since_update = 0.0
 

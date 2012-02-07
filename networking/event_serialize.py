@@ -58,8 +58,6 @@ class Server_Event_Hello(object):
 
     def pack(self):
         packetstr = struct.pack(">32pB64pH", self.servername, self.maxplayers, self.mapname, self.version)
-        print("Server Event Hello serialize; packet size:", len(packetstr), struct.calcsize(">32pB64pH"))
-        a = raw_input()
 
         return packetstr
 
@@ -183,14 +181,14 @@ class Server_Event_Snapshot_Update(object):
         self.bytestr = bytestr
 
     def pack(self):
-        packetstr += struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
-        packetstr += bytestr
+        packetstr = struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
+        packetstr += self.bytestr
 
         return packetstr
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)
-        bytestr = packetstr[:length]
+        self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
 
@@ -202,13 +200,13 @@ class Server_Event_Full_Update(object):
         self.bytestr = bytestr
 
     def pack(self):
-        packetstr += struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
-        packetstr += bytestr
+        packetstr = struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
+        packetstr += self.bytestr
 
         return packetstr
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)
-        bytestr = packetstr[:length]
+        self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
