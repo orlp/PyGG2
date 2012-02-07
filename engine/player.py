@@ -19,18 +19,18 @@ class Player(object):
 
         self.nextclass = character.Pyro
         self.character_id = None
-        self.spawn(game, state)
+        self.spawn(game, state)# FIXME: Remove this
         self.respawntimer = 0
-        self.name = ""
+        self.name = "Test name"
 
     # FIXME: Make this actually get executed
     def step(self, game, state, frametime):
+        # FIXME: Make this dependent on server input, and not executed on the client.
         if self.character_id == None:# If the character is dead
             if self.respawntimer <= 0:
                 self.spawn(self, game, state)# Respawn
             else:
                 self.respawntimer -= frametime
-                print(self.respawntimer)
 
     def spawn(self, game, state):
         if self.character_id != None:

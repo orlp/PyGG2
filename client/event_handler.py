@@ -4,6 +4,7 @@ from __future__ import division, print_function
 import sys
 sys.path.append("../")
 
+import struct
 import engine.map
 import engine.player
 import function, constants
@@ -34,7 +35,6 @@ def Server_Event_Die(networker, game, event):
 
 def Server_Event_Spawn(networker, game, event):
     player = game.current_state.players[event.playerid]
-    player.spawn(game, state)
 
 def Server_Snapshot_Update(networker, game, event):
     state = game.current_state
@@ -45,7 +45,7 @@ def Server_Snapshot_Update(networker, game, event):
         character.deserialize(state)
 
 def Server_Full_Update(networker, game, event):
-    numof_players = struct.unpack_from(">B", event.bytestr)
+    numof_players = struct.unpack_from(">B", event.bytestr)[0]
     event.bytestr = event.bytestr[1:]
 
     for index in range(numof_players):
@@ -54,6 +54,10 @@ def Server_Full_Update(networker, game, event):
         player.name, player_class = struct.unpack_from(">32pB", event.bytestr)
         player.nextclass = function.convert_class(player_class)
         event.bytestr = event.bytestr[33:]
+
+        # TODO: Make spawning not instant
+        #if character_exists:
+        #    player.spawn(game, game.current_state)
 
     Server_Snapshot_Update(networker, game, event)
 

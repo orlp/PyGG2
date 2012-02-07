@@ -40,25 +40,25 @@ class Networker(object):
             print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE AT HELLO")
 
     def recieve(self, game, client):
-        ## If we haven't received confirmation that we're connected yet, see if we should try again:
-        #if not self.has_connected:
-        #    self.connection_timeout_timer -= 1
-        #
-        #    if self.connection_timeout_timer <= 0:
-        #        self.connection_timeout_timer = constants.CLIENT_TIMEOUT
-        #        # Send a reminder, in case the first packet was lost
-        #        packet = networking.packet.Packet("client")
-        #        packet.sequence = 0
-        #        packet.acksequence = 0
-        #
-        #        event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
-        #        packet.events.append(event)
-        #        data = packet.pack()
-        #
-        #        numbytes = self.socket.sendto(data, self.server_address)
-        #        if len(data) != numbytes:
-        #            # TODO sane error handling
-        #            print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE AT HELLO")
+        # If we haven't received confirmation that we're connected yet, see if we should try again:
+        if not self.has_connected:
+            self.connection_timeout_timer -= 1
+
+            if self.connection_timeout_timer <= 0:
+                self.connection_timeout_timer = constants.CLIENT_TIMEOUT
+                # Send a reminder, in case the first packet was lost
+                packet = networking.packet.Packet("client")
+                packet.sequence = 0
+                packet.acksequence = 0
+
+                event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
+                packet.events.append(event)
+                data = packet.pack()
+
+                numbytes = self.socket.sendto(data, self.server_address)
+                if len(data) != numbytes:
+                    # TODO sane error handling
+                    print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE AT HELLO")
 
 
         while True:
@@ -104,7 +104,8 @@ class Networker(object):
 
     def generate_inputdata(self, client):
         packetstr = client.our_player.serialize_input()
-        return packetstr
+        event = networking.event_serialize.Client_Event_Inputstate(packetstr)
+        return event
 
 
     def update(self, client):
@@ -112,9 +113,10 @@ class Networker(object):
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
         packet.events = [event[1] for event in self.events]
+        # Prepend the input data
+        packet.events.insert(0, self.generate_inputdata(client))
 
         packetstr = ""
-        packetstr += self.generate_inputdata(client)
         packetstr += packet.pack()
 
         self.sequence = (self.sequence + 1) % 65535

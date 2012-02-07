@@ -79,7 +79,7 @@ class Client_Event_Jump(object):
         return packetstr
 
     def unpack(self, packetstr):
-        self.time = struct.unpack(">I", packetstr)
+        self.time = struct.unpack(">I", packetstr)[0]
 
         return struct.calcsize(">I")
 
@@ -114,7 +114,7 @@ class Client_Event_Changeclass(object):
         return packetstr
 
     def unpack(self, packetstr):
-        self.newclass = struct.unpack_from(">B", packetstr)
+        self.newclass = struct.unpack_from(">B", packetstr)[0]
 
         return struct.calcsize(">B")
 
@@ -150,7 +150,7 @@ class Server_Event_Die(object):
         return packetstr
 
     def unpack(self, packetstr):
-        self.playerid = struct.unpack_from(">B", packetstr)
+        self.playerid = struct.unpack_from(">B", packetstr)[0]
 
         return struct.calcsize(">B")
 
@@ -168,7 +168,7 @@ class Client_Event_Inputstate(object):
         return packetstr
 
     def unpack(self, packetstr):
-        length = struct.unpack_from(">H", packetstr)
+        length = struct.unpack_from(">H", packetstr)[0]
         bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
@@ -187,7 +187,7 @@ class Server_Event_Snapshot_Update(object):
         return packetstr
 
     def unpack(self, packetstr):
-        length = struct.unpack_from(">H", packetstr)
+        length = struct.unpack_from(">H", packetstr)[0]
         self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
@@ -206,7 +206,7 @@ class Server_Event_Full_Update(object):
         return packetstr
 
     def unpack(self, packetstr):
-        length = struct.unpack_from(">H", packetstr)
+        length = struct.unpack_from(">H", packetstr)[0]
         self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length

@@ -52,7 +52,7 @@ class Weapon(entity.Entity):
 
     def deserialize(self, state, packetstr):
         try:
-            self.ammo = struct.unpack(">B", packetstr)
+            self.ammo = struct.unpack(">B", packetstr)[0]
             packetstr = packetstr[1:]
             return 0
         except struct.error:

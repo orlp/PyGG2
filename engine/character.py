@@ -147,7 +147,7 @@ class Character(entity.MovingObject):
         try:
             self.x, self.y, self.hspeed, self.vspeed = struct.unpack(">IIii", packetstr)
             packetstr = packetstr[16:]
-            byte = struct.unpack(">B", packetstr)
+            byte = struct.unpack(">B", packetstr)[0]
             packetstr = packetstr[1:]
             self.intel = byte & (1 << 0)
             self.can_doublejump = byte & (1 << 1)
