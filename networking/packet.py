@@ -48,10 +48,10 @@ class Packet(object):
             packetstr = packetstr[eventsize:]
 
             # Separate states and events
-            if eventid in (constants.INPUTSTATE, constants.SNAPSHOT_UPDATE, constants.FULL_UPDATE):
+            if eventid in (constants.INPUTSTATE, constants.SNAPSHOT_UPDATE):
                 statedata.append(packet_event)
             else:
                 self.events.append(packet_event)
 
-            # Append the state updates to the end of the normal event list.
-            self.events += statedata
+        # Append the state updates to the end of the normal event list.
+        self.events += statedata

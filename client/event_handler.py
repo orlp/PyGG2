@@ -38,7 +38,8 @@ def Server_Event_Spawn(networker, game, event):
 
 def Server_Snapshot_Update(networker, game, event):
     state = game.current_state
-    for playerid, player in state.players:
+    print(state.players)
+    for player in state.players.values():
         player.deserialize_input(event.bytestr)
 
         character = state.entities[player.character_id]
@@ -51,7 +52,7 @@ def Server_Full_Update(networker, game, event):
     for index in range(numof_players):
         player = engine.player.Player(game, game.current_state, index)
 
-        player.name, player_class = struct.unpack_from(">32pB", event.bytestr)
+        player.name, player_class, character_exists = struct.unpack_from(">32pBB", event.bytestr)
         player.nextclass = function.convert_class(player_class)
         event.bytestr = event.bytestr[33:]
 

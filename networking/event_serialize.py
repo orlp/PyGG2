@@ -207,6 +207,8 @@ class Server_Event_Full_Update(object):
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)[0]
+        packetstr = packetstr[2:]
         self.bytestr = packetstr[:length]
+        packetstr = packetstr[length:]
 
         return struct.calcsize(">H")+length

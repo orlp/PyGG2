@@ -75,9 +75,6 @@ class Networker(object):
         update = self.generate_full_update(game)
         newplayer.events.append((newplayer.sequence, update))
 
-        update = self.generate_snapshot_update(game)
-        newplayer.events.append((newplayer.sequence, update))
-
     def recieve(self, server, game):
         # recieve all packets
         while True:

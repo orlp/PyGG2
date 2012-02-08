@@ -58,7 +58,7 @@ class Player(object):
         packet.events.insert(0, snapshot)
 
         data = ""
-        data += packet.pack()
+        data += packet.pack()# TODO: Compression would be here
 
         numbytes = networker.socket.sendto(data, self.address)
         if len(data) != numbytes:
