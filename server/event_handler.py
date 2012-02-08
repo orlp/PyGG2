@@ -11,7 +11,7 @@ def Client_Event_Changeclass(networker, game, senderplayer, event):
     player = game.current_state.entities[senderplayer.id]
     # TODO: If any, add classlimits here
     player.nextclass = function.convert_class(event.newclass)
-    classchange_event = event_serialize.Server_Event_Changeclass(senderplayer.id, event.newclass)
+    classchange_event = event_serialize.Server_Event_Changeclass(0, senderplayer.id, event.newclass)
     networker.sendbuffer.append(classchange_event)
 
 def Client_Event_Jump(networker, game, senderplayer, event):

@@ -11,7 +11,7 @@ import function, constants
 from networking import event_serialize
 
 
-def Server_Event_Hello(networker, game, event):
+def Server_Event_Hello(client, networker, game, event):
     # Stop saying hello
     networker.has_connected = True
     # TODO: Some version check using event.version and constants.GAME_VERSION_NUMBER
@@ -19,33 +19,35 @@ def Server_Event_Hello(networker, game, event):
     game.servername = event.servername
     game.maxplayers = event.maxplayers
     game.map = engine.map.Map(game, event.mapname)
+    client.start_game()
 
-def Server_Event_Player_Join(networker, game, event):
+def Server_Event_Player_Join(client, networker, game, event):
     newplayer = engine.player.Player(game, game.current_state, event.id)
     newplayer.name = event.name
 
-def Server_Event_Changeclass(networker, game, event):
+def Server_Event_Changeclass(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     player.nextclass = event.newclass
 
-def Server_Event_Die(networker, game, event):
+def Server_Event_Die(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     character = game.current_state.enities[player.character_id]
     character.die(game, game.current_state)
 
-def Server_Event_Spawn(networker, game, event):
+def Server_Event_Spawn(client, networker, game, event):
     player = game.current_state.players[event.playerid]
 
-def Server_Snapshot_Update(networker, game, event):
+def Server_Snapshot_Update(client, networker, game, event):
     state = game.current_state
-    print(state.players)
     for player in state.players.values():
-        player.deserialize_input(event.bytestr)
+        length = player.deserialize_input(event.bytestr)
+        event.bytestr = event.bytestr[length:]
 
         character = state.entities[player.character_id]
-        character.deserialize(state)
+        length = character.deserialize(state, event.bytestr)
+        event.bytestr = event.bytestr[length:]
 
-def Server_Full_Update(networker, game, event):
+def Server_Full_Update(client, networker, game, event):
     numof_players = struct.unpack_from(">B", event.bytestr)[0]
     event.bytestr = event.bytestr[1:]
 
@@ -59,8 +61,6 @@ def Server_Full_Update(networker, game, event):
         # TODO: Make spawning not instant
         #if character_exists:
         #    player.spawn(game, game.current_state)
-
-    Server_Snapshot_Update(networker, game, event)
 
 
 # Gather the functions together to easily be called by the event ID

@@ -51,7 +51,11 @@ class Player(object):
         packet = networking.packet.Packet("server")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
-        packet.events = [event[1] for event in self.events]
+
+        for sequence, event in self.events:
+            newevent = event
+            newevent.sequence = sequence
+            packet.events.append(newevent)
 
         # Put state data before event data, for better compression
         snapshot = networker.generate_snapshot_update(game)
