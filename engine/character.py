@@ -144,16 +144,19 @@ class Character(entity.MovingObject):
         return packetstr
 
     def deserialize(self, state, packetstr):
-        self.x, self.y, self.hspeed, self.vspeed = struct.unpack_from(">IIii", packetstr)
-        packetstr = packetstr[16:]
-        byte = struct.unpack_from(">B", packetstr)[0]
-        packetstr = packetstr[1:]
-        self.intel = byte & (1 << 0)
-        self.can_doublejump = byte & (1 << 1)
-        #self.sentry = byte & (1 << 2)
-
-        weapon_string_length = state.entities[self.weapon].deserialize(state, packetstr)
-        return struct.calcsize(">IIiiB")+weapon_string_length
+        try:
+            self.x, self.y, self.hspeed, self.vspeed = struct.unpack(">IIii", packetstr)
+            packetstr = packetstr[16:]
+            byte = struct.unpack(">B", packetstr)[0]
+            packetstr = packetstr[1:]
+            self.intel = byte & (1 << 0)
+            self.can_doublejump = byte & (1 << 1)
+            #self.sentry = byte & (1 << 2)
+            error = state.entites[self.weapon].deserialize(state, packetstr)
+            return error
+        except struct.error:
+            print("Error while deserializing character")
+            return 1
 
 class Scout(Character):
     # width, height of scout - rectangle collision

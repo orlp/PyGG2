@@ -30,7 +30,7 @@ class Networker(object):
         packet.sequence = 0
         packet.acksequence = 0
 
-        event = networking.event_serialize.Client_Event_Hello(self.sequence, client.player_name, client.server_password)
+        event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
         packet.events.append(event)
         data = packet.pack()
 
@@ -51,7 +51,7 @@ class Networker(object):
                 packet.sequence = 0
                 packet.acksequence = 0
 
-                event = networking.event_serialize.Client_Event_Hello(self.sequence, client.player_name, client.server_password)
+                event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
                 packet.events.append(event)
                 data = packet.pack()
 
@@ -80,10 +80,7 @@ class Networker(object):
             # only accept the packet if the sender is the server
             if sender == self.server_address:
                 for event in packet.events:
-                    if event.sequence <= self.acksequence:
-                        # Event is old, ignore it
-                        continue
-                    event_handler.eventhandlers[event.eventid](client, self, game, event)
+                    event_handler.eventhandlers[event.eventid](self, game, event)
             # otherwise drop the packet
             else:
                 print("RECEIVED PACKET NOT FROM ACTUAL SERVER ADDRESS:\nActual Server Address:"+str(self.server_address)+"\nPacket Address:"+str(sender))
