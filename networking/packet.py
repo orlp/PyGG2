@@ -22,7 +22,8 @@ class Packet(object):
 
         packetstr += struct.pack(">HH", self.sequence, self.acksequence)
 
-        for event in self.events:
+        for seq, event in self.events:
+            packetstr += struct.pack(">H", seq)
             packetstr += struct.pack(">B", event.eventid)
             packetstr += event.pack()
 
@@ -36,8 +37,8 @@ class Packet(object):
         packetstr = packetstr[struct.calcsize(">HH"):]
 
         while packetstr:
-            eventid = struct.unpack_from(">B", packetstr)[0]
-            packetstr = packetstr[struct.calcsize(">B"):]
+            sequence, eventid = struct.unpack_from(">HB", packetstr)
+            packetstr = packetstr[struct.calcsize(">HB"):]
 
             if self.sender == "client":
                 packet_event = object.__new__(event_serialize.clientevents[eventid])
@@ -49,9 +50,9 @@ class Packet(object):
 
             # Separate states and events
             if eventid in (constants.INPUTSTATE, constants.SNAPSHOT_UPDATE):
-                statedata.append(packet_event)
+                statedata.append((sequence, packet_event))
             else:
-                self.events.append(packet_event)
+                self.events.append((sequence, packet_event))
 
         # Append the state updates to the end of the normal event list.
         self.events += statedata

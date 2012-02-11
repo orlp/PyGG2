@@ -86,16 +86,19 @@ class Networker(object):
                 # recvfrom throws socket.error if there was no packet to read
                 break
 
-            try:
-                packet.unpack(data)
-            except:
-                # parse error, don't throw exception but print it
-                print("Parse error: %s" % sys.exc_info()[1])
-                continue # drop packet
+            #try:
+            packet.unpack(data)
+            #except:
+            #    # parse error, don't throw exception but print it
+            #    print("Parse error: %s" % sys.exc_info()[1])
+            #    continue # drop packet
 
             # only handle this packet if we know the player
             if sender in self.players:
-                for event in packet.events:
+                for seq, event in packet.events:
+                    if seq <= self.players[sender].server_acksequence:
+                        # Event has already been processed before, discard
+                        continue
                     try:
                         event_handler.eventhandlers[event.eventid](self, game, self.players[sender], event)
                     except KeyError:
@@ -109,8 +112,8 @@ class Networker(object):
                 self.sendbuffer = []# Clear the slate afterwards
 
             # or if someone wants to shake hands
-            elif packet.events[0].eventid == constants.EVENT_HELLO:
-                event = packet.events[0]
+            elif (packet.events[0])[1].eventid == constants.EVENT_HELLO:
+                event = (packet.events[0])[1]
                 if event.password == server.password:
                     newplayer = player.Player(self, game, event.name, sender)
                     newplayer.name = event.name
@@ -120,10 +123,11 @@ class Networker(object):
                             self.service_new_player(server, game, newplayer)
                         else:
                             join_event = networking.event_serialize.Server_Event_Player_Join(newplayer.id, newplayer.name)
-                            player_obj.events.append((player_obj.acksequence, join_event))
+                            player_obj.events.append((player_obj.sequence, join_event))
             # otherwise drop the packet
             else:
                 continue
 
             # ack the packet
-            self.players[sender].acksequence = packet.sequence
+            self.players[sender].server_acksequence = packet.sequence
+            self.players[sender].client_acksequence = packet.acksequence

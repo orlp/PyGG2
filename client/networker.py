@@ -15,7 +15,7 @@ class Networker(object):
         self.server_address = server_address
 
         self.events = []
-        self.sequence = 0
+        self.sequence = 1
         self.acksequence = 0
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -27,11 +27,11 @@ class Networker(object):
 
         # Connect to the server, or at least send the hello
         packet = networking.packet.Packet("client")
-        packet.sequence = 0
-        packet.acksequence = 0
+        packet.sequence = self.sequence
+        packet.acksequence = self.acksequence
 
         event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
-        packet.events.append(event)
+        packet.events.append((self.sequence, event))
         data = packet.pack()
 
         numbytes = self.socket.sendto(data, self.server_address)
@@ -48,11 +48,11 @@ class Networker(object):
                 self.connection_timeout_timer = constants.CLIENT_TIMEOUT
                 # Send a reminder, in case the first packet was lost
                 packet = networking.packet.Packet("client")
-                packet.sequence = 0
-                packet.acksequence = 0
+                packet.sequence = self.sequence
+                packet.acksequence = self.acksequence
 
                 event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
-                packet.events.append(event)
+                packet.events.append((self.sequence, event))
                 data = packet.pack()
 
                 numbytes = self.socket.sendto(data, self.server_address)
@@ -79,8 +79,11 @@ class Networker(object):
 
             # only accept the packet if the sender is the server
             if sender == self.server_address:
-                for event in packet.events:
-                    event_handler.eventhandlers[event.eventid](self, game, event)
+                for seq, event in packet.events:
+                    if seq <= self.acksequence:
+                        # Event has already been processed before, discard
+                        continue
+                    event_handler.eventhandlers[event.eventid](client, self, game, event)
             # otherwise drop the packet
             else:
                 print("RECEIVED PACKET NOT FROM ACTUAL SERVER ADDRESS:\nActual Server Address:"+str(self.server_address)+"\nPacket Address:"+str(sender))
@@ -112,9 +115,12 @@ class Networker(object):
         packet = networking.packet.Packet("client")
         packet.sequence = self.sequence
         packet.acksequence = self.acksequence
-        packet.events = [event[1] for event in self.events]
+
+        for seq, event in self.events:
+            packet.events.append((seq, event))
+
         # Prepend the input data
-        packet.events.insert(0, self.generate_inputdata(client))
+        packet.events.insert(0, (self.sequence, self.generate_inputdata(client)))
 
         packetstr = ""
         packetstr += packet.pack()

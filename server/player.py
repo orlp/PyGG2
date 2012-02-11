@@ -19,7 +19,8 @@ class Player(object):
         self.address = address
         self.events = []
         self.sequence = 1
-        self.acksequence = 0
+        self.server_acksequence = 0
+        self.client_acksequence = 0
         self.time_since_update = 0.0
 
         # register in networker
@@ -33,7 +34,7 @@ class Player(object):
         index = 0
         while index < len(self.events):
             seq, event = self.events[index]
-            if seq > self.acksequence:
+            if seq > self.client_acksequence:
                 # This (and all the following events) weren't acked yet. We're done.
                 break
             else:
@@ -50,12 +51,14 @@ class Player(object):
     def send_packet(self, networker, game):
         packet = networking.packet.Packet("server")
         packet.sequence = self.sequence
-        packet.acksequence = self.acksequence
-        packet.events = [event[1] for event in self.events]
+        packet.acksequence = self.server_acksequence
+
+        for seq, event in self.events:
+            packet.events.append((seq, event))
 
         # Put state data before event data, for better compression
         snapshot = networker.generate_snapshot_update(game)
-        packet.events.insert(0, snapshot)
+        packet.events.insert(0, (self.sequence, snapshot))
 
         data = ""
         data += packet.pack()# TODO: Compression would be here
