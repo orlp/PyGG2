@@ -38,8 +38,12 @@ class Networker(object):
 
         for playerid, player_obj in state.players.items():
             packetstr += player_obj.serialize_input()
-            character = state.entities[player_obj.character_id]
-            packetstr += character.serialize(state)
+            try:
+                character = state.entities[player_obj.character_id]
+                packetstr += character.serialize(state)
+            except KeyError:
+                # Character is dead
+                pass
 
         event = networking.event_serialize.Server_Event_Snapshot_Update(packetstr)
 

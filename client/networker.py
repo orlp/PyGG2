@@ -119,8 +119,6 @@ class Networker(object):
         packet.sequence = self.sequence
         packet.acksequence = self.client_acksequence
 
-        print(self.events)
-
         for seq, event in self.events:
             packet.events.append((seq, event))
 

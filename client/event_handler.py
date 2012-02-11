@@ -27,11 +27,11 @@ def Server_Event_Player_Join(client, networker, game, event):
 
 def Server_Event_Changeclass(client, networker, game, event):
     player = game.current_state.players[event.playerid]
-    player.nextclass = event.newclass
+    player.nextclass = function.convert_class(event.newclass)
 
 def Server_Event_Die(client, networker, game, event):
     player = game.current_state.players[event.playerid]
-    character = game.current_state.enities[player.character_id]
+    character = game.current_state.entities[player.character_id]
     character.die(game, game.current_state)
 
 def Server_Event_Spawn(client, networker, game, event):
@@ -43,9 +43,13 @@ def Server_Snapshot_Update(client, networker, game, event):
         length = player.deserialize_input(event.bytestr)
         event.bytestr = event.bytestr[length:]
 
-        character = state.entities[player.character_id]
-        length = character.deserialize(state, event.bytestr)
-        event.bytestr = event.bytestr[length:]
+        try:
+            character = state.entities[player.character_id]
+            length = character.deserialize(state, event.bytestr)
+            event.bytestr = event.bytestr[length:]
+        except KeyError:
+            # Character is dead
+            pass
 
 def Server_Full_Update(client, networker, game, event):
     numof_players = struct.unpack_from(">B", event.bytestr)[0]
