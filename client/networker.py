@@ -16,7 +16,8 @@ class Networker(object):
 
         self.events = []
         self.sequence = 1
-        self.acksequence = 0
+        self.server_acksequence = 0
+        self.client_acksequence = 0
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", 0))
@@ -28,7 +29,7 @@ class Networker(object):
         # Connect to the server, or at least send the hello
         packet = networking.packet.Packet("client")
         packet.sequence = self.sequence
-        packet.acksequence = self.acksequence
+        packet.acksequence = self.client_acksequence
 
         event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
         packet.events.append((self.sequence, event))
@@ -49,7 +50,7 @@ class Networker(object):
                 # Send a reminder, in case the first packet was lost
                 packet = networking.packet.Packet("client")
                 packet.sequence = self.sequence
-                packet.acksequence = self.acksequence
+                packet.acksequence = self.client_acksequence
 
                 event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
                 packet.events.append((self.sequence, event))
@@ -80,7 +81,7 @@ class Networker(object):
             # only accept the packet if the sender is the server
             if sender == self.server_address:
                 for seq, event in packet.events:
-                    if seq <= self.acksequence:
+                    if seq <= self.client_acksequence:
                         # Event has already been processed before, discard
                         continue
                     event_handler.eventhandlers[event.eventid](client, self, game, event)
@@ -90,13 +91,14 @@ class Networker(object):
                 continue
 
             # ack the packet
-            self.acksequence = packet.sequence
+            self.client_acksequence = packet.sequence
+            self.server_acksequence = packet.acksequence
 
             # Clear the acked stuff from the history
             index = 0
             while index < len(self.events):
                 seq, event = self.events[index]
-                if seq > self.acksequence:
+                if seq > self.server_acksequence:
                     # This (and all the following events) weren't acked yet. We're done.
                     break
                 else:
@@ -106,7 +108,8 @@ class Networker(object):
 
 
     def generate_inputdata(self, client):
-        packetstr = client.our_player.serialize_input()
+        our_player = client.game.current_state.players[client.our_player_id]
+        packetstr = our_player.serialize_input()
         event = networking.event_serialize.Client_Event_Inputstate(packetstr)
         return event
 
@@ -114,7 +117,9 @@ class Networker(object):
     def update(self, client):
         packet = networking.packet.Packet("client")
         packet.sequence = self.sequence
-        packet.acksequence = self.acksequence
+        packet.acksequence = self.client_acksequence
+
+        print(self.events)
 
         for seq, event in self.events:
             packet.events.append((seq, event))
@@ -124,5 +129,10 @@ class Networker(object):
 
         packetstr = ""
         packetstr += packet.pack()
+
+        numbytes = self.socket.sendto(packetstr, self.server_address)
+        if len(packetstr) != numbytes:
+            # TODO sane error handling
+            print("SERIOUS ERROR, NUMBER OF BYTES SENT != PACKET SIZE")
 
         self.sequence = (self.sequence + 1) % 65535

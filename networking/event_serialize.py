@@ -99,7 +99,7 @@ class Server_Event_Changeclass(object):
     def unpack(self, packetstr):
         self.playerid, self.newclass = struct.unpack_from(">HB", packetstr)
 
-        return struct.calc_size(">HB", packetstr)
+        return struct.calcsize(">HB")
 
 @clientevent
 class Client_Event_Changeclass(object):
@@ -162,14 +162,14 @@ class Client_Event_Inputstate(object):
         self.bytestr = bytestr
 
     def pack(self):
-        packetstr += struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
-        packetstr += bytestr
+        packetstr = struct.pack(">H", len(self.bytestr)) # TODO: Implement a better system that doesn't require this length, because it shouldn't be needed.
+        packetstr += self.bytestr
 
         return packetstr
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)[0]
-        bytestr = packetstr[:length]
+        self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
 

@@ -106,7 +106,7 @@ class Networker(object):
                         print("WARNING: Client sent invalid event:", type(event), event.eventid)
 
                 # Stick the new events to everyone
-                for player_obj in self.players:
+                for player_obj in self.players.values():
                     for event in self.sendbuffer:
                         player_obj.events.append((player_obj.sequence, event))
                 self.sendbuffer = []# Clear the slate afterwards
