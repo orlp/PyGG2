@@ -36,6 +36,7 @@ def Server_Event_Die(client, networker, game, event):
 
 def Server_Event_Spawn(client, networker, game, event):
     player = game.current_state.players[event.playerid]
+    player.spawn(game, game.current_state)
 
 def Server_Snapshot_Update(client, networker, game, event):
     state = game.current_state
