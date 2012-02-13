@@ -63,7 +63,7 @@ class Networker(object):
             except KeyError:
                 # The character does not exist yet.
                 # Send nextclass instead
-                current_class = player_obj.nextclass
+                current_class = function.convert_class(player_obj.nextclass)
                 character_exists = False
 
             packetstr += struct.pack(">32pBB", player_obj.name, current_class, character_exists)

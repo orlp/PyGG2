@@ -2,6 +2,7 @@ from __future__ import division, print_function
 
 import character
 import struct
+from networking import event_serialize
 
 class Player(object):
     def __init__(self, game, state, id):
@@ -19,18 +20,21 @@ class Player(object):
 
         self.nextclass = character.Scout
         self.character_id = None
-        self.spawn(game, state)# FIXME: Remove this
         self.respawntimer = 0
         self.name = "Test name"
 
-    # FIXME: Make this actually get executed
     def step(self, game, state, frametime):
-        # FIXME: Make this dependent on server input, and not executed on the client.
-        if self.character_id == None:# If the character is dead
-            if self.respawntimer <= 0:
-                self.spawn(self, game, state)# Respawn
-            else:
-                self.respawntimer -= frametime
+        # Only do this on the server
+        if game.isserver:
+            if self.character_id == None:# If the character is dead
+                if self.respawntimer <= 0:
+                    # Respawn
+                    self.spawn(game, state)
+                    # Send it to everyone
+                    spawn_event = event_serialize.Server_Event_Spawn(self.id, 2300, 50)
+                    game.networker.sendbuffer.append(spawn_event)
+                else:
+                    self.respawntimer -= frametime
 
     def spawn(self, game, state):
         if self.character_id != None:

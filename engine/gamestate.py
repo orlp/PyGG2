@@ -15,6 +15,7 @@ class Gamestate(object):
         self.time += frametime
 
         for entity in self.entities.values(): entity.beginstep(game, self, frametime)
+        for player in self.players.values(): player.step(game, self, frametime)
         for entity in self.entities.values(): entity.step(game, self, frametime)
         for entity in self.entities.values(): entity.endstep(game, self, frametime)
 

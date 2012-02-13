@@ -14,6 +14,7 @@ class Game:
     def __init__(self):
         self.maxplayers = 8
         self.servername = ""
+        self.isserver = False
 
         # map data
         self.map = map.Map(self, "twodforttwo_remix")

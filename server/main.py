@@ -28,6 +28,7 @@ class Server(object):
         # create game engine object
         self.game = engine.game.Game()
         self.game.servername = self.name
+        self.game.isserver = True
 
         # create packet handler
         self.networker = networker.Networker(self.port)

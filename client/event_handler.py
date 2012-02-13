@@ -63,9 +63,8 @@ def Server_Full_Update(client, networker, game, event):
         player.nextclass = function.convert_class(player_class)
         event.bytestr = event.bytestr[33:]
 
-        # TODO: Make spawning not instant
-        #if character_exists:
-        # player.spawn(game, game.current_state)
+        if character_exists:
+            player.spawn(game, game.current_state)
 
 
 # Gather the functions together to easily be called by the event ID
