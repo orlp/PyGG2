@@ -15,6 +15,7 @@ class Networker(object):
         self.server_address = server_address
 
         self.events = []
+        self.sendbuffer = []
         self.sequence = 1
         self.server_acksequence = 0
         self.client_acksequence = 0
@@ -116,6 +117,11 @@ class Networker(object):
 
 
     def update(self, client):
+        # Unload the whole sendbuffer here, and add the sequence
+        for event in self.sendbuffer:
+            self.events.append((self.sequence, event))
+        self.sendbuffer = []
+
         packet = networking.packet.Packet("client")
         packet.sequence = self.sequence
         packet.acksequence = self.client_acksequence

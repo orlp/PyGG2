@@ -48,7 +48,7 @@ class Server(object):
 
             self.networker.recieve(self, self.game)
 
-            self.game.update(frametime)
+            self.game.update(self.networker, frametime)
 
             self.networker.update(self, self.game, frametime)
 

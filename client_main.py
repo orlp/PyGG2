@@ -126,7 +126,7 @@ class Client(object):
                 self.fpscounter_accumulator += frame_time
 
                 self.networker.recieve(self.game, self)
-                self.game.update(frame_time)
+                self.game.update(self.networker, frame_time)
                 self.networker.update(self)
                 self.renderer.render(self, self.game, frame_time)
 

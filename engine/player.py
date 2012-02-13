@@ -32,7 +32,7 @@ class Player(object):
                     self.spawn(game, state)
                     # Send it to everyone
                     spawn_event = event_serialize.Server_Event_Spawn(self.id, 2300, 50)
-                    game.networker.sendbuffer.append(spawn_event)
+                    game.sendbuffer.append(spawn_event)
                 else:
                     self.respawntimer -= frametime
 

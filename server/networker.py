@@ -28,8 +28,15 @@ class Networker(object):
     def update(self, server, game, frametime):
         # update everyone
         for address, player_obj in self.players.items():
+            # Give them the new events
+            for event in self.sendbuffer:
+                player_obj.events.append((player_obj.sequence, event))
+
             # Let each of the players decide whether to send something
             player_obj.update(self, game, frametime)
+
+        # Clear the slate afterwards
+        self.sendbuffer = []
 
 
     def generate_snapshot_update(self, game):
@@ -108,12 +115,6 @@ class Networker(object):
                     except KeyError:
                         # Invalid event; ignore
                         print("WARNING: Client sent invalid event:", type(event), event.eventid)
-
-                # Stick the new events to everyone
-                for player_obj in self.players.values():
-                    for event in self.sendbuffer:
-                        player_obj.events.append((player_obj.sequence, event))
-                self.sendbuffer = []# Clear the slate afterwards
 
             # or if someone wants to shake hands
             elif (packet.events[0])[1].eventid == constants.EVENT_HELLO:

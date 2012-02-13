@@ -23,10 +23,13 @@ class Game:
         self.current_state = gamestate.Gamestate()
         self.previous_state = self.current_state.copy()
 
+        # This is a hack to allow game objects to append stuff to the networking event queue
+        self.sendbuffer = []
+
         # this accumulator is used to update the engine in fixed timesteps
         self.accumulator = 0.0
 
-    def update(self, frametime):
+    def update(self, networker, frametime):
         self.accumulator += frametime
 
         while self.accumulator >= constants.PHYSICS_TIMESTEP:
@@ -34,3 +37,5 @@ class Game:
 
             self.previous_state = self.current_state.copy()
             self.current_state.update(self, constants.PHYSICS_TIMESTEP)
+            networker.sendbuffer += self.sendbuffer
+            self.sendbuffer = []
