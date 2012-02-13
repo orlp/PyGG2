@@ -69,16 +69,17 @@ class Player(object):
         aim = int((self.aimdirection % 360) / 360 * 65535)
 
         bytestr = struct.pack(">BH", keybyte, aim)
+
         return bytestr
 
     def deserialize_input(self, bytestr):
         keybyte, aim = struct.unpack_from(">BH", bytestr)
 
-        self.left = keybyte & (1 << 0)
-        self.right = keybyte & (1 << 1)
-        self.up = keybyte & (1 << 2)
-        self.leftmouse = keybyte & (1 << 3)
-        self.rightmouse = keybyte & (1 << 4)
+        self.left = (keybyte & (1 << 0) > 0)
+        self.right = (keybyte & (1 << 1) > 0)
+        self.up = (keybyte & (1 << 2) > 0)
+        self.leftmouse = (keybyte & (1 << 3) > 0)
+        self.rightmouse = (keybyte & (1 << 4) > 0)
 
         self.aimdirection = aim * 360 / 65535
 
