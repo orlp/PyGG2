@@ -56,6 +56,8 @@ class Character(entity.MovingObject):
 
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
 
+        #print(self.x, self.y)
+
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True

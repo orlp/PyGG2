@@ -169,6 +169,7 @@ class Client_Event_Inputstate(object):
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)[0]
+        packetstr = packetstr[2:]
         self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
@@ -188,6 +189,7 @@ class Server_Event_Snapshot_Update(object):
 
     def unpack(self, packetstr):
         length = struct.unpack_from(">H", packetstr)[0]
+        packetstr = packetstr[2:]
         self.bytestr = packetstr[:length]
 
         return struct.calcsize(">H")+length
