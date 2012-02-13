@@ -97,6 +97,7 @@ class Networker(object):
                 # recvfrom throws socket.error if there was no packet to read
                 break
 
+            # FIXME: Uncomment these as soon as networking debugging is done. I commented this out because it messed with Traceback.
             #try:
             packet.unpack(data)
             #except:
