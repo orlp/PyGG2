@@ -51,7 +51,7 @@ class Networker(object):
                 # Character is dead
                 pass
 
-        event = networking.event_serialize.Server_Event_Snapshot_Update(packetstr)
+        event = networking.event_serialize.ServerEventSnapshotUpdate(packetstr)
 
         return event
 
@@ -74,12 +74,12 @@ class Networker(object):
 
             packetstr += struct.pack(">32pBB", player_obj.name, current_class, character_exists)
 
-        event = networking.event_serialize.Server_Event_Full_Update(packetstr)
+        event = networking.event_serialize.ServerEventFullUpdate(packetstr)
         return event
 
 
     def service_new_player(self, server, game, newplayer):
-        hello_event = networking.event_serialize.Server_Event_Hello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
+        hello_event = networking.event_serialize.ServerEventHello(server.name, server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
         newplayer.events.append((newplayer.sequence, hello_event))
 
         update = self.generate_full_update(game)
@@ -127,7 +127,7 @@ class Networker(object):
                         if player_obj == newplayer:
                             self.service_new_player(server, game, newplayer)
                         else:
-                            join_event = networking.event_serialize.Server_Event_Player_Join(newplayer.id, newplayer.name)
+                            join_event = networking.event_serialize.ServerEventPlayerJoin(newplayer.id, newplayer.name)
                             player_obj.events.append((player_obj.sequence, join_event))
             # otherwise drop the packet
             else:

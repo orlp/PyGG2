@@ -27,7 +27,7 @@ def Client_Event_Changeclass(networker, game, senderplayer, event):
 
     # Resurrect him with new class. FIXME: REMOVE THIS
     player.spawn(game, game.current_state)
-    spawn_event = event_serialize.Server_Event_Spawn(player.id, 2300, 50)
+    spawn_event = event_serialize.ServerEventSpawn(player.id, 2300, 50)
     networker.sendbuffer.append(spawn_event)
 
 def Client_Event_Jump(networker, game, senderplayer, event):

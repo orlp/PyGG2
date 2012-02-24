@@ -16,7 +16,7 @@ def serverevent(cls):
     return cls
 
 @serverevent
-class Server_Event_Player_Join(object):
+class ServerEventPlayerJoin(object):
     eventid = constants.EVENT_PLAYER_JOIN
 
     def __init__(self, id, name):
@@ -32,7 +32,7 @@ class Server_Event_Player_Join(object):
         return struct.calcsize(">H32p")
 
 @clientevent
-class Client_Event_Hello(object):
+class ClientEventHello(object):
     eventid = constants.EVENT_HELLO
 
     def __init__(self, name, password):
@@ -47,7 +47,7 @@ class Client_Event_Hello(object):
         return struct.calcsize(">32p32p")
 
 @serverevent
-class Server_Event_Hello(object):
+class ServerEventHello(object):
     eventid = constants.EVENT_HELLO
 
     def __init__(self, servername, maxplayers, mapname, version):
@@ -67,7 +67,7 @@ class Server_Event_Hello(object):
         return struct.calcsize(">32pB64pH")
 
 @clientevent
-class Client_Event_Jump(object):
+class ClientEventJump(object):
     eventid = constants.EVENT_JUMP
 
     def __init__(self, time):
@@ -84,7 +84,7 @@ class Client_Event_Jump(object):
         return struct.calcsize(">I")
 
 @serverevent
-class Server_Event_Changeclass(object):
+class ServerEventChangeclass(object):
     eventid = constants.EVENT_PLAYER_CHANGECLASS
 
     def __init__(self, playerid, newclass):
@@ -102,7 +102,7 @@ class Server_Event_Changeclass(object):
         return struct.calcsize(">HB")
 
 @clientevent
-class Client_Event_Changeclass(object):
+class ClientEventChangeclass(object):
     eventid = constants.EVENT_PLAYER_CHANGECLASS
 
     def __init__(self, newclass):
@@ -119,7 +119,7 @@ class Client_Event_Changeclass(object):
         return struct.calcsize(">B")
 
 @serverevent
-class Server_Event_Spawn(object):
+class ServerEventSpawn(object):
     eventid = constants.EVENT_PLAYER_SPAWN
 
     def __init__(self, playerid, x, y):
@@ -138,7 +138,7 @@ class Server_Event_Spawn(object):
         return struct.calcsize(">BII")
 
 @serverevent
-class Server_Event_Die(object):
+class ServerEventDie(object):
     eventid = constants.EVENT_PLAYER_DIE
 
     def __init__(self, playerid):
@@ -155,7 +155,7 @@ class Server_Event_Die(object):
         return struct.calcsize(">B")
 
 @clientevent
-class Client_Event_Inputstate(object):
+class ClientEventInputstate(object):
     eventid = constants.INPUTSTATE
 
     def __init__(self, bytestr):
@@ -175,7 +175,7 @@ class Client_Event_Inputstate(object):
         return struct.calcsize(">H")+length
 
 @serverevent
-class Server_Event_Snapshot_Update(object):
+class ServerEventSnapshotUpdate(object):
     eventid = constants.SNAPSHOT_UPDATE
 
     def __init__(self, bytestr):
@@ -195,7 +195,7 @@ class Server_Event_Snapshot_Update(object):
         return struct.calcsize(">H")+length
 
 @serverevent
-class Server_Event_Full_Update(object):
+class ServerEventFullUpdate(object):
     eventid = constants.FULL_UPDATE
 
     def __init__(self, bytestr):

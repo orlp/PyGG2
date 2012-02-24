@@ -44,6 +44,7 @@ class Client(object):
 
         # Create the networking-handler
         self.networker = client.networker.Networker(('127.0.0.1', 8190), self) # FIXME: Remove these values, and replace with something easier.
+        self.network_update_timer = 0
 
 
     def start_game(self):
@@ -127,8 +128,13 @@ class Client(object):
 
                 self.networker.recieve(self.game, self)
                 self.game.update(self.networker, frame_time)
-                self.networker.update(self)
                 self.renderer.render(self, self.game, frame_time)
+
+                if self.network_update_timer >= constants.INPUT_SEND_FPS:
+                    self.networker.update(self)
+                    self.network_update_timer = 0
+                else:
+                    self.network_update_timer += frame_time
 
                 if self.fpscounter_accumulator > 0.5:
                     self.window.set_title("PyGG2 - %d FPS" % self.window.get_fps())
