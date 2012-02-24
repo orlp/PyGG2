@@ -10,16 +10,19 @@ from networking import event_serialize
 def Client_Event_Changeclass(networker, game, senderplayer, event):
     player = game.current_state.players[senderplayer.id]
     # TODO: If any, add classlimits here
-    player.nextclass = function.convert_class(event.newclass)
+    newclass = function.convert_class(event.newclass)
+    if player.nextclass == newclass:
+        return
+    player.nextclass = newclass
 
-    classchange_event = event_serialize.Server_Event_Changeclass(senderplayer.id, event.newclass)
+    classchange_event = event_serialize.ServerEventChangeclass(senderplayer.id, event.newclass)
     networker.sendbuffer.append(classchange_event)
 
     # Kill the character
     try:
         character = game.current_state.entities[player.character_id]
         character.die(game, game.current_state)
-        death_event = event_serialize.Server_Event_Die(player.id)
+        death_event = event_serialize.ServerEventDie(player.id)
         networker.sendbuffer.append(death_event)
     except KeyError:
         # Character is already dead, we don't need to do anything here
