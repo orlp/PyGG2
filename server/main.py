@@ -47,11 +47,8 @@ class Server(object):
             frametime = min(0.25, frametime) # a limit of 0.25 seconds to prevent complete breakdown
 
             self.networker.recieve(self, self.game)
-
             self.game.update(self.networker, frametime)
-
             self.networker.update(self, self.game, frametime)
-
             self.lobbyannouncer.update(self, frametime)
 
 

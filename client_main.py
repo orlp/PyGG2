@@ -97,22 +97,22 @@ class Client(object):
                 our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
 
                 if self.window.is_key_pressed(key._1):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_SCOUT)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SCOUT)
                     self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._2):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_PYRO)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_PYRO)
                     self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._3):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_SOLDIER)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SOLDIER)
                     self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._4):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_HEAVY)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_HEAVY)
                     self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._7):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_ENGINEER)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_ENGINEER)
                     self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._8):
-                    event = networking.event_serialize.Client_Event_Changeclass(constants.CLASS_SPY)
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
                     self.networker.events.append((self.networker.sequence, event))
 
                 # did we just release the F11 button? if yes, go fullscreen

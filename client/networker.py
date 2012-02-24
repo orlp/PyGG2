@@ -32,7 +32,7 @@ class Networker(object):
         packet.sequence = self.sequence
         packet.acksequence = self.client_acksequence
 
-        event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
+        event = networking.event_serialize.ClientEventHello(client.player_name, client.server_password)
         packet.events.append((self.sequence, event))
         data = packet.pack()
 
@@ -53,7 +53,7 @@ class Networker(object):
                 packet.sequence = self.sequence
                 packet.acksequence = self.client_acksequence
 
-                event = networking.event_serialize.Client_Event_Hello(client.player_name, client.server_password)
+                event = networking.event_serialize.ClientEventHello(client.player_name, client.server_password)
                 packet.events.append((self.sequence, event))
                 data = packet.pack()
 
@@ -112,7 +112,7 @@ class Networker(object):
     def generate_inputdata(self, client):
         our_player = client.game.current_state.players[client.our_player_id]
         packetstr = our_player.serialize_input()
-        event = networking.event_serialize.Client_Event_Inputstate(packetstr)
+        event = networking.event_serialize.ClientEventInputstate(packetstr)
         return event
 
 
