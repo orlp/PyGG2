@@ -10,7 +10,7 @@ class MapRenderer(object):
         self.set_map(mapname)
 
     def set_map(self, mapname):
-        self.sprite = pygrafix.sprite.Sprite(function.load_image("maps/" + mapname))
+        self.sprite = pygrafix.sprite.Sprite(pygrafix.image.load("maps/" + mapname + ".png"))
         self.sprite.scale = 6
 
     def render(self, renderer, state):

@@ -40,26 +40,6 @@ def interpolate_angle(a, b, alpha):
 
     return (a + alpha * (b - a)) % 360
 
-# prevent double-loading, only load a filename once
-images = {}
-def load_image(filename):
-    if filename in images:
-        return images[filename].copy()
-
-    # first try to load the sprite from the sprite folder, fall back to our zipped sprites
-    # this allows users to override sprites, and makes testing/developing easier
-    try:
-        image = pygrafix.image.load(spritesfolder + filename + ".png")
-    except:
-        sprites = zipfile.ZipFile(spriteszip, "r")
-        spritefile = cStringIO.StringIO(sprites.open("sprites/" + filename + ".png", "r").read())
-        image = pygrafix.image.load("sprites/" + filename + ".png", spritefile)
-        spritefile.close()
-
-    images[filename] = image
-
-    return image
-
 masks = {}
 def load_mask(filename, give_orig=False):
     if filename in masks:

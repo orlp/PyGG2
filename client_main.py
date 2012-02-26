@@ -30,6 +30,12 @@ def get_input(window):
         "right": window.is_key_pressed(key.D),
     }
 
+# add resource locations
+if os.path.isdir("sprites"):
+    pygrafix.resource.add_location("sprites")
+if os.path.isfile("sprites.zip"):
+    pygrafix.resource.add_location("sprites.zip")
+
 # the main client class
 class Client(object):
     def __init__(self):
@@ -118,7 +124,7 @@ class Client(object):
 
                 # did we just release the F11 button? if yes, go fullscreen
                 if self.window.is_key_pressed(key.F11):
-                    self.window.toggle_fullscreen()
+                    self.window.fullscreen = not self.window.fullscreen
 
                 # update the game and render
                 frame_time = self.clock.tick()
@@ -137,7 +143,7 @@ class Client(object):
                     self.network_update_timer += frame_time
 
                 if self.fpscounter_accumulator > 0.5:
-                    self.window.set_title("PyGG2 - %d FPS" % self.window.get_fps())
+                    self.window.title = "PyGG2 - %d FPS" % self.window.get_fps()
                     self.fpscounter_accumulator = 0.0
 
                 self.window.flip()

@@ -49,13 +49,13 @@ class GameRenderer(object):
             engine.projectile.Rocket: projectile_renderer.RocketRenderer()
         }
 
-        self.world_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
-        self.hud_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
+        self.world_sprites = []
+        self.hud_sprites = []
 
     def render(self, client, game, frametime):
         # reset spritegroups
-        self.world_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
-        self.hud_sprites = pygrafix.sprite.SpriteGroup(scale_smoothing = False)
+        self.world_sprites = []
+        self.hud_sprites = []
 
         self.window = client.window
         alpha = game.accumulator / constants.PHYSICS_TIMESTEP
@@ -92,8 +92,8 @@ class GameRenderer(object):
         for entity in self.interpolated_state.entities.values():
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
 
-        self.world_sprites.draw()
-        self.hud_sprites.draw()
+        pygrafix.sprite.draw_batch(self.world_sprites, scale_smoothing = False)
+        pygrafix.sprite.draw_batch(self.hud_sprites, scale_smoothing = False)
 
     def get_screen_coords(self, x, y):
         # calculate drawing position

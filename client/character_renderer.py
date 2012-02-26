@@ -30,47 +30,47 @@ class ClassRenderer(object):
 
         sprite.position = renderer.get_screen_coords(character.x, character.y)
 
-        renderer.world_sprites.add_sprite(sprite)
+        renderer.world_sprites.append(sprite)
 
 
 class ScoutRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/scoutreds/%s" % i) for i in range(4)]
+        self.sprites = [pygrafix.image.load("characters/scoutreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
         self.spriteoffset_flipped = (28, 30)
 
 class PyroRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/pyroreds/%s" % i) for i in range(4)]
-        
+        self.sprites = [pygrafix.image.load("characters/pyroreds/%s.png" % i) for i in range(4)]
+
         self.spriteoffset = (24, 30)
         self.spriteoffset_flipped = (28, 30)
 
 class SoldierRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/soldierreds/%s" % i) for i in range(4)]
+        self.sprites = [pygrafix.image.load("characters/soldierreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
         self.spriteoffset_flipped = (28, 30)
 
 class HeavyRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/heavyreds/%s" % i) for i in range(4)]
+        self.sprites = [pygrafix.image.load("characters/heavyreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (14, 30)
         self.spriteoffset_flipped = (36, 30)
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/engineerreds/%s" % i) for i in range(4)]
+        self.sprites = [pygrafix.image.load("characters/engineerreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (26, 30)
         self.spriteoffset_flipped = (26, 30)
 
 class SpyRenderer(ClassRenderer):
     def __init__(self):
-        self.sprites = [function.load_image("characters/spyreds/%s" % i) for i in range(4)]
+        self.sprites = [pygrafix.image.load("characters/spyreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (22, 30)
         self.spriteoffset_flipped = (30, 30)
