@@ -50,21 +50,22 @@ class ClientEventHello(object):
 class ServerEventHello(object):
     eventid = constants.EVENT_HELLO
 
-    def __init__(self, servername, maxplayers, mapname, version):
+    def __init__(self, servername, numplayers, maxplayers, mapname, version):
         self.servername = servername
+        self.numplayers = numplayers
         self.maxplayers = maxplayers
         self.mapname = mapname
         self.version = version
 
     def pack(self):
-        packetstr = struct.pack(">32pB64pH", self.servername, self.maxplayers, self.mapname, self.version)
+        packetstr = struct.pack(">32pBB64pH", self.servername, self.numplayers, self.maxplayers, self.mapname, self.version)
 
         return packetstr
 
     def unpack(self, packetstr):
-        self.servername, self.maxplayers, self.mapname, self.version = struct.unpack_from(">32pB64pH", packetstr)
+        self.servername, self.numplayers, self.maxplayers, self.mapname, self.version = struct.unpack_from(">32pBB64pH", packetstr)
 
-        return struct.calcsize(">32pB64pH")
+        return struct.calcsize(">32pBB64pH")
 
 @clientevent
 class ClientEventJump(object):

@@ -47,7 +47,7 @@ class Client(object):
         self.network_update_timer = 0
 
 
-    def start_game(self):
+    def start_game(self, player_id):
         # Only start the game once the networker has confirmed a connection with the server
 
         # keep state of keys stored for one frame so we can detect down/up events
@@ -56,7 +56,7 @@ class Client(object):
 
         # TODO REMOVE THIS
         # create player
-        self.our_player_id = engine.player.Player(self.game, self.game.current_state, 0).id
+        self.our_player_id = engine.player.Player(self.game, self.game.current_state, player_id).id
         self.spectator = client.spectator.Spectator(self.our_player_id)
 
         # create renderer object
