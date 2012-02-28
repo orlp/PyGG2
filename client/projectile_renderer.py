@@ -8,7 +8,7 @@ import function
 
 class ShotRenderer(object):
     def __init__(self):
-        self.shotsprite = function.load_image("projectiles/shots/0")
+        self.shotsprite = pygrafix.image.load("projectiles/shots/0.png")
 
     def render(self, renderer, game, state, shot):
         sprite = pygrafix.sprite.Sprite(self.shotsprite)
@@ -19,7 +19,7 @@ class ShotRenderer(object):
 
         sprite.position = renderer.get_screen_coords(shot.x, shot.y)
 
-        renderer.world_sprites.add_sprite(sprite)
+        renderer.world_sprites.append(sprite)
 
 class FlameRenderer(object):
     def __init__(self):
@@ -27,9 +27,9 @@ class FlameRenderer(object):
         self.currentindex = -1
         self.flamesprite = [0,1,2]
 
-        self.flamesprite[0] = function.load_image("projectiles/flames/0")
-        self.flamesprite[1] = function.load_image("projectiles/flames/1")
-        self.flamesprite[2] = function.load_image("projectiles/flames/2")
+        self.flamesprite[0] = pygrafix.image.load("projectiles/flames/0.png")
+        self.flamesprite[1] = pygrafix.image.load("projectiles/flames/1.png")
+        self.flamesprite[2] = pygrafix.image.load("projectiles/flames/2.png")
 
     def render(self, renderer, game, state, flame):
         #sprite animation
@@ -49,7 +49,7 @@ class FlameRenderer(object):
 
 class RocketRenderer(object):
     def __init__(self):
-        self.rocketsprite = function.load_image("projectiles/rockets/0")
+        self.rocketsprite = pygrafix.image.load("projectiles/rockets/0.png")
 
     def render(self, renderer, game, state, rocket):
         sprite = pygrafix.sprite.Sprite(self.rocketsprite)

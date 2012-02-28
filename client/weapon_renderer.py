@@ -6,7 +6,6 @@ import pygrafix
 import function
 
 class WeaponRenderer(object):
-
     def __init__(self):
         pass
 
@@ -30,7 +29,7 @@ class WeaponRenderer(object):
         sprite.anchor = weapon_rotate
         sprite.rotation = 360 - weapon.direction
 
-        renderer.world_sprites.add_sprite(sprite)
+        renderer.world_sprites.append(sprite)
 
 class ScattergunRenderer(WeaponRenderer):
     weapon_rotate_point = (5, 6) # where is the handle of the gun, where to rotate around
@@ -39,18 +38,18 @@ class ScattergunRenderer(WeaponRenderer):
     weaponoffset_flipped = (7, 10)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/scatterguns/0")
-        self.firingsprite = function.load_image("weapons/scatterguns/2")
+        self.weaponsprite = pygrafix.image.load("weapons/scatterguns/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/scatterguns/2.png")
 
 class FlamethrowerRenderer(WeaponRenderer):
     weapon_rotate_point = (8, 2) #Where is the handle of the gun, where to rotate around
     weapon_rotate_flipped = (8,8)
     weaponoffset = (4, 11) #Where the character should carry it's gun
     weaponoffset_flipped = (8, 11)
-    
+
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/flamethrowers/0")
-        self.firingsprite = function.load_image("weapons/flamethrowers/2")
+        self.weaponsprite = pygrafix.image.load("weapons/flamethrowers/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/flamethrowers/2.png")
 
 class RocketlauncherRenderer(WeaponRenderer):
     weapon_rotate_point = (10, 6) # where is the handle of the gun, where to rotate around
@@ -59,8 +58,8 @@ class RocketlauncherRenderer(WeaponRenderer):
     weaponoffset_flipped = (12, 7)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/rocketlaunchers/0")
-        self.firingsprite = function.load_image("weapons/rocketlaunchers/2")
+        self.weaponsprite = pygrafix.image.load("weapons/rocketlaunchers/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/rocketlaunchers/2.png")
 
 class MinigunRenderer(WeaponRenderer):
     weapon_rotate_point = (14, 3) # where is the handle of the gun, where to rotate around
@@ -69,8 +68,8 @@ class MinigunRenderer(WeaponRenderer):
     weaponoffset_flipped = (8, 10)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/miniguns/0")
-        self.firingsprite = function.load_image("weapons/miniguns/2")
+        self.weaponsprite = pygrafix.image.load("weapons/miniguns/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/miniguns/2.png")
 
 class ShotgunRenderer(WeaponRenderer):
     weapon_rotate_point = (10, -1) # where is the handle of the gun, where to rotate around
@@ -79,8 +78,8 @@ class ShotgunRenderer(WeaponRenderer):
     weaponoffset_flipped = (2, 9)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/shotguns/0")
-        self.firingsprite = function.load_image("weapons/shotguns/2")
+        self.weaponsprite = pygrafix.image.load("weapons/shotguns/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/shotguns/2.png")
 
 class RevolverRenderer(WeaponRenderer):
     weapon_rotate_point = (-1, 6) # where is the handle of the gun, where to rotate around
@@ -89,8 +88,8 @@ class RevolverRenderer(WeaponRenderer):
     weaponoffset_flipped = (8, 9)
 
     def __init__(self):
-        self.weaponsprite = function.load_image("weapons/revolver2s/0")
-        self.firingsprite = function.load_image("weapons/revolver2s/2")
+        self.weaponsprite = pygrafix.image.load("weapons/revolver2s/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/revolver2s/2.png")
 
     def render(self, renderer, game, state, weapon):
         if not state.entities[weapon.owner].cloaking:#FIXME: or player.team == out team
