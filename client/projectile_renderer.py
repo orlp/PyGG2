@@ -45,7 +45,7 @@ class FlameRenderer(object):
 
         sprite.position = renderer.get_screen_coords(flame.x,flame.y)
 
-        renderer.world_sprites.add_sprite(sprite)
+        renderer.world_sprites.append(sprite)
 
 class RocketRenderer(object):
     def __init__(self):
@@ -59,4 +59,4 @@ class RocketRenderer(object):
 
         sprite.position = renderer.get_screen_coords(rocket.x, rocket.y)
 
-        renderer.world_sprites.add_sprite(sprite)
+        renderer.world_sprites.append(sprite)

@@ -176,6 +176,7 @@ class Flame(entity.MovingObject):
 
         #calculate direction
         self.direction = function.point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
+        print(self.direction)
 
     def endstep(self, game, state, frametime):
         super(Flame, self).endstep(game, state, frametime)
