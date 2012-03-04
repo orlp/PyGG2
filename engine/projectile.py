@@ -147,7 +147,7 @@ class Rocket(entity.MovingObject):
 
 class Flame(entity.MovingObject):
     flame_hitmasks = {}
-    max_flight_time = 0.5 - random.randint(0, 3)/10
+    max_flight_time = 1/2
     damage = 3.3
 
     def __init__(self, game, state, sourceweapon):
@@ -163,20 +163,16 @@ class Flame(entity.MovingObject):
         self.x = srcchar.x
         self.y = srcchar.y
 
-        self.direction = srcwep.direction
+        self.direction = (srcwep.direction + (10-random.randint(0, 20))) % 360
 
-        self.speed = (500/13)*(5+random.randint(0,5))
-        self.hspeed = math.cos(math.radians(self.direction)) * self.speed
-        self.vspeed = math.cos(math.radians(self.direction)) * -self.speed
+        self.speed = 150 + random.randint(0, 150)
+        self.hspeed = math.cos(math.radians(self.direction)) * self.speed + srcchar.hspeed
+        self.vspeed = math.sin(math.radians(self.direction)) * -self.speed + srcchar.vspeed
+
 
     def step(self, game, state, frametime):
-        self.speed += 30 # Copied from GMK-GG2; should simulate some very basic acceleration+air resistance.
         #Gravitational force
-        self.vspeed -= 4.5
-
-        #calculate direction
-        self.direction = function.point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
-        print(self.direction)
+        self.vspeed += 4.5*frametime
 
     def endstep(self, game, state, frametime):
         super(Flame, self).endstep(game, state, frametime)
