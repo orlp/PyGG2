@@ -83,6 +83,9 @@ class Client(object):
 
                 # check if user exited the game
                 if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
+                    #clear buffer, send disconnect, and kiss and fly
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
+                    self.networker.events.append((self.networker.sequence, event))
                     break
 
                 # handle input
@@ -152,6 +155,7 @@ class Client(object):
 
     def quit(self):
         # clean up
+        self.networker.update(self)
         self.window.close()
 
 def profileGG2():
