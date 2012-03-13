@@ -62,7 +62,7 @@ def Server_Full_Update(client, networker, game, event):
 
         player.name, player_class, character_exists = struct.unpack_from(">32pBB", event.bytestr)
         player.nextclass = function.convert_class(player_class)
-        event.bytestr = event.bytestr[33:]
+        event.bytestr = event.bytestr[34:]
 
         if character_exists:
             player.spawn(game, game.current_state)
