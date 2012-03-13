@@ -84,7 +84,7 @@ class Client(object):
                 # check if user exited the game
                 if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
                     #clear buffer, send disconnect, and kiss and fly
-                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
+                    event = networking.event_serialize.ClientEventDisconnect()
                     self.networker.events.append((self.networker.sequence, event))
                     break
 
@@ -124,6 +124,9 @@ class Client(object):
                 elif self.window.is_key_pressed(key._8):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
                     self.networker.events.append((self.networker.sequence, event))
+               # elif self.window.is_key_pressed(key._9):
+                  #  event = networking.event_serialize.ClientEventDisconnect()
+                   # self.networker.events.append((self.networker.sequence, event))
 
                 # did we just release the F11 button? if yes, go fullscreen
                 if self.window.is_key_pressed(key.F11):

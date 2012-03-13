@@ -67,6 +67,10 @@ def Server_Full_Update(client, networker, game, event):
         if character_exists:
             player.spawn(game, game.current_state)
 
+def Server_Event_Disconnect(client, networker, game, event):
+    player = game.current_state.players[event.playerid]
+    print (str(player.name) +" has disconnected")
+    #to do: actually disconnect player
 
 # Gather the functions together to easily be called by the event ID
 eventhandlers = {}
@@ -77,3 +81,4 @@ eventhandlers[constants.EVENT_PLAYER_DIE] = Server_Event_Die
 eventhandlers[constants.EVENT_PLAYER_SPAWN] = Server_Event_Spawn
 eventhandlers[constants.SNAPSHOT_UPDATE] = Server_Snapshot_Update
 eventhandlers[constants.FULL_UPDATE] = Server_Full_Update
+eventhandlers[constants.EVENT_PLAYER_DISCONNECT] = Server_Event_Disconnect 

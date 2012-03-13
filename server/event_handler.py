@@ -42,9 +42,14 @@ def Client_Inputstate(networker, game, senderplayer, event):
     player = game.current_state.players[senderplayer.id]
     player.deserialize_input(event.bytestr)
 
+def Client_Event_Disconnect(networker, game, senderplayer, event):
+    player = game.current_state.players[senderplayer.id]
+    print (str(player.name) +" has disconnected")
+    #to do: actually disconnect player
 
 # Gather the functions together to easily be called by the event ID
 eventhandlers = {}
 eventhandlers[constants.EVENT_PLAYER_CHANGECLASS] = Client_Event_Changeclass
 eventhandlers[constants.EVENT_JUMP] = Client_Event_Jump
 eventhandlers[constants.INPUTSTATE] = Client_Inputstate
+eventhandlers[constants.EVENT_PLAYER_DISCONNECT] = Client_Event_Disconnect
