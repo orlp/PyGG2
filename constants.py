@@ -26,8 +26,8 @@ LOBBY_PORT = 29944
 # UUIDs
 LOBBY_MESSAGE_TYPE_REG = "b5dae2e8-424f-9ed0-0fcb-8c21c7ca1352"
 LOBBY_MESSAGE_TYPE_UNREG = "488984ac-45dc-86e1-9901-98dd1c01c064"
-#GG2_LOBBY_UUID = "0e29560e-443a-93a3-e15e-7bd072df7506" # FIXME: Replace with real one once Medo fixes the lobby
-GG2_LOBBY_UUID = "1ccf16b1-436d-856f-504d-cc1af306aaa7" # Real GG2 UUID
+GG2_LOBBY_UUID = "0e29560e-443a-93a3-e15e-7bd072df7506" # FIXME: Replace with real one once Medo fixes the lobby
+#GG2_LOBBY_UUID = "1ccf16b1-436d-856f-504d-cc1af306aaa7" # Real GG2 UUID
 PYGG2_COMPATIBILITY_PROTOCOL = "e8b036bf-409d-a71b-2702-c7e443b1fdbe"
 
 # Networked Events
