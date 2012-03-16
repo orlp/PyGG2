@@ -215,3 +215,30 @@ class ServerEventFullUpdate(object):
         packetstr = packetstr[length:]
 
         return struct.calcsize(">H")+length
+
+@clientevent
+class ClientEventDisconnect(object):
+    eventid = constants.EVENT_PLAYER_DISCONNECT
+
+    def pack(self):
+        return ""
+
+    def unpack(self, packetstr):
+        return 0
+        
+@serverevent
+class ServerEventDisconnect(object):
+    eventid = constants.EVENT_PLAYER_DISCONNECT
+
+    def __init__(self, playerid):
+        self.playerid = playerid
+
+    def pack(self):
+        packetstr = struct.pack(">B", self.playerid)
+
+        return packetstr
+
+    def unpack(self, packetstr):
+        self.playerid = struct.unpack_from(">B", packetstr)[0]
+
+        return struct.calcsize(">B")
