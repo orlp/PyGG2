@@ -43,6 +43,7 @@ class Player(object):
 
         self.character_id = self.nextclass(game, state, self.id).id
         char = state.entities[self.character_id]
+        char.just_spawned = True
         # FIXME remove
         char.x = 2300
         char.y = 50

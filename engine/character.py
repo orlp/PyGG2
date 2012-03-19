@@ -12,7 +12,7 @@ import mask
 
 class Character(entity.MovingObject):
     acceleration = 1200
-
+    
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
 
@@ -21,7 +21,7 @@ class Character(entity.MovingObject):
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
         self.can_doublejump = False
-
+        self.just_spawned = False # have we just spawned?
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
 
