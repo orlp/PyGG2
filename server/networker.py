@@ -122,7 +122,7 @@ class Networker(object):
                 if event.password == server.password:
                     newplayer = player.Player(self, game, event.name, sender)
                     newplayer.name = event.name
-
+                    
                     for player_obj in self.players.values():
                         if player_obj == newplayer:
                             self.service_new_player(server, game, newplayer)

@@ -29,7 +29,7 @@ class GameRenderer(object):
         self.view_height = constants.GAME_HEIGHT
 
         self.maprenderer = map_renderer.MapRenderer(self, "twodforttwo_remix")
-        self.testhud = hud_renderer.HealthRenderer()
+        self.healthhud = None
         self.overlayblits = []
 
         self.renderers = {
@@ -68,10 +68,12 @@ class GameRenderer(object):
             client.spectator.x = self.interpolated_state.entities[focus_object_id].x
             client.spectator.y = self.interpolated_state.entities[focus_object_id].y
             if game.current_state.entities[focus_object_id].just_spawned:
-                print("so long farewell")
-                
+                self.healthhud = hud_renderer.HealthRenderer()
                 game.current_state.entities[focus_object_id].just_spawned = False
+            self.hud_sprites.append(self.healthhud.render(self))
         else:
+            if self.healthhud != None:
+                self.healthhud = None
             player = game.current_state.players[client.our_player_id]
             if player.left:
                 client.spectator.x -= 800*frametime
@@ -81,7 +83,6 @@ class GameRenderer(object):
                 client.spectator.y -= 800*frametime
             elif player.down:
                 client.spectator.y += 800*frametime
-                
         # update view
         self.xview = int(int(client.spectator.x) - self.view_width / 2)
         self.yview = int(int(client.spectator.y) - self.view_height / 2)
@@ -92,7 +93,6 @@ class GameRenderer(object):
 
         # draw background
         self.maprenderer.render(self, self.interpolated_state)
-        self.testhud.render(self)
         # draw entities
         for entity in self.interpolated_state.entities.values():
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)

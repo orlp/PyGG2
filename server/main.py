@@ -39,6 +39,7 @@ class Server(object):
         # time tracking
         self.clock = precision_timer.Clock()
 
+        print ("Hosting " + str(self.name) + " on port " + str(self.port) + " with password " + "\"" + str(self.password) + "\"")
     def run(self):
         # game loop
         while True:
