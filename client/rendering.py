@@ -68,9 +68,9 @@ class GameRenderer(object):
             client.spectator.x = self.interpolated_state.entities[focus_object_id].x
             client.spectator.y = self.interpolated_state.entities[focus_object_id].y
             if game.current_state.entities[focus_object_id].just_spawned:
-                self.healthhud = hud_renderer.HealthRenderer()
+                self.healthhud = hud_renderer.HealthRenderer(self)
                 game.current_state.entities[focus_object_id].just_spawned = False
-            self.hud_sprites.append(self.healthhud.render(self))
+            self.healthhud.render(self)
         else:
             if self.healthhud != None:
                 self.healthhud = None
@@ -99,7 +99,10 @@ class GameRenderer(object):
 
         pygrafix.sprite.draw_batch(self.world_sprites, scale_smoothing = False)
         pygrafix.sprite.draw_batch(self.hud_sprites, scale_smoothing = False)
-        
+        temp = (25,25)
+        temp2 = (10,10)
+        temp3 = (3,3,3)
+        pygrafix.draw.rectangle(temp,temp2,temp3,0,None)
     def get_screen_coords(self, x, y):
         # calculate drawing position
         draw_x = int(x - self.xview)
