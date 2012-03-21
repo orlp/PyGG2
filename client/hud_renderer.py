@@ -36,7 +36,7 @@ class HealthRenderer(HudRenderer):
         self.health_box = HealthBar()
         self.health_box.health_location = (52, min ( (renderer.view_height - 14), (renderer.view_height - 54) + (40 - 40 * abs(health_percentage))) )
         self.health_box.health_size = (40, max(0, 40 * health_percentage))
-        self.health_box.health_color = (0.3,0.5,0.2,1) # last is alpha
+        self.health_box.health_color = (0.3/(health_percentage),0.5*(health_percentage),0.2*(health_percentage),1) # last is alpha
         renderer.hud_overlay.append(self.health_box)
 
 class HealthBar(object):
