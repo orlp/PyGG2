@@ -18,14 +18,27 @@ class HealthRenderer(HudRenderer):
     def __init__(self, renderer, character):
         self.sprite_location = (10, renderer.view_height - 75) # Where is the location on screen of the sprite
         
-        self.health_location = (52,renderer.view_height - 54) # where the little green rectangle shows up
-        self.health_size = (40,40)
-        self.health_color = (0.3,0.5,0.2,1) # last is alpha
         self.class_number = str(function.convert_class(character))
         self.hudsprite  = pygrafix.image.load("huds/characterhud/"+ self.class_number + ".png")
         
+        self.health_box_background = None
+        self.health_box = None
+        
     def render(self, renderer, health_percentage):
         HudRenderer.render(self,renderer)
-        self.health_size = (40, 40 * health_percentage)
-        self.health_location = (52, ((renderer.view_height - 54) + (40 - 40 * health_percentage)))
-        renderer.draw_health.append(self)
+        
+        self.health_box_background = HealthBar() #background first
+        self.health_box_background.health_location = (52, (renderer.view_height - 54))
+        self.health_box_background.health_size = (40, 40)
+        self.health_box_background.health_color = (0,0,0,1) # last is alpha
+        renderer.hud_overlay.append(self.health_box_background)
+        
+        self.health_box = HealthBar()
+        self.health_box.health_location = (52, min ( (renderer.view_height - 14), (renderer.view_height - 54) + (40 - 40 * abs(health_percentage))) )
+        self.health_box.health_size = (40, max(0, 40 * health_percentage))
+        self.health_box.health_color = (0.3,0.5,0.2,1) # last is alpha
+        renderer.hud_overlay.append(self.health_box)
+
+class HealthBar(object):
+    def render (self):
+        pygrafix.draw.rectangle(self.health_location, self.health_size, self.health_color)
