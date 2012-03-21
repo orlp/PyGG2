@@ -69,6 +69,8 @@ class GameRenderer(object):
             client.spectator.x = self.interpolated_state.entities[focus_object_id].x
             client.spectator.y = self.interpolated_state.entities[focus_object_id].y
             if game.current_state.entities[focus_object_id].just_spawned:
+                self.healthhud = None
+                self.draw_health = []
                 self.healthhud = hud_renderer.HealthRenderer(self)
                 game.current_state.entities[focus_object_id].just_spawned = False
             self.healthhud.render(self, (game.current_state.entities[focus_object_id].hp / game.current_state.entities[focus_object_id].maxhp))
@@ -102,6 +104,7 @@ class GameRenderer(object):
         # draw health bars
         for self.health_bar in self.draw_health:
             pygrafix.draw.rectangle(self.health_bar.health_location,self.health_bar.health_size,self.health_bar.health_color)
+        self.draw_health = [] #clear list
         # draw hud sprites
         pygrafix.sprite.draw_batch(self.hud_sprites, scale_smoothing = False)
 

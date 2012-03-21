@@ -55,7 +55,7 @@ class Character(entity.MovingObject):
         self.vspeed = min(800, self.vspeed)
 
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
-
+        self.hp -= 1
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True
@@ -93,7 +93,7 @@ class Character(entity.MovingObject):
                 self.y -= function.sign(self.vspeed)
 
             self.vspeed = 0
-
+    
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
         return game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y + 1)))

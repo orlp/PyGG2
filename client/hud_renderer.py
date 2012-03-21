@@ -21,8 +21,8 @@ class HealthRenderer(HudRenderer):
         self.health_location = (52,renderer.view_height - 54) # where the little green rectangle shows up
         self.health_size = (40,40)
         self.health_color = (0.3,0.5,0.2,1) # last is alpha
-        
         self.hudsprite  = pygrafix.image.load("huds/characterhud/0.png")
+        
     def render(self, renderer, health_percentage):
         HudRenderer.render(self,renderer)
         self.health_size = (40, 40 * health_percentage)
