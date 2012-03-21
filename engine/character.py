@@ -24,7 +24,7 @@ class Character(entity.MovingObject):
         self.just_spawned = False # have we just spawned?
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
-
+        
     def step(self, game, state, frametime):
         player = self.get_player(game, state)
 
