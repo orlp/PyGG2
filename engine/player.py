@@ -18,7 +18,7 @@ class Player(object):
         self.rightmouse = False
         self.aimdirection = 0
 
-        self.nextclass = character.Pyro
+        self.nextclass = character.Scout
         self.character_id = None
         self.respawntimer = 0
         self.name = "Test name"

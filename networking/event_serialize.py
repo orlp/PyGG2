@@ -50,20 +50,20 @@ class ClientEventHello(object):
 class ServerEventHello(object):
     eventid = constants.EVENT_HELLO
 
-    def __init__(self, servername, numplayers, maxplayers, mapname, version):
+    def __init__(self, servername, playerid, maxplayers, mapname, version):
         self.servername = servername
-        self.numplayers = numplayers
+        self.playerid = playerid
         self.maxplayers = maxplayers
         self.mapname = mapname
         self.version = version
 
     def pack(self):
-        packetstr = struct.pack(">32pBB64pH", self.servername, self.numplayers, self.maxplayers, self.mapname, self.version)
+        packetstr = struct.pack(">32pBB64pH", self.servername, self.playerid, self.maxplayers, self.mapname, self.version)
 
         return packetstr
 
     def unpack(self, packetstr):
-        self.servername, self.numplayers, self.maxplayers, self.mapname, self.version = struct.unpack_from(">32pBB64pH", packetstr)
+        self.servername, self.playerid, self.maxplayers, self.mapname, self.version = struct.unpack_from(">32pBB64pH", packetstr)
 
         return struct.calcsize(">32pBB64pH")
 

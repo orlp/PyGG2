@@ -17,7 +17,7 @@ def Server_Event_Hello(client, networker, game, event):
     # TODO: Some version check using event.version and constants.GAME_VERSION_NUMBER
     # Set all the important values to the game
     game.servername = event.servername
-    player_id = event.numplayers-1
+    player_id = event.playerid
     game.maxplayers = event.maxplayers
     game.map = engine.map.Map(game, event.mapname)
     client.start_game(player_id)
