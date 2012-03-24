@@ -133,6 +133,10 @@ class Networker(object):
             else:
                 continue
 
-            # ack the packet
-            self.players[sender].server_acksequence = packet.sequence
-            self.players[sender].client_acksequence = packet.acksequence
+            try:
+                # ack the packet
+                self.players[sender].server_acksequence = packet.sequence
+                self.players[sender].client_acksequence = packet.acksequence
+            except KeyError:
+                # The player has just disconnected, so no-one cares about acksequence
+                pass

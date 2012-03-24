@@ -52,6 +52,9 @@ class Client(object):
         self.networker = client.networker.Networker(('127.0.0.1', 8190), self) # FIXME: Remove these values, and replace with something easier.
         self.network_update_timer = 0
 
+        # Gets set to true when we're disconnecting, for the networker
+        self.destroy = False
+
 
     def start_game(self, player_id):
         # Only start the game once the networker has confirmed a connection with the server
@@ -73,7 +76,6 @@ class Client(object):
         self.inputsender_accumulator = 0.0 # this counter will accumulate time to send input at a constant rate
         self.fpscounter_accumulator = 0.0 # this counter will tell us when to update the fps info in the title
 
-
     def run(self):
         # game loop
         while True:
@@ -85,7 +87,8 @@ class Client(object):
                 if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
                     #clear buffer, send disconnect, and kiss and fly
                     event = networking.event_serialize.ClientEventDisconnect()
-                    self.networker.events.append((self.networker.sequence, event))
+                    self.networker.sendbuffer.append(event)
+                    self.destroy = True
                     break
 
                 # handle input
@@ -124,9 +127,9 @@ class Client(object):
                 elif self.window.is_key_pressed(key._8):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
                     self.networker.events.append((self.networker.sequence, event))
-               # elif self.window.is_key_pressed(key._9):
-                  #  event = networking.event_serialize.ClientEventDisconnect()
-                   # self.networker.events.append((self.networker.sequence, event))
+                #elif self.window.is_key_pressed(key._9):
+                #    event = networking.event_serialize.ClientEventDisconnect()
+                #    self.networker.events.append((self.networker.sequence, event))
 
                 # did we just release the F11 button? if yes, go fullscreen
                 if self.window.is_key_pressed(key.F11):

@@ -129,8 +129,9 @@ class Networker(object):
         for seq, event in self.events:
             packet.events.append((seq, event))
 
-        # Prepend the input data
-        packet.events.insert(0, (self.sequence, self.generate_inputdata(client)))
+        if not client.destroy:
+            # Prepend the input data if we're not disconnecting
+            packet.events.insert(0, (self.sequence, self.generate_inputdata(client)))
 
         packetstr = ""
         packetstr += packet.pack()

@@ -225,7 +225,7 @@ class ClientEventDisconnect(object):
 
     def unpack(self, packetstr):
         return 0
-        
+
 @serverevent
 class ServerEventDisconnect(object):
     eventid = constants.EVENT_PLAYER_DISCONNECT
