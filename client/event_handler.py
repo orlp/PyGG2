@@ -17,7 +17,7 @@ def Server_Event_Hello(client, networker, game, event):
     # TODO: Some version check using event.version and constants.GAME_VERSION_NUMBER
     # Set all the important values to the game
     game.servername = event.servername
-    player_id = event.numplayers-1
+    player_id = event.playerid
     game.maxplayers = event.maxplayers
     game.map = engine.map.Map(game, event.mapname)
     client.start_game(player_id)
@@ -69,8 +69,8 @@ def Server_Full_Update(client, networker, game, event):
 
 def Server_Event_Disconnect(client, networker, game, event):
     player = game.current_state.players[event.playerid]
-    print (str(player.name) +" has disconnected")
-    #to do: actually disconnect player
+    print (player.name +" has disconnected")
+    player.destroy(game, game.current_state)
 
 # Gather the functions together to easily be called by the event ID
 eventhandlers = {}
@@ -81,4 +81,4 @@ eventhandlers[constants.EVENT_PLAYER_DIE] = Server_Event_Die
 eventhandlers[constants.EVENT_PLAYER_SPAWN] = Server_Event_Spawn
 eventhandlers[constants.SNAPSHOT_UPDATE] = Server_Snapshot_Update
 eventhandlers[constants.FULL_UPDATE] = Server_Full_Update
-eventhandlers[constants.EVENT_PLAYER_DISCONNECT] = Server_Event_Disconnect 
+eventhandlers[constants.EVENT_PLAYER_DISCONNECT] = Server_Event_Disconnect

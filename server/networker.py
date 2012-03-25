@@ -79,7 +79,7 @@ class Networker(object):
 
 
     def service_new_player(self, server, game, newplayer):
-        hello_event = networking.event_serialize.ServerEventHello(server.name, len(server.game.current_state.players),  server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
+        hello_event = networking.event_serialize.ServerEventHello(server.name, newplayer.id,  server.game.maxplayers, server.game.map.mapname, constants.GAME_VERSION_NUMBER)
         newplayer.events.append((newplayer.sequence, hello_event))
 
         update = self.generate_full_update(game)
@@ -133,6 +133,10 @@ class Networker(object):
             else:
                 continue
 
-            # ack the packet
-            self.players[sender].server_acksequence = packet.sequence
-            self.players[sender].client_acksequence = packet.acksequence
+            try:
+                # ack the packet
+                self.players[sender].server_acksequence = packet.sequence
+                self.players[sender].client_acksequence = packet.acksequence
+            except KeyError:
+                # The player has just disconnected, so no-one cares about acksequence
+                pass
