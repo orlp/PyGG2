@@ -82,7 +82,7 @@ class Rocket(entity.MovingObject):
 
     damage = 35
     blastradius = 65
-    knockback = 70000
+    knockback = 240
 
     def __init__(self, game, state, sourceweapon):
         super(Rocket, self).__init__(game, state)
@@ -107,10 +107,9 @@ class Rocket(entity.MovingObject):
         if not self.max_flight_time - self.flight_time < self.fade_time:
             for obj in state.entities.values():
                 if isinstance(obj, character.Character) and math.hypot(self.x - obj.x, self.y - obj.y) < self.blastradius:
-                    force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius))*(self.knockback*frametime)# TODO: Fix Frametime
+                    force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius)) * self.knockback # TODO: Fix this to be correct. I think the problem is that it checks distance to the center of the character, and a rocketmans feet are too far.
                     obj.hspeed += force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y))
                     obj.vspeed += force*((obj.y-self.y)/math.hypot(self.x - obj.x, self.y - obj.y))/3
-                    print (force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y)))
 
         super(Rocket, self).destroy(state)
 
