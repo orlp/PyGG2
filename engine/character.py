@@ -12,7 +12,7 @@ import mask
 
 class Character(entity.MovingObject):
     acceleration = 1200
-    
+
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
 
@@ -24,7 +24,8 @@ class Character(entity.MovingObject):
         self.just_spawned = False # have we just spawned?
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
-        
+        self.hp_offset = -1 # FIXME: REMOVE; THIS ONLY EXISTS FOR HEALTH HUD TESTING
+
     def step(self, game, state, frametime):
         player = self.get_player(game, state)
 
@@ -45,8 +46,9 @@ class Character(entity.MovingObject):
         if abs(self.hspeed) < 10: self.hspeed = 0
         else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
 
-        if player.up:
+        if player.up and not player.old_up:
             self.jump(game, state)
+        player.old_up = player.up
 
         # gravitational force
         self.vspeed += 300 * frametime
@@ -55,9 +57,11 @@ class Character(entity.MovingObject):
         self.vspeed = min(800, self.vspeed)
 
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
-        self.hp-=1 # test health change
+        self.hp+=self.hp_offset # test health change
         if self.hp < 0:
-            hp = 0
+            self.hp_offset = 1
+        if self.hp > self.maxhp:
+            self.hp_offset = -1
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True
@@ -95,7 +99,7 @@ class Character(entity.MovingObject):
                 self.y -= function.sign(self.vspeed)
 
             self.vspeed = 0
-    
+
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
         return game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y + 1)))

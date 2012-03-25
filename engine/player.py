@@ -10,6 +10,7 @@ class Player(object):
         state.players[id] = self
 
         self.up = False
+        self.old_up = False
         self.down = False
         self.left = False
         self.right = False
