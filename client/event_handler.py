@@ -42,6 +42,18 @@ def Server_Event_Spawn(client, networker, game, event, packet_sequence):
 def Server_Snapshot_Update(client, networker, game, event,  packet_sequence):
     # Copy the current game state, and replace it with everything the server knows
     state = game.current_state
+
+    # Rewind the state back to before the compensation
+    for i in range(networker.latency):
+        # TODO: FIND OUT WHETHER THIS HELPS
+        #try:
+        #    inputstr = networker.inputlog[packet_sequence-i]
+        #    player = state.players[client.our_player_id]
+        #    player.deserialize(state, inputstr)
+        #except:
+        #    pass
+        state.update(game, -constants.INPUT_SEND_FPS)
+
     for player in state.players.values():
         length = player.deserialize_input(event.bytestr)
         event.bytestr = event.bytestr[length:]
