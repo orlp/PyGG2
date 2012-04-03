@@ -23,7 +23,7 @@ class Networker(object):
         self.latency = 0
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.socket.bind(("127.0.0.1", 0))
+        self.socket.bind(("", 0))
         self.socket.setblocking(False)
 
         self.has_connected = False

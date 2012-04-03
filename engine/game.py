@@ -15,6 +15,7 @@ class Game:
         self.maxplayers = 8
         self.servername = ""
         self.isserver = False
+        self.lag_comp = False
 
         # map data
         self.map = map.Map(self, "twodforttwo_remix")

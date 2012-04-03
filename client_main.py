@@ -28,6 +28,7 @@ def get_input(window):
         "down": window.is_key_pressed(key.S),
         "left": window.is_key_pressed(key.A),
         "right": window.is_key_pressed(key.D),
+        "space": window.is_key_pressed(key.SPACE)
     }
 
 # add resource locations
@@ -49,7 +50,7 @@ class Client(object):
         self.player_name = ""
 
         # Create the networking-handler
-        self.networker = client.networker.Networker(('127.0.0.1', 8190), self) # FIXME: Remove these values, and replace with something easier.
+        self.networker = client.networker.Networker(("127.0.0.1", 8190), self) # FIXME: Remove these values, and replace with something easier.
         self.network_update_timer = 0
 
         # Gets set to true when we're disconnecting, for the networker
@@ -108,6 +109,7 @@ class Client(object):
                 our_player.middlemouse = middlemouse
                 our_player.rightmouse = rightmouse
                 our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
+                self.game.lag_comp = self.keys["space"]
 
                 if self.window.is_key_pressed(key._1):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SCOUT)
