@@ -46,11 +46,3 @@ class Gamestate(object):
         new.time = self.time
 
         return new
-
-    # TODO: make serialize functions
-    def serialize(self):
-        bytestate = str()
-        return bytestate
-
-    def deserialize(self, bytestate):
-        pass
