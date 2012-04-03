@@ -24,6 +24,8 @@ class Player(object):
         self.respawntimer = 0
         self.name = "Test name"
 
+        self.issynced = True
+
     def step(self, game, state, frametime):
         # Only do this on the server
         if game.isserver:

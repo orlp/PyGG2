@@ -18,6 +18,8 @@ class Weapon(entity.Entity):
         self.refirealarm = 0.0
         self.ammo = self.maxammo
         self.direction = state.entities[self.owner].get_player(game, state).aimdirection
+        
+        self.issynced = True
 
     def beginstep(self, game, state, frametime):
         owner = state.entities[self.owner]
