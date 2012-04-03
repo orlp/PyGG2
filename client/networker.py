@@ -89,7 +89,7 @@ class Networker(object):
                         # Event has already been processed before, discard
                         continue
                     # process the event
-                    event_handler.eventhandlers[event.eventid](client, self, game, event, seq)
+                    event_handler.eventhandlers[event.eventid](client, self, game, event)
             # otherwise drop the packet
             else:
                 print("RECEIVED PACKET NOT FROM ACTUAL SERVER ADDRESS:\nActual Server Address:"+str(self.server_address)+"\nPacket Address:"+str(sender))

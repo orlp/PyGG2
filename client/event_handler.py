@@ -11,7 +11,7 @@ import function, constants
 from networking import event_serialize
 
 
-def Server_Event_Hello(client, networker, game, event, packet_sequence):
+def Server_Event_Hello(client, networker, game, event):
     # Stop saying hello
     networker.has_connected = True
     # TODO: Some version check using event.version and constants.GAME_VERSION_NUMBER
@@ -22,20 +22,20 @@ def Server_Event_Hello(client, networker, game, event, packet_sequence):
     game.map = engine.map.Map(game, event.mapname)
     client.start_game(player_id)
 
-def Server_Event_Player_Join(client, networker, game, event, packet_sequence):
+def Server_Event_Player_Join(client, networker, game, event):
     newplayer = engine.player.Player(game, game.current_state, event.id)
     newplayer.name = event.name
 
-def Server_Event_Changeclass(client, networker, game, event, packet_sequence):
+def Server_Event_Changeclass(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     player.nextclass = function.convert_class(event.newclass)
 
-def Server_Event_Die(client, networker, game, event, packet_sequence):
+def Server_Event_Die(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     character = game.current_state.entities[player.character_id]
     character.die(game, game.current_state)
 
-def Server_Event_Spawn(client, networker, game, event, packet_sequence):
+def Server_Event_Spawn(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     player.spawn(game, game.current_state)
 
@@ -64,7 +64,7 @@ def Server_Snapshot_Update(client, networker, game, event,  packet_sequence):
     #        pass
     #    state.update_synced_objects(game, constants.INPUT_SEND_FPS)
 
-def Server_Full_Update(client, networker, game, event, packet_sequence):
+def Server_Full_Update(client, networker, game, event):
     numof_players = struct.unpack_from(">B", event.bytestr)[0]
     event.bytestr = event.bytestr[1:]
 
@@ -78,7 +78,7 @@ def Server_Full_Update(client, networker, game, event, packet_sequence):
         if character_exists:
             player.spawn(game, game.current_state)
 
-def Server_Event_Disconnect(client, networker, game, event, packet_sequence):
+def Server_Event_Disconnect(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     print (player.name +" has disconnected")
     player.destroy(game, game.current_state)
