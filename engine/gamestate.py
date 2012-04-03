@@ -11,13 +11,29 @@ class Gamestate(object):
         self.next_entity_id = 0
         self.time = 0.0
 
-    def update(self, game, frametime):
+    def update_all_objects(self, game, frametime):
         self.time += frametime
 
         for entity in self.entities.values(): entity.beginstep(game, self, frametime)
         for player in self.players.values(): player.step(game, self, frametime)
         for entity in self.entities.values(): entity.step(game, self, frametime)
         for entity in self.entities.values(): entity.endstep(game, self, frametime)
+
+
+    def update_synced_objects(self, game, frametime):
+        for entity in self.entities.values():
+            if entity.issynced:
+                entity.beginstep(game, self, frametime)
+        for player in self.players.values():
+            if entity.issynced:
+                player.step(game, self, frametime)
+        for entity in self.entities.values():
+            if entity.issynced:
+                entity.step(game, self, frametime)
+        for entity in self.entities.values():
+            if entity.issynced:
+                entity.endstep(game, self, frametime)
+
 
     def interpolate(self, prev_state, next_state, alpha):
         self.next_entity_id = next_state.next_entity_id

@@ -9,9 +9,9 @@ class Entity(object):
         self.id = state.next_entity_id
         state.entities[self.id] = self
         state.next_entity_id += 1
-        
-        issynced = False
-        
+
+        self.issynced = False
+
     def copy(self):
         cpobj = object.__new__(type(self))
         cpobj.__dict__.update(self.__dict__)
@@ -39,7 +39,7 @@ class MovingObject(Entity):
         # hspeed and vspeed are the speeds of the object in respective directions
         self.hspeed = 0.0
         self.vspeed = 0.0
-        
+
     def endstep(self, game, state, frametime):
         # first move
         self.x += self.hspeed * frametime

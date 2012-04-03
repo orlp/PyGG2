@@ -36,6 +36,6 @@ class Game:
             self.accumulator -= constants.PHYSICS_TIMESTEP
 
             self.previous_state = self.current_state.copy()
-            self.current_state.update(self, constants.PHYSICS_TIMESTEP)
+            self.current_state.update_all_objects(self, constants.PHYSICS_TIMESTEP)
             networker.sendbuffer += self.sendbuffer
             self.sendbuffer = []
