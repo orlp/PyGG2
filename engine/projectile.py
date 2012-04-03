@@ -107,9 +107,36 @@ class Rocket(entity.MovingObject):
         if not self.max_flight_time - self.flight_time < self.fade_time:
             for obj in state.entities.values():
                 if isinstance(obj, character.Character) and math.hypot(self.x - obj.x, self.y - obj.y) < self.blastradius:
-                    force = (1-(math.hypot(self.x - obj.x, self.y - obj.y)/self.blastradius)) * self.knockback # TODO: Fix this to be correct. I think the problem is that it checks distance to the center of the character, and a rocketmans feet are too far.
-                    obj.hspeed += force*((obj.x-self.x)/math.hypot(self.x - obj.x, self.y - obj.y))
-                    obj.vspeed += force*((obj.y-self.y)/math.hypot(self.x - obj.x, self.y - obj.y))/3
+
+                    # w and h are the width and height of the collision mask of the character
+                    w, h = obj.collision_mask.get_size()
+
+                    # x and y are here a vector from the rocket to the character
+                    x = self.x-obj.x
+                    y = self.y-obj.y
+
+                    # we try to find out the crosspoint of that vector with the collision rectangle
+                    f = w/(2*x)
+                    if abs(f*y) < h/2:
+                        # the vector crosses the rectangle at the sides
+                        x = function.sign(x)*w/2
+                        y *= f
+                    else:
+                        # the vector crosses the rectangle at the bottom or top
+                        f = h/(2*y)
+                        x *= f
+                        y = function.sign(y)*h/2
+
+                    # x and y are now the positions of the point on the edge of the collision rectangle nearest to the rocket
+
+                    # now get the vector from the rocket to that point, and store it in x and y
+                    x = (obj.x+x) - self.x
+                    y = (obj.y+y) - self.y
+
+                    length = math.hypot(x, y)
+                    force = 1 - (length/self.blastradius)
+                    obj.hspeed += force*(x/length) * self.knockback
+                    obj.vspeed += force*(y/length) * self.knockback
 
         super(Rocket, self).destroy(state)
 
