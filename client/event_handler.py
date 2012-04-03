@@ -39,7 +39,7 @@ def Server_Event_Spawn(client, networker, game, event):
     player = game.current_state.players[event.playerid]
     player.spawn(game, game.current_state)
 
-def Server_Snapshot_Update(client, networker, game, event,  packet_sequence):
+def Server_Snapshot_Update(client, networker, game, event):
     # Copy the current game state, and replace it with everything the server knows
     state = game.current_state
 
@@ -54,15 +54,15 @@ def Server_Snapshot_Update(client, networker, game, event,  packet_sequence):
         except KeyError:
             # Character is dead
             pass
-    ## Update this state with all the input information that appeared in the meantime
-    #for i in range(networker.latency):
-    #    try:
-    #        inputstr = networker.inputlog[packet_sequence+i]
-    #        player = state.players[client.our_player_id]
-    #        player.deserialize(state, inputstr)
-    #    except:
-    #        pass
-    #    state.update_synced_objects(game, constants.INPUT_SEND_FPS)
+    # Update this state with all the input information that appeared in the meantime
+    for i in range(networker.latency):
+        try:
+            inputstr = networker.inputlog[packet_sequence+i]
+            player = state.players[client.our_player_id]
+            player.deserialize(state, inputstr)
+        except:
+            pass
+        state.update_synced_objects(game, constants.INPUT_SEND_FPS)
 
 def Server_Full_Update(client, networker, game, event):
     numof_players = struct.unpack_from(">B", event.bytestr)[0]

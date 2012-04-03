@@ -134,7 +134,7 @@ class Rocket(entity.MovingObject):
                     y = (obj.y+y) - self.y
 
                     length = math.hypot(x, y)
-                    force = 1 - (length/self.blastradius) * self.knockback
+                    force = (1 - (length/self.blastradius)) * self.knockback
                     obj.hspeed += force*(x/length)
                     obj.vspeed += force*(y/length)
 
