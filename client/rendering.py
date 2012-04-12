@@ -72,7 +72,7 @@ class GameRenderer(object):
                 self.healthhud = None
                 self.healthhud = hud_renderer.HealthRenderer(self, type(game.current_state.entities[focus_object_id]))
                 game.current_state.entities[focus_object_id].just_spawned = False
-            self.healthhud.render(self, max(0.01,(game.current_state.entities[focus_object_id].hp / game.current_state.entities[focus_object_id].maxhp))) #always have at least 1 percent, can't divide by zero!
+            self.healthhud.render(self, game.current_state.entities[focus_object_id].hp, game.current_state.entities[focus_object_id].maxhp)
             
         else:
             if self.healthhud != None:
