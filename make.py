@@ -56,7 +56,11 @@ elif sys.argv[1] == "clean":
 elif sys.argv[1] == "testclient":
     import client_main
 #    client_main.profileGG2()
-    client_main.GG2main()
+    client_main.GG2main(skipmenu=True)
+elif sys.argv[1] == "menuclient":
+    import client_main
+#    client_main.profileGG2()
+    client_main.GG2main(skipmenu=False)
 elif sys.argv[1] == "testserver":
     import server.main
     server.main.GG2main()
