@@ -25,6 +25,10 @@ class HealthRenderer(HudRenderer):
         self.health_box_background = None
         self.health_box = None
 
+        self.health_text = HealthText()
+        self.health_text.health_location = (56, renderer.view_height - 52)
+        self.health_text.health_size = (36, 36)
+
     def render(self, renderer, health, health_max):
         HudRenderer.render(self,renderer)
 
@@ -37,14 +41,11 @@ class HealthRenderer(HudRenderer):
         self.health_box_background.health_color = (0,0,0,1) # last is alpha
         renderer.hud_overlay.append(self.health_box_background)
 
+        self.health_text.text = str(health)
+
         self.health_box = HealthBar()
         self.health_box.health_location = (52, min ( (renderer.view_height - 14), (renderer.view_height - 54) + (40 - 40 * abs(health_percentage))) )
         self.health_box.health_size = (40, max(0, 40 * health_percentage))
-
-        self.health_text = HealthText()
-        self.health_text.health_location = (56, renderer.view_height - 52)
-        self.health_text.health_size = (36, 36)
-        self.health_text.text = str(health)
 
         if health_percentage > 0.5:
             exponent = 2 # The higher this will be, the quicker will the change happen, and the flatter will the curve be
@@ -55,7 +56,7 @@ class HealthRenderer(HudRenderer):
             # Color it yellow-red
             self.health_box.health_color = (1, (2*health_percentage)**exponent, 0, 1)
         renderer.hud_overlay.append(self.health_box)
-        #renderer.hud_overlay.append(self.health_text)
+        renderer.hud_overlay.append(self.health_text)
 
 class HealthBar(object):
     def render(self):
