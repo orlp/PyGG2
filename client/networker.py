@@ -15,12 +15,10 @@ class Networker(object):
         self.server_address = server_address
 
         self.events = []
-        self.inputlog = {}
         self.sendbuffer = []
         self.sequence = 1
         self.server_acksequence = 0
         self.client_acksequence = 0
-        self.latency = 0
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", 0))
@@ -98,8 +96,6 @@ class Networker(object):
             # ack the packet
             self.client_acksequence = packet.sequence
             self.server_acksequence = packet.acksequence
-            #FIXME: MAKE THIS WORK FOR SEQUENCE LOOPING
-            self.latency = self.sequence-self.server_acksequence
 
             # Clear the acked stuff from the history
             index = 0
@@ -117,7 +113,6 @@ class Networker(object):
     def generate_inputdata(self, client):
         our_player = client.game.current_state.players[client.our_player_id]
         packetstr = our_player.serialize_input()
-        self.inputlog[self.sequence] = packetstr
         event = networking.event_serialize.ClientEventInputstate(packetstr)
         return event
 

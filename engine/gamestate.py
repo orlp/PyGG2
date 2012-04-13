@@ -12,6 +12,7 @@ class Gamestate(object):
         self.time = 0.0
 
     def update_all_objects(self, game, frametime):
+        # time is synced with 4 bytes, so to force looping one would have to host for a straight two years...
         self.time += frametime
 
         for entity in self.entities.values(): entity.beginstep(game, self, frametime)

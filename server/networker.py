@@ -42,6 +42,8 @@ class Networker(object):
         packetstr = ""
         state = game.current_state
 
+        packetstr += struct.pack(">I", state.time)
+
         for playerid, player_obj in state.players.items():
             packetstr += player_obj.serialize_input()
             try:
@@ -59,6 +61,8 @@ class Networker(object):
     def generate_full_update(self, game):
         packetstr = ""
         state = game.current_state
+
+        packetstr += struct.pack(">I", state.time)
         packetstr += struct.pack(">B", len(state.players))
 
         for player_id, player_obj in state.players.items():
@@ -122,7 +126,7 @@ class Networker(object):
                 if event.password == server.password:
                     newplayer = player.Player(self, game, event.name, sender)
                     newplayer.name = event.name
-                    
+
                     for player_obj in self.players.values():
                         if player_obj == newplayer:
                             self.service_new_player(server, game, newplayer)
