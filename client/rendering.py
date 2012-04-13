@@ -53,6 +53,8 @@ class GameRenderer(object):
         self.world_sprites = []
         self.hud_overlay = []
         self.hud_sprites = []
+        
+        self.rendering_stack = []
 
     def render(self, client, game, frametime):
         # reset spritegroups
@@ -97,10 +99,15 @@ class GameRenderer(object):
         # draw background
         self.maprenderer.render(self, self.interpolated_state)
         # draw entities
+        self.rendering_stack = []
         for entity in self.interpolated_state.entities.values():
+            self.rendering_stack.append(entity)
+            
+        self.rendering_stack.sort(key=lambda entityobject: self.renderers[type(entityobject)].depth) # Reorder by depth attribute
+        for entity in self.rendering_stack:
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
         # draw world sprites
-        pygrafix.sprite.draw_batch(self.world_sprites, scale_smoothing = False)
+        pygrafix.sprite.draw_batch(self.world_sprites, preserve_order = True, scale_smoothing = False)
         # draw health bars
         for self.overlay in self.hud_overlay: #Call the render of all the objects
             self.overlay.render()

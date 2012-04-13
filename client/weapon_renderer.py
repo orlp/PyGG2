@@ -38,6 +38,7 @@ class ScattergunRenderer(WeaponRenderer):
     weaponoffset_flipped = (7, 10)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/scatterguns/0.png")
         self.firingsprite = pygrafix.image.load("weapons/scatterguns/2.png")
 
@@ -48,6 +49,7 @@ class FlamethrowerRenderer(WeaponRenderer):
     weaponoffset_flipped = (8, 11)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/flamethrowers/0.png")
         self.firingsprite = pygrafix.image.load("weapons/flamethrowers/2.png")
 
@@ -58,6 +60,7 @@ class RocketlauncherRenderer(WeaponRenderer):
     weaponoffset_flipped = (12, 7)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/rocketlaunchers/0.png")
         self.firingsprite = pygrafix.image.load("weapons/rocketlaunchers/2.png")
 
@@ -68,6 +71,7 @@ class MinigunRenderer(WeaponRenderer):
     weaponoffset_flipped = (8, 10)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/miniguns/0.png")
         self.firingsprite = pygrafix.image.load("weapons/miniguns/2.png")
 
@@ -78,6 +82,7 @@ class ShotgunRenderer(WeaponRenderer):
     weaponoffset_flipped = (2, 9)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/shotguns/0.png")
         self.firingsprite = pygrafix.image.load("weapons/shotguns/2.png")
 
@@ -88,6 +93,7 @@ class RevolverRenderer(WeaponRenderer):
     weaponoffset_flipped = (8, 9)
 
     def __init__(self):
+        self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/revolver2s/0.png")
         self.firingsprite = pygrafix.image.load("weapons/revolver2s/2.png")
 

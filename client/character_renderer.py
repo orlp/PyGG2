@@ -35,6 +35,7 @@ class ClassRenderer(object):
 
 class ScoutRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/scoutreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
@@ -42,6 +43,7 @@ class ScoutRenderer(ClassRenderer):
 
 class PyroRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/pyroreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
@@ -49,6 +51,7 @@ class PyroRenderer(ClassRenderer):
 
 class SoldierRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/soldierreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (24, 30)
@@ -56,6 +59,7 @@ class SoldierRenderer(ClassRenderer):
 
 class HeavyRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/heavyreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (14, 30)
@@ -63,6 +67,7 @@ class HeavyRenderer(ClassRenderer):
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/engineerreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (26, 30)
@@ -70,6 +75,7 @@ class EngineerRenderer(ClassRenderer):
 
 class SpyRenderer(ClassRenderer):
     def __init__(self):
+        self.depth = 0
         self.sprites = [pygrafix.image.load("characters/spyreds/%s.png" % i) for i in range(4)]
 
         self.spriteoffset = (22, 30)
