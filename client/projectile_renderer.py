@@ -8,8 +8,9 @@ import function
 
 class ShotRenderer(object):
     def __init__(self):
+        self.depth = 1
         self.shotsprite = pygrafix.image.load("projectiles/shots/0.png")
-
+        
     def render(self, renderer, game, state, shot):
         sprite = pygrafix.sprite.Sprite(self.shotsprite)
         sprite.rotation = 360 - shot.direction
@@ -20,10 +21,13 @@ class ShotRenderer(object):
         sprite.position = renderer.get_screen_coords(shot.x, shot.y)
 
         renderer.world_sprites.append(sprite)
+    def return_depth(self):
+        return self.depth
+
 
 class FlameRenderer(object):
     def __init__(self):
-
+        self.depth = 1
         self.currentindex = -1
         self.flamesprite = [0,1,2]
 
@@ -46,9 +50,13 @@ class FlameRenderer(object):
         sprite.position = renderer.get_screen_coords(flame.x,flame.y)
 
         renderer.world_sprites.append(sprite)
+    def return_depth(self):
+        return self.depth
+
 
 class RocketRenderer(object):
     def __init__(self):
+        self.depth = 1
         self.rocketsprite = pygrafix.image.load("projectiles/rockets/0.png")
 
     def render(self, renderer, game, state, rocket):
@@ -60,3 +68,6 @@ class RocketRenderer(object):
         sprite.position = renderer.get_screen_coords(rocket.x, rocket.y)
 
         renderer.world_sprites.append(sprite)
+    def return_depth(self):
+        return self.depth
+
