@@ -41,7 +41,43 @@ def Server_Event_Spawn(client, networker, game, event):
 
 def Server_Snapshot_Update(client, networker, game, event):
     # Copy the current game state, and replace it with everything the server knows
-    state = game.current_state
+    time = struct.unpack_from(">I", event.bytestr)[0]
+    event.bytestr= event.bytestr[4:]
+
+    if len(game.old_states) > 0:
+        keys = game.old_states.keys()
+        if max(keys) > time:
+            if time in keys:
+                state = game.old_states[time]
+            else:
+                times = keys
+                keys.sort()
+                times.sort(lambda a, b: (abs(a-time) < abs(b-time)))
+                key1 = times[0]
+                key2 = keys[keys.index(key1) + (key1<time)]
+
+                if key1 == key2:
+                    state = game.old_states[key1]
+                else:
+                    state_1 = game.old_states[key1]
+                    state_2 = game.old_states[key2]
+                    state = state_1.copy()
+                    state.interpolate(state_1, state_2, (time-key1)/(key2-key1))
+
+        else:
+            state = game.current_state
+
+        # Delete all the old states, they are useless
+        keys = game.old_states.keys()
+        while len(game.old_states) > 0:
+            if keys[0] < time:
+                del game.old_states[keys[0]]
+                del keys[0]
+            else:
+                break
+
+    else:
+        state = game.current_state
 
     for player in state.players.values():
         length = player.deserialize_input(event.bytestr)
@@ -56,18 +92,15 @@ def Server_Snapshot_Update(client, networker, game, event):
             pass
     if game.lag_comp:
         # Update this state with all the input information that appeared in the meantime
-        for i in range(networker.latency):
-            try:
-                inputstr = networker.inputlog[packet_sequence+i]
-                player = state.players[client.our_player_id]
-                player.deserialize(state, inputstr)
-            except:
-                pass
-            state.update_synced_objects(game, constants.INPUT_SEND_FPS)
+        for i in range(len(game.old_states)):
+            if i > 0:
+                state.update_all_objects(game, game.old_states[i]-game.old_states[i-1])
+            else:
+                state.update_all_objects(game, game.old_states[0]-state.time)
 
 def Server_Full_Update(client, networker, game, event):
-    numof_players = struct.unpack_from(">B", event.bytestr)[0]
-    event.bytestr = event.bytestr[1:]
+    game.current_state.time, numof_players = struct.unpack_from(">IB", event.bytestr)
+    event.bytestr = event.bytestr[5:]
 
     for index in range(numof_players):
         player = engine.player.Player(game, game.current_state, index)
