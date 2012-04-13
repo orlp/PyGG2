@@ -103,11 +103,11 @@ class GameRenderer(object):
         for entity in self.interpolated_state.entities.values():
             self.rendering_stack.append(entity)
             
-        self.rendering_stack.sort(key=lambda entityobject: self.renderers[type(entityobject)].depth) # reorder by depth TODO: fix batch drawing to render by inputs
+        self.rendering_stack.sort(key=lambda entityobject: self.renderers[type(entityobject)].depth) # Reorder by depth attribute
         for entity in self.rendering_stack:
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
         # draw world sprites
-        pygrafix.sprite.draw_batch(self.world_sprites, scale_smoothing = False)
+        pygrafix.sprite.draw_batch(self.world_sprites, preserve_order = True, scale_smoothing = False)
         # draw health bars
         for self.overlay in self.hud_overlay: #Call the render of all the objects
             self.overlay.render()
