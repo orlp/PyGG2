@@ -9,8 +9,8 @@ GAME_HEIGHT = 600
 
 PHYSICS_TIMESTEP = 1/60 # always update physics in these steps
 
-GAME_VERSION_NUMBER = 2500
-GAME_VERSION_STRING = "2.5"
+GAME_VERSION_NUMBER = 25000
+GAME_VERSION_STRING = "2.5b"
 GAME_URL = "http://www.ganggarrison.com/forums/index.php?topic=29530.0"
 
 # Networking
@@ -26,8 +26,9 @@ LOBBY_PORT = 29944
 # UUIDs
 LOBBY_MESSAGE_TYPE_REG = "b5dae2e8-424f-9ed0-0fcb-8c21c7ca1352"
 LOBBY_MESSAGE_TYPE_UNREG = "488984ac-45dc-86e1-9901-98dd1c01c064"
-GG2_LOBBY_UUID = "0e29560e-443a-93a3-e15e-7bd072df7506" # FIXME: Replace with real one once Medo fixes the lobby
-#GG2_LOBBY_UUID = "1ccf16b1-436d-856f-504d-cc1af306aaa7" # Real GG2 UUID
+LOBBY_MESSAGE_TYPE_LIST = "297d0df4-430c-bf61-640a-640897eaef57"
+#GG2_LOBBY_UUID = "0e29560e-443a-93a3-e15e-7bd072df7506" # FIXME: Replace with real one once Medo fixes the lobby
+GG2_LOBBY_UUID = "1ccf16b1-436d-856f-504d-cc1af306aaa7" # Real GG2 UUID
 PYGG2_COMPATIBILITY_PROTOCOL = "e8b036bf-409d-a71b-2702-c7e443b1fdbe"
 
 # Networked Events
