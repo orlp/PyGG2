@@ -25,7 +25,7 @@ class Character(entity.MovingObject):
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
         self.hp_offset = -1 # FIXME: REMOVE; THIS ONLY EXISTS FOR HEALTH HUD TESTING
-        
+
         self.issynced = True
 
     def step(self, game, state, frametime):

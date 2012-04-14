@@ -8,6 +8,7 @@ import random
 import function
 import entity
 import projectile
+import sentry
 
 # abstract class, don't directly instantiate
 class Weapon(entity.Entity):
@@ -18,7 +19,7 @@ class Weapon(entity.Entity):
         self.refirealarm = 0.0
         self.ammo = self.maxammo
         self.direction = state.entities[self.owner].get_player(game, state).aimdirection
-        
+
         self.issynced = True
 
     def beginstep(self, game, state, frametime):
@@ -66,6 +67,7 @@ class Scattergun(Weapon):
     def fire_primary(self, game, state):
         owner = state.entities[self.owner]
         random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
+        sentry.Building_Sentry(game, state, owner)
 
         for i in range(10):
             direction = owner.get_player(game, state).aimdirection + (7 - random.randint(0, 15))

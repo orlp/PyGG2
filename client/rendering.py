@@ -11,10 +11,12 @@ import map_renderer
 import character_renderer
 import weapon_renderer
 import projectile_renderer
+import sentry_renderer
 import spectator
 import engine.character
 import engine.weapon
 import engine.projectile
+import engine.sentry
 import hud_renderer
 
 class GameRenderer(object):
@@ -47,13 +49,14 @@ class GameRenderer(object):
             engine.weapon.Revolver: weapon_renderer.RevolverRenderer(),
             engine.projectile.Shot: projectile_renderer.ShotRenderer(),
             engine.projectile.Flame: projectile_renderer.FlameRenderer(),
-            engine.projectile.Rocket: projectile_renderer.RocketRenderer()
+            engine.projectile.Rocket: projectile_renderer.RocketRenderer(),
+            engine.sentry.Building_Sentry: sentry_renderer.BuildingSentryRenderer(),
         }
 
         self.world_sprites = []
         self.hud_overlay = []
         self.hud_sprites = []
-        
+
         self.rendering_stack = []
 
     def render(self, client, game, frametime):
@@ -75,7 +78,7 @@ class GameRenderer(object):
                 self.healthhud = hud_renderer.HealthRenderer(self, type(game.current_state.entities[focus_object_id]))
                 game.current_state.entities[focus_object_id].just_spawned = False
             self.healthhud.render(self, game.current_state.entities[focus_object_id].hp, game.current_state.entities[focus_object_id].maxhp)
-            
+
         else:
             if self.healthhud != None:
                 self.healthhud = None
@@ -102,7 +105,7 @@ class GameRenderer(object):
         self.rendering_stack = []
         for entity in self.interpolated_state.entities.values():
             self.rendering_stack.append(entity)
-            
+
         self.rendering_stack.sort(key=lambda entityobject: self.renderers[type(entityobject)].depth) # Reorder by depth attribute
         for entity in self.rendering_stack:
             self.renderers[type(entity)].render(self, game, self.interpolated_state, entity)
