@@ -397,6 +397,7 @@ class GameClientHandler(Handler):
 
     def cleanup(self):
         self.destroy = True
+        self.networker.update(self)
 
 def profileGG2():
     cProfile.run("GG2main()", sort="time")
