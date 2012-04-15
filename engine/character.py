@@ -130,7 +130,7 @@ class Character(entity.MovingObject):
 
         # Then we have to destroy our weapon
         state.entities[self.weapon].destroy(state)
-
+        # TODO: destroy our sentry
         self.destroy(state)
 
     def get_player(self, game, state):

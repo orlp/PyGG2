@@ -13,46 +13,50 @@ class Building_Sentry(entity.MovingObject):
     hp_increment = (max_hp-starting_hp)/build_time
     animation_increment = 10/build_time # 10 == number of frames in sentry build animation
 
-    def __init__(self, game, state, owner):
+    def __init__(self, game, state, owner_id):
         super(Building_Sentry, self).__init__(game, state)
 
         self.hp = self.starting_hp
         self.isfalling = True
         self.animation_frame = 0
         self.building_time = 0
-
-        self.owner_id = owner
+        self.owner_id = owner_id
+        
+        owner = state.entities[self.owner_id]
         self.x = owner.x
         self.y = owner.y
 
     def step(self, game, state, frametime):
-        #owner = state.entities[self.owner_id]
-        if self.isfalling:
-            # If we've hit the floor, get us back out and build
-            while game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y))):
-                self.y -= 1
-                self.isfalling = False
-
-            # Gravity
-            self.vspeed += 300 * frametime
-
-            # TODO: air resistance, not hard limit
-            self.vspeed = min(800, self.vspeed)
-
-        if not self.isfalling:
-            self.hspeed = 0
-            self.vspeed = 0
-
-            if self.building_time >= self.build_time:
-                if self.hp >= self.max_hp:
-                    self.hp = self.max_hp
-                # Create a finished sentry, and destroy the building sentry object
-                #owner.get_player(game, state).sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
-                self.destroy(state)
-            else:
-                self.hp += self.hp_increment * frametime
-                self.building_time += self.build_time * frametime
-                self.animation_frame += self.animation_increment * frametime
+        try:
+            owner = state.entities[self.owner_id]
+            if self.isfalling:
+                # If we've hit the floor, get us back out and build
+                while game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y))):
+                    self.y -= 1
+                    self.isfalling = False
+    
+                # Gravity
+                self.vspeed += 300 * frametime
+    
+                # TODO: air resistance, not hard limit
+                self.vspeed = min(800, self.vspeed)
+    
+            if not self.isfalling:
+                self.hspeed = 0
+                self.vspeed = 0
+    
+                if self.building_time >= self.build_time:
+                    if self.hp >= self.max_hp:
+                        self.hp = self.max_hp
+                    # Create a finished sentry, and destroy the building sentry object
+                    #owner.get_player(game, state).sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp) # TODO: make Character object associate with this
+                    self.destroy(state)
+                else:
+                    self.hp += self.hp_increment * frametime
+                    self.building_time += self.build_time * frametime
+                    self.animation_frame += self.animation_increment * frametime
+        except KeyError: # TODO: Destroy from character object; temporary hack to prevent server crash
+            self.destroy(state)
 
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Building_Sentry, self).interpolate(prev_obj, next_obj, alpha)

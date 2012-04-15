@@ -67,7 +67,7 @@ class Scattergun(Weapon):
     def fire_primary(self, game, state):
         owner = state.entities[self.owner]
         random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
-        sentry.Building_Sentry(game, state, owner)
+        sentry.Building_Sentry(game, state, self.owner)
 
         for i in range(10):
             direction = owner.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
