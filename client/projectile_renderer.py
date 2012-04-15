@@ -21,8 +21,6 @@ class ShotRenderer(object):
         sprite.position = renderer.get_screen_coords(shot.x, shot.y)
 
         renderer.world_sprites.append(sprite)
-    def return_depth(self):
-        return self.depth
 
 
 class FlameRenderer(object):
@@ -50,9 +48,6 @@ class FlameRenderer(object):
         sprite.position = renderer.get_screen_coords(flame.x,flame.y)
 
         renderer.world_sprites.append(sprite)
-    def return_depth(self):
-        return self.depth
-
 
 class RocketRenderer(object):
     def __init__(self):
@@ -68,9 +63,6 @@ class RocketRenderer(object):
         sprite.position = renderer.get_screen_coords(rocket.x, rocket.y)
 
         renderer.world_sprites.append(sprite)
-    def return_depth(self):
-        return self.depth
-
 class NeedleRenderer(object):
     def __init__(self):
         self.depth = 1

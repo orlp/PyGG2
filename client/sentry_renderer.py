@@ -19,6 +19,3 @@ class BuildingSentryRenderer(object):
         sprite.position = renderer.get_screen_coords(sentry.x, sentry.y)
 
         renderer.world_sprites.append(sprite)
-
-    def return_depth(self):
-        return self.depth
