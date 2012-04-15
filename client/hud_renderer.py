@@ -56,7 +56,7 @@ class HealthRenderer(HudRenderer):
             # Color it yellow-red
             self.health_box.health_color = (1, (2*health_percentage)**exponent, 0, 1)
         renderer.hud_overlay.append(self.health_box)
-        renderer.hud_overlay.append(self.health_text)
+        #renderer.hud_overlay.append(self.health_text) # FIXME: Uncomment when the memory leak is gone
 
 class HealthBar(object):
     def render(self):

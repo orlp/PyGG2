@@ -50,3 +50,8 @@ class Building_Sentry(entity.MovingObject):
             else:
                 self.hp += self.hp_increment * frametime
                 self.animation_frame += self.animation_increment * frametime
+
+    def interpolate(self, prev_obj, next_obj, alpha):
+        super(Building_Sentry, self).interpolate(prev_obj, next_obj, alpha)
+        self.animation_frame = prev_obj.animation_frame + (next_obj.animation_frame - prev_obj.animation_frame) * alpha
+        self.hp = prev_obj.hp + (next_obj.hp - prev_obj.hp) * alpha
