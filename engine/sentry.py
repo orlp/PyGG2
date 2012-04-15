@@ -20,6 +20,7 @@ class Building_Sentry(entity.MovingObject):
         self.hp = self.starting_hp
         self.isfalling = True
         self.animation_frame = 0
+        self.building_time = 0
 
         self.owner_id = owner.id
         self.x = owner.x
@@ -42,16 +43,29 @@ class Building_Sentry(entity.MovingObject):
             self.hspeed = 0
             self.vspeed = 0
 
-            if self.hp >= self.max_hp:
-                self.hp = self.max_hp
+            if sef.building_time >= build_time:
+                if self.hp >= self.max_hp:
+                    self.hp = self.max_hp
                 # Create a finished sentry, and destroy the building sentry object
-                #self.owner.sentry = Sentry(game, state, self.owner)
+                #self.owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
                 self.destroy(state)
             else:
                 self.hp += self.hp_increment * frametime
+                self.building_time += self.build_time * frametime
                 self.animation_frame += self.animation_increment * frametime
 
     def interpolate(self, prev_obj, next_obj, alpha):
         super(Building_Sentry, self).interpolate(prev_obj, next_obj, alpha)
         self.animation_frame = prev_obj.animation_frame + (next_obj.animation_frame - prev_obj.animation_frame) * alpha
         self.hp = prev_obj.hp + (next_obj.hp - prev_obj.hp) * alpha
+
+
+class Sentry(entity.MovingObject):
+    collision_mask = mask.Mask(26, 19, True)
+
+    def __init__(self, game, state, owner_id, x, y, hp):
+        self.owner_id = owner_id
+        self.aiming_direction = 0
+        self.x = x
+        self.y = y
+        self.hp = hp
