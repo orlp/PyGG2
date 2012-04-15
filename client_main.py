@@ -323,79 +323,84 @@ class GameClientHandler(Handler):
         self.fpscounter_accumulator = 0.0 # this counter will tell us when to update the fps info in the title
 
     def step(self):
-        self.networker.recieve(self.game, self)
-        if self.networker.has_connected:
-            self.window.poll_events()
-
-            # check if user exited the game
-            if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
-                return False
-
-            # handle input
-            self.oldkeys = self.keys
-            self.keys = get_input(self.window)
-            leftmouse = self.window.is_mouse_button_pressed(mouse.LEFT)
-            middlemouse = self.window.is_mouse_button_pressed(mouse.MIDDLE)
-            rightmouse = self.window.is_mouse_button_pressed(mouse.RIGHT)
-
-            mouse_x, mouse_y = self.window.get_mouse_position()
-            our_player = self.game.current_state.players[self.our_player_id]
-            our_player.up = self.keys["up"]
-            our_player.down = self.keys["down"]
-            our_player.left = self.keys["left"]
-            our_player.right = self.keys["right"]
-            our_player.leftmouse = leftmouse
-            our_player.middlemouse = middlemouse
-            our_player.rightmouse = rightmouse
-            our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
-
-            if self.window.is_key_pressed(key._1):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SCOUT)
-                self.networker.events.append((self.networker.sequence, event))
-            elif self.window.is_key_pressed(key._2):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_PYRO)
-                self.networker.events.append((self.networker.sequence, event))
-            elif self.window.is_key_pressed(key._3):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SOLDIER)
-                self.networker.events.append((self.networker.sequence, event))
-            elif self.window.is_key_pressed(key._4):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_HEAVY)
-                self.networker.events.append((self.networker.sequence, event))
-            elif self.window.is_key_pressed(key._7):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_ENGINEER)
-                self.networker.events.append((self.networker.sequence, event))
-            elif self.window.is_key_pressed(key._8):
-                event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
-                self.networker.events.append((self.networker.sequence, event))
-
-            # did we just release the F11 button? if yes, go fullscreen
-            if self.window.is_key_pressed(key.F11):
-                self.window.fullscreen = not self.window.fullscreen
-
-            # update the game and render
-            frame_time = self.clock.tick()
-            frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
-
-            self.fpscounter_accumulator += frame_time
-
+        #game loop
+        while True:
             self.networker.recieve(self.game, self)
-            self.game.update(self.networker, frame_time)
-            self.renderer.render(self, self.game, frame_time)
-
-            if self.network_update_timer >= constants.INPUT_SEND_FPS:
-                self.networker.update(self)
-                self.network_update_timer = 0
-            else:
-                self.network_update_timer += frame_time
-
-            if self.fpscounter_accumulator > 0.5:
-                self.window.title = "PyGG2 - %d FPS" % self.window.get_fps()
-                self.fpscounter_accumulator = 0.0
-
-            self.window.flip()
-        return True
+            if self.networker.has_connected:
+                self.window.poll_events()
+    
+                # check if user exited the game
+                if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
+                    event = networking.event_serialize.ClientEventDisconnect()
+                    self.networker.sendbuffer.append(event)
+                    break
+    
+                # handle input
+                self.oldkeys = self.keys
+                self.keys = get_input(self.window)
+                leftmouse = self.window.is_mouse_button_pressed(mouse.LEFT)
+                middlemouse = self.window.is_mouse_button_pressed(mouse.MIDDLE)
+                rightmouse = self.window.is_mouse_button_pressed(mouse.RIGHT)
+    
+                mouse_x, mouse_y = self.window.get_mouse_position()
+                our_player = self.game.current_state.players[self.our_player_id]
+                our_player.up = self.keys["up"]
+                our_player.down = self.keys["down"]
+                our_player.left = self.keys["left"]
+                our_player.right = self.keys["right"]
+                our_player.leftmouse = leftmouse
+                our_player.middlemouse = middlemouse
+                our_player.rightmouse = rightmouse
+                our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
+    
+                if self.window.is_key_pressed(key._1):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SCOUT)
+                    self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._2):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_PYRO)
+                    self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._3):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SOLDIER)
+                    self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._4):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_HEAVY)
+                    self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._7):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_ENGINEER)
+                    self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._8):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
+                    self.networker.events.append((self.networker.sequence, event))
+    
+                # did we just release the F11 button? if yes, go fullscreen
+                if self.window.is_key_pressed(key.F11):
+                    self.window.fullscreen = not self.window.fullscreen
+    
+                # update the game and render
+                frame_time = self.clock.tick()
+                frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
+    
+                self.fpscounter_accumulator += frame_time
+    
+                self.networker.recieve(self.game, self)
+                self.game.update(self.networker, frame_time)
+                self.renderer.render(self, self.game, frame_time)
+    
+                if self.network_update_timer >= constants.INPUT_SEND_FPS:
+                    self.networker.update(self)
+                    self.network_update_timer = 0
+                else:
+                    self.network_update_timer += frame_time
+    
+                if self.fpscounter_accumulator > 0.5:
+                    self.window.title = "PyGG2 - %d FPS" % self.window.get_fps()
+                    self.fpscounter_accumulator = 0.0
+    
+                self.window.flip()
+        self.cleanup()
 
     def cleanup(self):
+        #clear buffer, send disconnect, and kiss and fly
         self.destroy = True
         self.networker.update(self)
 
