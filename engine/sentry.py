@@ -8,9 +8,8 @@ import mask
 class Building_Sentry(entity.MovingObject):
     max_hp = 100 # Maximum hitpoints the sentry can ever have
     starting_hp = 25 # At what hitpoints the sentry will start building
-    build_time = 2 # Number of secs it takes to build
     collision_mask = mask.Mask(26, 19, True) # TODO: Implement changing masks
-
+    build_time = 2 # Number of secs it takes to build
     hp_increment = (max_hp-starting_hp)/build_time
     animation_increment = 10/build_time # 10 == number of frames in sentry build animation
 
@@ -22,11 +21,12 @@ class Building_Sentry(entity.MovingObject):
         self.animation_frame = 0
         self.building_time = 0
 
-        self.owner_id = owner.id
+        self.owner_id = owner
         self.x = owner.x
         self.y = owner.y
 
     def step(self, game, state, frametime):
+        #owner = state.entities[self.owner_id]
         if self.isfalling:
             # If we've hit the floor, get us back out and build
             while game.map.collision_mask.overlap(self.collision_mask, (int(self.x), int(self.y))):
@@ -43,11 +43,11 @@ class Building_Sentry(entity.MovingObject):
             self.hspeed = 0
             self.vspeed = 0
 
-            if sef.building_time >= build_time:
+            if self.building_time >= self.build_time:
                 if self.hp >= self.max_hp:
                     self.hp = self.max_hp
                 # Create a finished sentry, and destroy the building sentry object
-                #self.owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
+                #owner.get_player(game, state).sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
                 self.destroy(state)
             else:
                 self.hp += self.hp_increment * frametime
