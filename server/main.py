@@ -21,7 +21,7 @@ import os
 class Server(object):
     def __init__(self):
         self.port = 8190
-        self.name = "Testing Server"
+        self.name = "Development Server"
         self.password = ""
         self.ID = uuid.uuid4()
 

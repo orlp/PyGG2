@@ -3,8 +3,14 @@ from __future__ import division
 import socket, struct, uuid
 
 import constants
+import random
 
 class Lobby(object):
+
+    # FIXME: Remove, this is only a troll (AJF's idea)
+    max_players = 128
+    num_players = random.randint(32, 128)
+
     def __init__(self):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.timer = 0
@@ -21,6 +27,14 @@ class Lobby(object):
     def build_reg_packet(self, server):
         packet = ""
 
+        if random.randint(1, 3) == 1:
+            if self.num_players < 16:
+                self.num_players = 16
+            elif self.num_players > self.max_players:
+                self.num_players = self.max_players
+            else:
+                self.num_players += random.randint(-1, 1)
+
         # Message type for the lobby
         messagetype = uuid.UUID(constants.LOBBY_MESSAGE_TYPE_REG)
         packet += messagetype.get_bytes()
@@ -36,7 +50,8 @@ class Lobby(object):
         packet += struct.pack(">H", server.port)
 
         # Max number of players, current number of players and current number of AI players
-        packet += struct.pack(">HHH", server.game.maxplayers, len(server.game.current_state.players), 0)# There are no AI players in mainstream.
+        #packet += struct.pack(">HHH", server.game.maxplayers, len(server.game.current_state.players), 0)# There are no AI players in mainstream.
+        packet += struct.pack(">HHH", self.max_players, self.num_players, 0)# AJF's troll
         # Password protected?
         packet += struct.pack(">H", 0)
 
