@@ -9,9 +9,10 @@ import function
 class BuildingSentryRenderer(object):
     def __init__(self):
         self.depth = 1
-
+        self.sprites = list([pygrafix.image.load("sprites/ingameelements/sentryred/{0}.png".format(i)) for i in range(10)])
+        
     def render(self, renderer, game, state, sentry):
-        self.sprite = pygrafix.image.load("sprites/ingameelements/sentryred/"+str(int(sentry.animation_frame))+".png")
+        self.sprite = self.sprites[int(sentry.animation_frame)]
         sprite = pygrafix.sprite.Sprite(self.sprite)
 
         # TODO: Sprite offset correctly
