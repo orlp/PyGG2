@@ -9,10 +9,11 @@ class Building_Sentry(entity.MovingObject):
     max_hp = 100 # Maximum hitpoints the sentry can ever have
     starting_hp = 25 # At what hitpoints the sentry will start building
     collision_mask = mask.Mask(26, 19, True) # TODO: Implement changing masks
-    build_time = 10 # Number of secs it takes to build
+    build_time = 15 # Number of secs it takes to build
     hp_increment = (max_hp-starting_hp)/build_time
     animation_increment = 10/build_time # 10 == number of frames in sentry build animation
-
+    building_increment = hp_increment
+    
     def __init__(self, game, state, owner_id):
         super(Building_Sentry, self).__init__(game, state)
 
@@ -20,6 +21,7 @@ class Building_Sentry(entity.MovingObject):
         self.isfalling = True
         self.animation_frame = 0
         self.building_time = 0
+        
         self.owner_id = owner_id
         
         owner = state.entities[self.owner_id]
@@ -44,17 +46,17 @@ class Building_Sentry(entity.MovingObject):
             if not self.isfalling:
                 self.hspeed = 0
                 self.vspeed = 0
-    
-                if self.building_time >= self.build_time:
+                if self.building_time >= self.max_hp - self.starting_hp:
                     if self.hp >= self.max_hp:
                         self.hp = self.max_hp
                     # Create a finished sentry, and destroy the building sentry object
                     #owner.get_player(game, state).sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp) # TODO: make Character object associate with this
-                    self.destroy(state)
+                        self.destroy(state)
                 else:
                     self.hp += self.hp_increment * frametime
-                    self.building_time += self.build_time * frametime
+                    self.building_time += self.building_increment * frametime
                     self.animation_frame += self.animation_increment * frametime
+                    
         except KeyError: # TODO: Destroy from character object; temporary hack to prevent server crash
             self.destroy(state)
 
@@ -62,7 +64,6 @@ class Building_Sentry(entity.MovingObject):
         super(Building_Sentry, self).interpolate(prev_obj, next_obj, alpha)
         self.animation_frame = prev_obj.animation_frame + (next_obj.animation_frame - prev_obj.animation_frame) * alpha
         self.hp = prev_obj.hp + (next_obj.hp - prev_obj.hp) * alpha
-
 
 class Sentry(entity.MovingObject):
     collision_mask = mask.Mask(26, 19, True)
