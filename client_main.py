@@ -310,7 +310,7 @@ class GameClientHandler(Handler):
             key.UP,
             key.LEFT,
             key.RIGHT,
-            key.SPACE
+            key.LEFT_SHIFT,
             ]
         #Generate Dictionary
         self.pressed_dict = {}
@@ -397,23 +397,19 @@ class GameClientHandler(Handler):
                 #DEBUGTOOL
                 for keypress in self.pressed_list:
                     if self.window.is_key_pressed(keypress) == True and self.pressed_dict[keypress] == False:
+                        self.pressed_dict[keypress] = True
                         if keypress == key.LEFT:
                             self.game.horizontal -= 1
-                            self.pressed_dict[keypress] = True
                         if keypress == key.RIGHT:
                             self.game.horizontal += 1
                             self.pressed_right = True
-                            self.pressed_dict[keypress] = True
                         if keypress == key.UP:
                             self.game.vertical -= 1
-                            self.pressed_dict[keypress] = True
                         if keypress == key.DOWN:
                             self.game.vertical += 1
-                            self.pressed_dict[keypress] = True
-                        if keypress == key.SPACE:
+                        if keypress == key.LEFT_SHIFT:
                             print("HORIZONTAL OFFSET = " + str(self.game.horizontal))
                             print("VERTICAL OFFSET = " + str(self.game.vertical))
-                            self.pressed_space = True
                     elif self.window.is_key_pressed(keypress) == False:
                             self.pressed_dict[keypress] = False
                 # did we just release the F11 button? if yes, go fullscreen
