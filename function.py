@@ -71,6 +71,8 @@ def convert_class(class_object):
             return constants.CLASS_SOLDIER
         elif class_object == engine.character.Heavy:
             return constants.CLASS_HEAVY
+        elif class_object == engine.character.Medic:
+            return constants.CLASS_MEDIC
         elif class_object == engine.character.Engineer:
             return constants.CLASS_ENGINEER
         elif class_object == engine.character.Spy:
@@ -85,6 +87,8 @@ def convert_class(class_object):
             return engine.character.Soldier
         elif class_object == constants.CLASS_HEAVY:
             return engine.character.Heavy
+        elif class_object == constants.CLASS_MEDIC:
+            return engine.character.Medic
         elif class_object == constants.CLASS_ENGINEER:
             return engine.character.Engineer
         elif class_object == constants.CLASS_SPY:
