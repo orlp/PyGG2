@@ -20,11 +20,11 @@ class WeaponRenderer(object):
         if owner.flip:
             sprite.flip_y = True
             sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset_flipped[0], owner.y + self.weaponoffset_flipped[1])
-            weapon_rotate = self.weapon_rotate_flipped
+            weapon_rotate = self.weapon_rotate_flipped[0] , self.weapon_rotate_flipped[1]
         else:
             sprite.flip_y = False
-            sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset[0], owner.y + self.weaponoffset[1])
-            weapon_rotate = self.weapon_rotate_point
+            sprite.position = renderer.get_screen_coords(owner.x + self.weaponoffset[0] , owner.y + self.weaponoffset[1] )
+            weapon_rotate = self.weapon_rotate_point[0] , self.weapon_rotate_point[1] 
 
         sprite.anchor = weapon_rotate
         sprite.rotation = 360 - weapon.direction
@@ -76,10 +76,11 @@ class MinigunRenderer(WeaponRenderer):
         self.firingsprite = pygrafix.image.load("weapons/miniguns/2.png")
         
 class MedigunRenderer(WeaponRenderer):
-    weapon_rotate_point = (10, -1) # where is the handle of the gun, where to rotate around
-    weapon_rotate_flipped = (10,11)
-    weaponoffset = (10, 9) # where the character should carry it's gun
-    weaponoffset_flipped = (2, 9)
+    #TODO: fix these to actually align correctly
+    weapon_rotate_point = (7, 3) # where is the handle of the gun, where to rotate around
+    weapon_rotate_flipped = (7,6)
+    weaponoffset = (5, 14) # where the character should carry it's gun
+    weaponoffset_flipped = (6, 14)
 
     def __init__(self):
         self.depth = 1

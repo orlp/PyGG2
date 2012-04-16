@@ -31,6 +31,12 @@ class ClassRenderer(object):
         sprite.position = renderer.get_screen_coords(character.x, character.y)
 
         renderer.world_sprites.append(sprite)
+        #draw mask
+        #w, h = character.collision_mask.get_size()
+        #location =  renderer.get_screen_coords(character.x, character.y)
+        #size = (w,h)
+        #color = (153,0,153)
+        #pygrafix.draw.rectangle(location,size,color)
 
 
 class ScoutRenderer(ClassRenderer):
@@ -70,8 +76,8 @@ class MedicRenderer(ClassRenderer):
         self.depth = 0
         self.sprites = [pygrafix.image.load("characters/medicreds/%s.png" % i) for i in range(4)]
 
-        self.spriteoffset = (26, 30)
-        self.spriteoffset_flipped = (26, 30)
+        self.spriteoffset = (23, 30)
+        self.spriteoffset_flipped = (29, 30)
 
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
