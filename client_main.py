@@ -301,7 +301,24 @@ class GameClientHandler(Handler):
 
         # Gets set to true when we're disconnecting, for the networker
         self.destroy = False
+        
+        #These are used for when we want to detect when certain keys are pressed; append to this list which keys you want tracked
+        #(don't forget to remember to add the handle to the step loop below!)
+        #DEBUGTOOL
+        self.pressed_list = [
+            key.DOWN,
+            key.UP,
+            key.LEFT,
+            key.RIGHT,
+            key.SPACE
+            ]
+        #Generate Dictionary
+        self.pressed_dict = {}
+        
+        for pressedlistkey in self.pressed_list:
+            self.pressed_dict[pressedlistkey] = False
 
+    
     def start_game(self, player_id):
         # Only start the game once the networker has confirmed a connection with the server
 
@@ -374,7 +391,31 @@ class GameClientHandler(Handler):
                 elif self.window.is_key_pressed(key._8):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
                     self.networker.events.append((self.networker.sequence, event))
-    
+                    
+
+                #This for loop detects to see if a key has been pressed. Currently useful for precision offsets
+                #DEBUGTOOL
+                for keypress in self.pressed_list:
+                    if self.window.is_key_pressed(keypress) == True and self.pressed_dict[keypress] == False:
+                        if keypress == key.LEFT:
+                            self.game.horizontal -= 1
+                            self.pressed_dict[keypress] = True
+                        if keypress == key.RIGHT:
+                            self.game.horizontal += 1
+                            self.pressed_right = True
+                            self.pressed_dict[keypress] = True
+                        if keypress == key.UP:
+                            self.game.vertical -= 1
+                            self.pressed_dict[keypress] = True
+                        if keypress == key.DOWN:
+                            self.game.vertical += 1
+                            self.pressed_dict[keypress] = True
+                        if keypress == key.SPACE:
+                            print("HORIZONTAL OFFSET = " + str(self.game.horizontal))
+                            print("VERTICAL OFFSET = " + str(self.game.vertical))
+                            self.pressed_space = True
+                    elif self.window.is_key_pressed(keypress) == False:
+                            self.pressed_dict[keypress] = False
                 # did we just release the F11 button? if yes, go fullscreen
                 if self.window.is_key_pressed(key.F11):
                     self.window.fullscreen = not self.window.fullscreen

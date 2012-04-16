@@ -78,6 +78,7 @@ class Sentry(entity.MovingObject):
     collision_mask = mask.Mask(26, 19, True)
 
     def __init__(self, game, state, owner_id, x, y, hp):
+        super(Sentry, self).__init__(game, state)
         self.owner_id = owner_id
         self.aiming_direction = 0
         self.x = x
@@ -86,7 +87,7 @@ class Sentry(entity.MovingObject):
 
     def step(self, game, state, frametime):
         # TODO: Aim at nearest enemy
-        if hp <= 0:
+        if self.hp <= 0:
             self.destroy(state)
 
     def interpolate(self, prev_obj, next_obj, alpha):

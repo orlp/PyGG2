@@ -54,6 +54,7 @@ class GameRenderer(object):
             engine.projectile.Rocket: projectile_renderer.RocketRenderer(),
             engine.projectile.Needle : projectile_renderer.NeedleRenderer(),
             engine.sentry.Building_Sentry: sentry_renderer.BuildingSentryRenderer(),
+            engine.sentry.Sentry: sentry_renderer.SentryRenderer(),
         }
 
         self.world_sprites = []

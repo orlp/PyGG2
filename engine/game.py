@@ -17,7 +17,7 @@ class Game:
         self.isserver = False
         self.lag_comp = False
         self.old_states = {}
-
+        
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
 
@@ -30,7 +30,10 @@ class Game:
 
         # this accumulator is used to update the engine in fixed timesteps
         self.accumulator = 0.0
-
+        #These variables are useful for modifying to change the offsets of objects ingame
+        #DEBUGTOOLL
+        self.horizontal = 0
+        self.vertical = 0
     def update(self, networker, frametime):
         self.accumulator += frametime
 
