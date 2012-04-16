@@ -40,7 +40,6 @@ class Building_Sentry(entity.MovingObject):
             self.vspeed = min(800, self.vspeed)
 
         if not self.isfalling:
-            print(self.animation_frame)
             self.hspeed = 0
             self.vspeed = 0
 
