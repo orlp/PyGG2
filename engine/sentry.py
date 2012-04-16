@@ -81,3 +81,17 @@ class Sentry(entity.MovingObject):
         self.x = x
         self.y = y
         self.hp = hp
+
+    def step(self, game, state, frametime):
+        # TODO: Aim at nearest enemy
+        if hp <= 0:
+            self.destroy(state)
+
+    def interpolate(self, prev_obj, next_obj, alpha):
+        super(Sentry, self).interpolate(prev_obj, next_obj, alpha)
+        self.hp = prev_obj.hp + (next_obj.hp - prev_obj.hp) * alpha
+
+    def destroy(self, state):
+        # TODO: Sentry destruction syncing, bubble
+        owner = state.players[self.owner_id]
+        owner.sentry = None
