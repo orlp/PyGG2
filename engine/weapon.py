@@ -67,7 +67,6 @@ class Scattergun(Weapon):
     def fire_primary(self, game, state):
         owner = state.entities[self.owner]
         random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
-        sentry.Building_Sentry(game, state, owner)
 
         for i in range(10):
             direction = owner.get_player(game, state).aimdirection + (7 - random.randint(0, 15))
@@ -138,6 +137,7 @@ class Shotgun(Weapon):
             projectile.Shot(game, state, self.id, self.shotdamage, direction, speed)
 
         self.refirealarm = self.refiretime
+        sentry.Building_Sentry(game, state, state.players[owner.player_id])
 
 class Revolver(Weapon):
     maxammo = 6

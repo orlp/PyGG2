@@ -23,8 +23,9 @@ class Building_Sentry(entity.MovingObject):
         self.building_time = 0
 
         self.owner_id = owner.id
-        self.x = owner.x
-        self.y = owner.y
+        character = state.entities[owner.character_id]
+        self.x = character.x
+        self.y = character.y
 
     def step(self, game, state, frametime):
         if self.isfalling:
@@ -43,13 +44,19 @@ class Building_Sentry(entity.MovingObject):
             self.hspeed = 0
             self.vspeed = 0
 
-            if sef.building_time >= build_time:
+            if self.hp <= 0:
+                self.destroy(state)
+                return
+
+            if self.building_time >= self.build_time:
+                # Cap hp at max hp
                 if self.hp >= self.max_hp:
                     self.hp = self.max_hp
                 # Create a finished sentry, and destroy the building sentry object
-                #self.owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
+                self.owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
                 self.destroy(state)
             else:
+                # Continue building
                 self.hp += self.hp_increment * frametime
                 self.building_time += self.build_time * frametime
                 self.animation_frame += self.animation_increment * frametime
@@ -58,6 +65,11 @@ class Building_Sentry(entity.MovingObject):
         super(Building_Sentry, self).interpolate(prev_obj, next_obj, alpha)
         self.animation_frame = prev_obj.animation_frame + (next_obj.animation_frame - prev_obj.animation_frame) * alpha
         self.hp = prev_obj.hp + (next_obj.hp - prev_obj.hp) * alpha
+
+    def destroy(self, state):
+        # TODO: Sentry destruction syncing, bubble
+        owner = state.players[self.owner_id]
+        owner.sentry = None
 
 
 class Sentry(entity.MovingObject):
