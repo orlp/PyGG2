@@ -9,7 +9,7 @@ class Building_Sentry(entity.MovingObject):
     max_hp = 100 # Maximum hitpoints the sentry can ever have
     starting_hp = 25 # At what hitpoints the sentry will start building
     collision_mask = mask.Mask(26, 19, True) # TODO: Implement changing masks
-    build_time = 2 # Number of secs it takes to build
+    build_time = 10 # Number of secs it takes to build
     hp_increment = (max_hp-starting_hp)/build_time
     animation_increment = 10/build_time # 10 == number of frames in sentry build animation
 
