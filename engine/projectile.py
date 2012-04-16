@@ -74,6 +74,71 @@ class Shot(entity.MovingObject):
 
         self.flight_time = prev_obj.flight_time + (next_obj.flight_time - prev_obj.flight_time) * alpha
 
+
+class Needle(entity.MovingObject):
+    shot_hitmasks = {}
+
+    fade_time = 0.8 # seconds of fading when max_flight_time is being reached
+    max_flight_time = 3
+
+    def __init__(self, game, state, sourceweapon, damage, direction, speed):
+        super(Needle, self).__init__(game, state)
+
+        self.direction = 0.0
+        self.flight_time = 0.0
+        self.sourceweapon = sourceweapon
+        self.damage = damage
+
+        srcwep = state.entities[sourceweapon]
+        srcchar = state.entities[srcwep.owner]
+
+        self.x = srcchar.x
+        self.y = srcchar.y+8
+
+        self.direction = direction
+
+        self.hspeed = math.cos(math.radians(self.direction)) * speed
+        self.vspeed = math.sin(math.radians(self.direction)) * -speed
+
+    def step(self, game, state, frametime):
+        # gravitational force
+        self.vspeed += 4.5 * frametime
+
+        # calculate direction
+        self.direction = function.point_direction(self.x - self.hspeed, self.y - self.vspeed, self.x, self.y)
+
+    def endstep(self, game, state, frametime):
+        super(Needle, self).endstep(game, state, frametime)
+
+        self.flight_time += frametime
+
+        angle = int(self.direction) % 360
+        if angle in self.shot_hitmasks:
+            mask = self.shot_hitmasks[angle]
+        else:
+            mask = function.load_mask("projectiles/needles/0").rotate(angle)
+            self.shot_hitmasks[angle] = mask
+
+        if game.map.collision_mask.overlap(mask, (int(self.x), int(self.y))) or self.flight_time > self.max_flight_time:
+            # calculate unit speeds (speeds normalized into the range 0-1)
+            h_unit_speed = math.cos(math.radians(self.direction))
+            v_unit_speed = -math.sin(math.radians(self.direction))
+
+            x, y = self.x, self.y
+
+            # move back until we're not colliding anymore - this is the colliding point
+            while game.map.collision_mask.overlap(mask, (int(x), int(y))):
+                x -= h_unit_speed
+                y -= v_unit_speed
+
+            self.destroy(state)
+
+    def interpolate(self, prev_obj, next_obj, alpha):
+        super(Needle, self).interpolate(prev_obj, next_obj, alpha)
+        self.direction = function.interpolate_angle(prev_obj.direction, next_obj.direction, alpha)
+
+        self.flight_time = prev_obj.flight_time + (next_obj.flight_time - prev_obj.flight_time) * alpha
+
 class Rocket(entity.MovingObject):
     rocket_hitmasks = {}
 

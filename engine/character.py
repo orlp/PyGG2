@@ -130,7 +130,7 @@ class Character(entity.MovingObject):
 
         # Then we have to destroy our weapon
         state.entities[self.weapon].destroy(state)
-
+        # TODO: destroy our sentry
         self.destroy(state)
 
     def get_player(self, game, state):
@@ -207,6 +207,24 @@ class Soldier(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
+        
+class Demoman(Character):
+    #TODO: this class
+    # FIXME: width, height of heavy - rectangle collision
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 144
+    maxhp = 200
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Minigun(game, state, self.id).id
+
+    def step(self, game, state, frametime):
+        Character.step(self, game, state, frametime)
+        if self.get_player(game, state).leftmouse:
+            self.hspeed = min(54, max(-54, self.hspeed))
 
 class Heavy(Character):
     # FIXME: width, height of heavy - rectangle collision
@@ -224,7 +242,20 @@ class Heavy(Character):
         Character.step(self, game, state, frametime)
         if self.get_player(game, state).leftmouse:
             self.hspeed = min(54, max(-54, self.hspeed))
+            
+class Medic(Character):
+    # FIXME: width, height of Medic - rectangle collision
+    # FIXME: offsets to be proper
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 175
+    maxhp = 120
 
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Medigun(game, state, self.id).id
+        
 class Engineer(Character):
     # FIXME: width, height of engineer - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
@@ -249,3 +280,16 @@ class Spy(Character):
         self.hp = self.maxhp
         self.weapon = weapon.Revolver(game, state, self.id).id
         self.cloaking = False
+
+class Sniper(Character):
+    # FIXME: width, height of heavy - rectangle collision
+    # TODO: this class
+    collision_mask = mask.Mask(12, 33, True)
+    max_speed = 144
+    maxhp = 200
+
+    def __init__(self, game, state, player_id):
+        Character.__init__(self, game, state, player_id)
+
+        self.hp = self.maxhp
+        self.weapon = weapon.Minigun(game, state, self.id).id

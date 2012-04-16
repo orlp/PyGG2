@@ -365,6 +365,9 @@ class GameClientHandler(Handler):
                 elif self.window.is_key_pressed(key._4):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_HEAVY)
                     self.networker.events.append((self.networker.sequence, event))
+                elif self.window.is_key_pressed(key._6):
+                    event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_MEDIC)
+                    self.networker.events.append((self.networker.sequence, event))
                 elif self.window.is_key_pressed(key._7):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_ENGINEER)
                     self.networker.events.append((self.networker.sequence, event))

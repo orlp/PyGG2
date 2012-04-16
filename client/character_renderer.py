@@ -65,6 +65,14 @@ class HeavyRenderer(ClassRenderer):
         self.spriteoffset = (14, 30)
         self.spriteoffset_flipped = (36, 30)
 
+class MedicRenderer(ClassRenderer):
+    def __init__(self):
+        self.depth = 0
+        self.sprites = [pygrafix.image.load("characters/medicreds/%s.png" % i) for i in range(4)]
+
+        self.spriteoffset = (26, 30)
+        self.spriteoffset_flipped = (26, 30)
+
 class EngineerRenderer(ClassRenderer):
     def __init__(self):
         self.depth = 0

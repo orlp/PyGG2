@@ -138,6 +138,28 @@ class Shotgun(Weapon):
 
         self.refirealarm = self.refiretime
         sentry.Building_Sentry(game, state, state.players[owner.player_id])
+        
+class Medigun(Weapon):
+    maxammo = 40
+    refiretime = 0.05
+    reloadtime = 1
+    shotdamage = 4
+
+    def fire_primary(self, game, state):
+        owner = state.entities[self.owner]
+        random.seed(str(owner.get_player(game, state).id) + ";" + str(state.time))
+        
+        direction = owner.get_player(game, state).aimdirection + (5 - random.randint(0, 11))
+
+        # add user speed to needle speed but don't change direction of the bullet
+        playerdir = math.degrees(math.atan2(-owner.vspeed, owner.hspeed))
+        diffdir = direction - playerdir
+        playerspeed = math.hypot(owner.hspeed, owner.vspeed)
+        speed = 330 + random.randint(0, 4)*30 + math.cos(math.radians(diffdir)) * playerspeed
+
+        projectile.Needle(game, state, self.id, self.shotdamage, direction, speed)
+
+        self.refirealarm = self.refiretime
 
 class Revolver(Weapon):
     maxammo = 6

@@ -74,6 +74,18 @@ class MinigunRenderer(WeaponRenderer):
         self.depth = 1
         self.weaponsprite = pygrafix.image.load("weapons/miniguns/0.png")
         self.firingsprite = pygrafix.image.load("weapons/miniguns/2.png")
+        
+class MedigunRenderer(WeaponRenderer):
+    weapon_rotate_point = (10, -1) # where is the handle of the gun, where to rotate around
+    weapon_rotate_flipped = (10,11)
+    weaponoffset = (10, 9) # where the character should carry it's gun
+    weaponoffset_flipped = (2, 9)
+
+    def __init__(self):
+        self.depth = 1
+        self.weaponsprite = pygrafix.image.load("weapons/mediguns/0.png")
+        self.firingsprite = pygrafix.image.load("weapons/mediguns/0.png")
+
 
 class ShotgunRenderer(WeaponRenderer):
     weapon_rotate_point = (10, -1) # where is the handle of the gun, where to rotate around
