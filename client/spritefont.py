@@ -12,6 +12,7 @@ class SpriteFont(object):
             self.texture = pygrafix.image.load('sprites/font.png')
             self.cw = 7
             self.ch = 13
+        self.chars = list([self.texture.get_region((char % 16) * self.cw, (char // 16) * self.ch, self.cw, self.ch) for char in range(256)])
             
     def stringSize(self, string):
         return (len(string) * self.cw, self.ch)
@@ -20,10 +21,10 @@ class SpriteFont(object):
         sprites = []
         for i, char in enumerate(string):
             char = ord(char)
-            cx = (char % 16) * self.cw
-            cy = (char // 16) * self.ch
+            if char > 255: # too big to be in font
+                char = ord(' ')
             sprite = pygrafix.sprite.Sprite(
-                self.texture.get_region(cx, cy, self.cw, self.ch)
+                self.chars[char]
             )
             sprite.x = x + i*self.cw
             sprite.y = y
