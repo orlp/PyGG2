@@ -102,10 +102,11 @@ class MainMenuHandler(MenuHandler):
             )
         )
         self.menubg.x = 200
+        self.color = tuple(self.manager.config.setdefault('menu_color', [0.7, 0.25, 0]))
 
     def draw(self, hoveritem):
         self.menubg.draw(scale_smoothing = False)
-        pygrafix.draw.rectangle((0, 0), (200, 600), (0.7, 0.25, 0))
+        pygrafix.draw.rectangle((0, 0), (200, 600), self.color)
 
         super(MainMenuHandler, self).draw(hoveritem)
 
@@ -130,6 +131,7 @@ class LobbyHandler(MenuHandler):
             pygrafix.image.load("sprites/gameelements/menubackgrounds/0.png")
         )
         self.menubg.x = 200
+        self.color = tuple(self.manager.config.setdefault('menu_color', [0.7, 0.25, 0]))
 
         self.sendbuf = b''
 
@@ -203,6 +205,6 @@ class LobbyHandler(MenuHandler):
 
     def draw(self, hoveritem):
         self.menubg.draw(scale_smoothing = False)
-        pygrafix.draw.rectangle((0, 0), (200, 600), (0.7, 0.25, 0))
+        pygrafix.draw.rectangle((0, 0), (200, 600), self.color)
 
         super(LobbyHandler, self).draw(hoveritem)

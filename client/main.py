@@ -27,7 +27,7 @@ class GameClientHandler(Handler):
         self.game = engine.game.Game()
 
         self.server_password = ""# FIXME: Remove and replace with something more flexible
-        self.player_name = ""
+        self.player_name = str(self.manager.config.setdefault('player_name', 'nightcracker'))
 
         # Create the networking-handler
         self.networker = networker.Networker(('127.0.0.1', 8190), self) # FIXME: Remove these values, and replace with something easier.

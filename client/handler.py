@@ -1,4 +1,6 @@
 import pygrafix
+import json
+import os.path
 
 # manages client, switches handlers
 class ClientManager(object):
@@ -6,10 +8,23 @@ class ClientManager(object):
         # set display mode
         self.window = pygrafix.window.Window(800, 600, title = "PyGG2 - 0 FPS", fullscreen = False, vsync = False)
 
-        self.handler = handler(self.window, self)
+        self.load_config()
 
         self.quitting = False
         self.newhandler = None
+
+        self.handler = handler(self.window, self)
+
+    def load_config(self):
+        if os.path.exists('client_cfg.json'):
+            with open('client_cfg.json', 'r') as fp:
+                self.config = json.load(fp)
+        else:
+            self.config = {}
+
+    def save_config(self):
+        with open('client_cfg.json', 'w') as fp:
+            json.dump(self.config, fp, indent=4)
 
     def run(self):
         while self.handler.step() and not self.quitting:
@@ -27,6 +42,7 @@ class ClientManager(object):
 
     def clearup(self):
         self.window.close()
+        self.save_config()
 
 # handler base class, implements dummy handler
 class Handler(object):

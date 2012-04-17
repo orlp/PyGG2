@@ -11,6 +11,7 @@ import engine.game
 import constants
 import networker
 import lobby
+import json
 
 # DEBUG ONLY
 import cProfile
@@ -20,9 +21,11 @@ import os
 # the main function
 class Server(object):
     def __init__(self):
-        self.port = 8190
-        self.name = "Development Server"
-        self.password = ""
+        self.load_config()
+
+        self.port = self.config.setdefault('port', 8190)
+        self.name = str(self.config.setdefault('name', 'Development Server'))
+        self.password = str(self.config.setdefault('password', ''))
         self.ID = uuid.uuid4()
 
         # create game engine object
@@ -40,6 +43,9 @@ class Server(object):
         self.clock = precision_timer.Clock()
 
         print ("Hosting " + str(self.name) + " on port " + str(self.port) + " with password " + "\"" + str(self.password) + "\"")
+
+        self.save_config()
+
     def run(self):
         # game loop
         while True:
@@ -51,6 +57,17 @@ class Server(object):
             self.game.update(self.networker, frametime)
             self.networker.update(self, self.game, frametime)
             self.lobbyannouncer.update(self, frametime)
+
+    def load_config(self):
+        if os.path.exists('server_cfg.json'):
+            with open('server_cfg.json', 'r') as fp:
+                self.config = json.load(fp)
+        else:
+            self.config = {}
+
+    def save_config(self):
+        with open('server_cfg.json', 'w') as fp:
+            json.dump(self.config, fp, indent=4)
 
 
 # TODO: CALL LOBBY DESTRUCTION WHEN SERVER IS KILLED
