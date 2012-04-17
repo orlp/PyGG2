@@ -64,3 +64,6 @@ elif sys.argv[1] == "menuclient":
 elif sys.argv[1] == "testserver":
     import server.main
     server.main.GG2main()
+elif sys.argv[1] == "test":
+    subprocess.Popen([sys.executable, 'make.py', 'testclient'])
+    subprocess.Popen([sys.executable, 'make.py', 'testserver']).wait()
