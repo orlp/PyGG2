@@ -30,12 +30,12 @@ class GameClientHandler(Handler):
         self.player_name = str(self.manager.config.setdefault('player_name', 'nightcracker'))
 
         # Create the networking-handler
-        self.networker = networker.Networker(('127.0.0.1', 8190), self) # FIXME: Remove these values, and replace with something easier.
+        self.networker = networker.Networker((constants.SERVER_IP, 8190), self) # FIXME: Remove these values, and replace with something easier.
         self.network_update_timer = 0
 
         # Gets set to true when we're disconnecting, for the networker
         self.destroy = False
-        
+
         #These are used for when we want to detect when certain keys are pressed; append to this list which keys you want tracked
         #(don't forget to remember to add the handle to the step loop below!)
         #DEBUGTOOL
@@ -48,11 +48,11 @@ class GameClientHandler(Handler):
             ]
         #Generate Dictionary
         self.pressed_dict = {}
-        
+
         for pressedlistkey in self.pressed_list:
             self.pressed_dict[pressedlistkey] = False
 
-    
+
     def start_game(self, player_id):
         # Only start the game once the networker has confirmed a connection with the server
 
@@ -79,20 +79,20 @@ class GameClientHandler(Handler):
             self.networker.recieve(self.game, self)
             if self.networker.has_connected:
                 self.window.poll_events()
-    
+
                 # check if user exited the game
                 if not self.window.is_open() or self.window.is_key_pressed(key.ESCAPE):
                     event = networking.event_serialize.ClientEventDisconnect()
                     self.networker.sendbuffer.append(event)
                     break
-    
+
                 # handle input
                 self.oldkeys = self.keys
                 self.keys = get_input(self.window)
                 leftmouse = self.window.is_mouse_button_pressed(mouse.LEFT)
                 middlemouse = self.window.is_mouse_button_pressed(mouse.MIDDLE)
                 rightmouse = self.window.is_mouse_button_pressed(mouse.RIGHT)
-    
+
                 mouse_x, mouse_y = self.window.get_mouse_position()
                 our_player = self.game.current_state.players[self.our_player_id]
                 our_player.up = self.keys["up"]
@@ -103,7 +103,7 @@ class GameClientHandler(Handler):
                 our_player.middlemouse = middlemouse
                 our_player.rightmouse = rightmouse
                 our_player.aimdirection = function.point_direction(self.window.width / 2, self.window.height / 2, mouse_x, mouse_y)
-    
+
                 if self.window.is_key_pressed(key._1):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SCOUT)
                     self.networker.events.append((self.networker.sequence, event))
@@ -125,7 +125,7 @@ class GameClientHandler(Handler):
                 elif self.window.is_key_pressed(key._8):
                     event = networking.event_serialize.ClientEventChangeclass(constants.CLASS_SPY)
                     self.networker.events.append((self.networker.sequence, event))
-                    
+
 
                 #This for loop detects to see if a key has been pressed. Currently useful for precision offsets
                 #DEBUGTOOL
@@ -149,27 +149,27 @@ class GameClientHandler(Handler):
                 # did we just release the F11 button? if yes, go fullscreen
                 if self.window.is_key_pressed(key.F11):
                     self.window.fullscreen = not self.window.fullscreen
-    
+
                 # update the game and render
                 frame_time = self.clock.tick()
                 frame_time = min(0.25, frame_time) # a limit of 0.25 seconds to prevent complete breakdown
-    
+
                 self.fpscounter_accumulator += frame_time
-    
+
                 self.networker.recieve(self.game, self)
                 self.game.update(self.networker, frame_time)
                 self.renderer.render(self, self.game, frame_time)
-    
+
                 if self.network_update_timer >= constants.INPUT_SEND_FPS:
                     self.networker.update(self)
                     self.network_update_timer = 0
                 else:
                     self.network_update_timer += frame_time
-    
+
                 if self.fpscounter_accumulator > 0.5:
                     self.window.title = "PyGG2 - %d FPS" % self.window.get_fps()
                     self.fpscounter_accumulator = 0.0
-    
+
                 self.window.flip()
         self.cleanup()
 

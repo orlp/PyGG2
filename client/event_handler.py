@@ -68,11 +68,11 @@ def Server_Snapshot_Update(client, networker, game, event):
             state = game.current_state
 
         # Delete all the old states, they are useless
-        keys = game.old_states.keys()
+        times = game.old_states.keys()
         while len(game.old_states) > 0:
-            if keys[0] < time:
-                del game.old_states[keys[0]]
-                del keys[0]
+            if times[0] < time:
+                del game.old_states[times[0]]
+                del times[0]
             else:
                 break
 

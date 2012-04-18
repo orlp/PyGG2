@@ -17,7 +17,7 @@ class Game:
         self.isserver = False
         self.lag_comp = False
         self.old_states = {}
-        
+
         # map data
         self.map = map.Map(self, "twodforttwo_remix")
 
@@ -40,10 +40,10 @@ class Game:
         while self.accumulator >= constants.PHYSICS_TIMESTEP:
             self.accumulator -= constants.PHYSICS_TIMESTEP
 
+            if not self.isserver:
+                self.old_states[self.current_state.time] = self.current_state
+
             self.previous_state = self.current_state.copy()
             self.current_state.update_all_objects(self, constants.PHYSICS_TIMESTEP)
             networker.sendbuffer += self.sendbuffer
             self.sendbuffer = []
-
-            if not self.isserver:
-                self.old_states[self.current_state.time] = self.current_state
