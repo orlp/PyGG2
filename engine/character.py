@@ -12,6 +12,7 @@ import mask
 
 class Character(entity.MovingObject):
     acceleration = 1200
+    friction = 0.95
 
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
@@ -40,13 +41,29 @@ class Character(entity.MovingObject):
 
         self.flip = not (player.aimdirection < 90 or player.aimdirection > 270)
 
-        # if we are holding down movement keys, move
-        if player.left: self.hspeed -= self.acceleration * frametime
-        if player.right: self.hspeed += self.acceleration * frametime
-
-        # Friction:
-        if abs(self.hspeed) < 10: self.hspeed = 0
-        else: self.hspeed -= function.sign(self.hspeed) * min(abs(self.hspeed), 600 * frametime)
+        # awesome handy movement code
+        # current code essentially goes in the most recent direction pressed,
+        # unlike the null movement in Source or the "preferred direction" that's
+        # present in a lot of indie games (aigh)
+        if player.left and not player.lastleft:     # left  movement
+            self.hspeed -= self.acceleration * frametime
+        elif player.lastleft and not player.left:   # right movement
+            if player.right:
+                self.hspeed += self.acceleration * frametime
+            else:                                   # null  movement
+                self.hspeed *= self.friction * frametime
+        if player.right and not player.lastright:   # right movement
+            self.hspeed += self.acceleration * frametime
+        elif player.lastright and not player.right: # left  movement
+            if player.left:
+                self.hspeed -= self.acceleration * frametime
+            else:                                   # null  movement
+                self.hspeed *= self.friction * frametime
+        #if not player.right and not player.left:    # null movement
+            #self.hspeed *= self.friction * frametime
+        
+        #if abs(self.hspeed) < 10:# * frametime:
+            #self.hspeed = 0
 
         if player.up and not player.old_up:
             self.jump(game, state)
@@ -57,13 +74,18 @@ class Character(entity.MovingObject):
 
         # TODO: air resistance, not hard limit
         self.vspeed = min(800, self.vspeed)
-
+        
+        # hspeed limit
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
         self.hp+=self.hp_offset # test health change
         if self.hp < 0:
             self.hp_offset = 1
         if self.hp > self.maxhp:
             self.hp_offset = -1
+        
+        player.lastleft = player.left;
+        player.lastright = player.right;
+        
     def endstep(self, game, state, frametime):
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True
