@@ -95,6 +95,13 @@ def Server_Snapshot_Update(client, networker, game, event):
         for time, old_state in game.old_states.items():
             state.update_all_objects(game, state, constants.PHYSICS_TIMESTEP)
 
+            old_player = old_state.players[client.our_player_id]
+            input = old_player.serialize()
+
+            player = state.players[client.our_player_id]
+            player.deserialize(input)
+
+
 def Server_Full_Update(client, networker, game, event):
     game.current_state.time, numof_players = struct.unpack_from(">IB", event.bytestr)
     event.bytestr = event.bytestr[5:]
