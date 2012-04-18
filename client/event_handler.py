@@ -92,11 +92,8 @@ def Server_Snapshot_Update(client, networker, game, event):
             pass
     if game.lag_comp:
         # Update this state with all the input information that appeared in the meantime
-        for i in range(len(game.old_states)):
-            if i > 0:
-                state.update_all_objects(game, game.old_states[i]-game.old_states[i-1])
-            else:
-                state.update_all_objects(game, game.old_states[0]-state.time)
+        for time, old_state in game.old_states.items():
+            state.update_all_objects(game, state, constants.PHYSICS_TIMESTEP)
 
 def Server_Full_Update(client, networker, game, event):
     game.current_state.time, numof_players = struct.unpack_from(">IB", event.bytestr)
