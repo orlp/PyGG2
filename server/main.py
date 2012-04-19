@@ -42,21 +42,26 @@ class Server(object):
         # time tracking
         self.clock = precision_timer.Clock()
 
-        print ("Hosting " + str(self.name) + " on port " + str(self.port) + " with password " + "\"" + str(self.password) + "\"")
+        print("Hosting " + str(self.name) + " on port " + str(self.port) + " with password " + "\"" + str(self.password) + "\"")
 
         self.save_config()
 
     def run(self):
         # game loop
         while True:
-            # update the game and render
-            frametime = self.clock.tick()
-            frametime = min(0.25, frametime) # a limit of 0.25 seconds to prevent complete breakdown
+            try:
+                # update the game and render
+                frametime = self.clock.tick()
+                frametime = min(0.25, frametime) # a limit of 0.25 seconds to prevent complete breakdown
 
-            self.networker.recieve(self, self.game)
-            self.game.update(self.networker, frametime)
-            self.networker.update(self, self.game, frametime)
-            self.lobbyannouncer.update(self, frametime)
+                self.networker.recieve(self, self.game)
+                self.game.update(self.networker, frametime)
+                self.networker.update(self, self.game, frametime)
+                self.lobbyannouncer.update(self, frametime)
+
+            except KeyboardInterrupt:
+                self.destroy()
+                sys.exit()
 
     def load_config(self):
         if os.path.exists('server_cfg.json'):
@@ -70,7 +75,8 @@ class Server(object):
             json.dump(self.config, fp, indent=4)
 
 
-# TODO: CALL LOBBY DESTRUCTION WHEN SERVER IS KILLED
+    def destroy(self):
+        self.lobbyannouncer.destroy(self)
 
 
 def profileGG2():
