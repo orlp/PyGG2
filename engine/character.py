@@ -11,9 +11,12 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    acceleration = 1200
-    friction = 0.035 # friction factor per second of null movement
-
+    base_acceleration = 25.5
+    friction = 9.7138714992377222758124853299492e-15# friction factor per second of null movement
+                                                    # calculated directly from Gang Garrison 2
+                                                    
+    run_power = 1;                                  # overridden in each class
+    
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
         
@@ -66,16 +69,15 @@ class Character(entity.MovingObject):
             else:                                   # null  movement
                 self.desired_direction =  0
             
-        if self.desired_direction == -1:            # left  movement
+        if self.desired_direction == -1:            # left
             if self.hspeed > 0:
                 self.hspeed *= self.friction  ** frametime
-            self.hspeed -= self.acceleration * frametime
-        if self.desired_direction ==  1:            # right movement
+            self.hspeed -= self.base_acceleration * self.run_power * frametime
+        if self.desired_direction ==  1:            # right
             if self.hspeed < 0:
                 self.hspeed *= self.friction  ** frametime
-            self.hspeed += self.acceleration * frametime
-        if self.desired_direction ==  0:            # null movement
-            self.hspeed *= self.friction  ** frametime
+            self.hspeed += self.base_acceleration * self.run_power * frametime
+        self.hspeed *= self.friction  ** frametime
         
         if abs(self.hspeed) < 10:
             self.hspeed = 0
@@ -210,7 +212,8 @@ class Scout(Character):
     collision_mask = mask.Mask(12, 33, True)
     max_speed = 252
     maxhp = 100
-
+    run_power = 1.4;
+    
     def __init__(self, game, state, player_id):
         Character.__init__(self, game, state, player_id)
 
