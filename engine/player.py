@@ -14,8 +14,8 @@ class Player(object):
         self.down = False
         self.left = False
         self.right = False
-        self.lastright = False
-        self.lastleft = False
+        self.last_right = False
+        self.last_left = False
         self.leftmouse = False
         self.middlemouse = False
         self.rightmouse = False

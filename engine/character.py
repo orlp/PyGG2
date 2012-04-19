@@ -12,21 +12,24 @@ import mask
 
 class Character(entity.MovingObject):
     acceleration = 1200
-    friction = 0.95
+    friction = 0.035 # friction factor per second of null movement
 
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
-
+        
+        
         self.player_id = player_id
 
         self.flip = False # are we flipped around?
         self.intel = False # has intel (for drawing purposes)
-        self.can_doublejump = False
         self.just_spawned = False # have we just spawned?
         # time tracker for the moving of the character's legs
         self.animoffset = 0.0
         self.hp_offset = -1 # FIXME: REMOVE; THIS ONLY EXISTS FOR HEALTH HUD TESTING
 
+        self.can_doublejump = False
+        self.desired_direction = 0
+        
         self.issynced = True
 
     def step(self, game, state, frametime):
@@ -38,7 +41,7 @@ class Character(entity.MovingObject):
             self.animoffset += frametime * abs(self.hspeed) / 20
             self.animoffset %= 2
         if abs(self.hspeed) == 0:
-            self.animoffset =0
+            self.animoffset = 0
 
         self.flip = not (player.aimdirection < 90 or player.aimdirection > 270)
 
@@ -46,48 +49,61 @@ class Character(entity.MovingObject):
         # current code essentially goes in the most recent direction pressed,
         # unlike the null movement in Source or the "preferred direction" that's
         # present in a lot of indie games (aigh)
-        if player.left and not player.lastleft:     # left  movement
-            self.hspeed -= self.acceleration * frametime
-        elif player.lastleft and not player.left:   # right movement
+        # rewrite acceptable if it makes it less shitload of code :[
+        apply_friction = False
+        if player.left and not player.last_left:    # left  movement
+            self.desired_direction = -1
+        elif player.last_left and not player.left:  # right movement
             if player.right:
-                self.hspeed += self.acceleration * frametime
+                self.desired_direction =  1
             else:                                   # null  movement
-                self.hspeed *= self.friction * frametime
-        if player.right and not player.lastright:   # right movement
-            self.hspeed += self.acceleration * frametime
-        elif player.lastright and not player.right: # left  movement
+                self.desired_direction =  0
+        if player.right and not player.last_right:  # right movement
+            self.desired_direction =  1
+        elif player.last_right and not player.right:# left  movement
             if player.left:
-                self.hspeed -= self.acceleration * frametime
+                self.desired_direction = -1
             else:                                   # null  movement
-                self.hspeed *= self.friction * frametime
-        #if not player.right and not player.left:    # null movement
-            #self.hspeed *= self.friction * frametime
+                self.desired_direction =  0
+            
+        if self.desired_direction == -1:            # left  movement
+            if hspeed > 0:
+                self.hspeed *= self.friction  ** frametime
+            self.hspeed -= self.acceleration * frametime
+        if self.desired_direction ==  1:            # right movement
+            if hspeed < 0:
+                self.hspeed *= self.friction  ** frametime
+            self.hspeed += self.acceleration * frametime
+        if self.desired_direction ==  0:            # null movement
+            self.hspeed *= self.friction  ** frametime
         
-        #if abs(self.hspeed) < 10:# * frametime:
-            #self.hspeed = 0
+        if abs(self.hspeed) < 10:
+            self.hspeed = 0
 
         if player.up and not player.old_up:
             self.jump(game, state)
         player.old_up = player.up
 
         # gravitational force
-        self.vspeed += 300 * frametime
+        self.vspeed += 700 * frametime
 
         # TODO: air resistance, not hard limit
         self.vspeed = min(800, self.vspeed)
+        # note: air resistance might have awkward side effects if implemented "naturally".
+        # Please consider resistance that's amplified at higher speeds & a threshold.
         
         # hspeed limit
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
+        
         self.hp+=self.hp_offset # test health change
         if self.hp < 0:
             self.hp_offset = 1
         if self.hp > self.maxhp:
             self.hp_offset = -1
         
-        player.lastleft = player.left;
-        player.lastright = player.right;
-        
     def endstep(self, game, state, frametime):
+        
+        player = self.get_player(game, state)
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True
 
@@ -124,6 +140,9 @@ class Character(entity.MovingObject):
                 self.y -= function.sign(self.vspeed)
 
             self.vspeed = 0
+            
+        player.last_left = player.left;
+        player.last_right = player.right;
 
     def onground(self, game, state):
         # are we on the ground? About one third of an unit from the ground is enough to qualify for this
@@ -144,7 +163,7 @@ class Character(entity.MovingObject):
 
         if player.up:
             if self.onground(game, state):
-                self.vspeed = -200
+                self.vspeed = -300
 
     def die(self, game, state):
         # first we must unregister ourselves from our player
@@ -201,10 +220,10 @@ class Scout(Character):
 
     def jump(self, game, state):
         if self.onground(game, state):
-            self.vspeed = -200
+            self.vspeed = -300
             self.can_doublejump = True
         elif self.can_doublejump:
-            self.vspeed = -200
+            self.vspeed = -300
             self.can_doublejump = False
 
 class Pyro(Character):

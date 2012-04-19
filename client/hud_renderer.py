@@ -30,9 +30,10 @@ class HealthRenderer(HudRenderer):
         self.health_text = HealthText()
         self.health_text.health_location = (56, renderer.view_height - 52)
         self.health_text.health_size = (36, 36)
+        self.debug_text = DebugText(game, character)
         
     def render(self, renderer, game, state, character):
-
+        
         HudRenderer.render(self,renderer)
 
         character_hp = character.hp
@@ -62,8 +63,7 @@ class HealthRenderer(HudRenderer):
             self.health_box.health_color = (1, (2*health_percentage)**exponent, 0, 1)
         renderer.hud_overlay.append(self.health_box)
         renderer.hud_overlay.append(self.health_text)
-        
-        spritefont.SpriteFont(bold=True).renderString("{0}, {1}, {2}, {3}".format(player.left, player.lastleft, player.right, player.lastright), 123, 123)
+        renderer.hud_overlay.append(self.debug_text)
 
 class HealthBar(object):
     def render(self):
@@ -78,3 +78,11 @@ class HealthText(object):
         tx = self.health_location[0] + (self.health_size[0] - tw)/2
         ty = self.health_location[1] + (self.health_size[1] - th)/2
         self.font.renderString(self.text, tx, ty)
+        
+class DebugText(object):
+    def __init__(self, game, character):
+        self.font = spritefont.SpriteFont(bold=True)
+        self.player = game.current_state.players[character.player_id]
+
+    def render(self):
+        self.font.renderString("{0}, {1}, {2}, {3}".format(self.player.left, self.player.last_left, self.player.right, self.player.last_right), 10, 10)
