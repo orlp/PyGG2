@@ -43,7 +43,7 @@ class HealthRenderer(HudRenderer):
         self.health_box_background.health_size = (40, 40)
         self.health_box_background.health_color = (0,0,0,1) # last is alpha
         renderer.hud_overlay.append(self.health_box_background)
-        print(character_hp)
+
         self.health_text.text = str(character_hp)
 
         self.health_box = HealthBar()
