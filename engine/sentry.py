@@ -25,6 +25,11 @@ class Building_Sentry(entity.MovingObject):
         character = state.entities[owner.character_id]
         self.x = character.x
         self.y = character.y
+        
+        if character.flip == True:
+            self.flip = True
+        else:
+            self.flip = False
 
     def step(self, game, state, frametime):
         if self.isfalling:
@@ -53,7 +58,7 @@ class Building_Sentry(entity.MovingObject):
                     self.hp = self.max_hp
                 # Create a finished sentry, and destroy the building sentry object
                 owner = state.players[self.owner_id]
-                owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp)
+                owner.sentry = Sentry(game, state, self.owner_id, self.x, self.y, self.hp, self.flip)
                 self.destroy(state)
             else:
                 # Continue building
@@ -77,13 +82,14 @@ class Building_Sentry(entity.MovingObject):
 class Sentry(entity.MovingObject):
     collision_mask = mask.Mask(26, 19, True)
 
-    def __init__(self, game, state, owner_id, x, y, hp):
+    def __init__(self, game, state, owner_id, x, y, hp, flip):
         super(Sentry, self).__init__(game, state)
         self.owner_id = owner_id
         self.aiming_direction = 0
         self.x = x
         self.y = y
         self.hp = hp
+        self.flip = flip
 
     def step(self, game, state, frametime):
         # TODO: Aim at nearest enemy
