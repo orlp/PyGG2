@@ -67,11 +67,11 @@ class Character(entity.MovingObject):
                 self.desired_direction =  0
             
         if self.desired_direction == -1:            # left  movement
-            if hspeed > 0:
+            if self.hspeed > 0:
                 self.hspeed *= self.friction  ** frametime
             self.hspeed -= self.acceleration * frametime
         if self.desired_direction ==  1:            # right movement
-            if hspeed < 0:
+            if self.hspeed < 0:
                 self.hspeed *= self.friction  ** frametime
             self.hspeed += self.acceleration * frametime
         if self.desired_direction ==  0:            # null movement
