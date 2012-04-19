@@ -29,6 +29,7 @@ class Character(entity.MovingObject):
         self.issynced = True
 
     def step(self, game, state, frametime):
+
         player = self.get_player(game, state)
 
         # this is quite important, if hspeed / 20 drops below 1 self.animoffset will rapidly change and cause very fast moving legs (while we are moving very slow)
@@ -110,7 +111,7 @@ class Character(entity.MovingObject):
         super(Character, self).interpolate(prev_obj, next_obj, alpha)
 
         self.animoffset = prev_obj.animoffset + (next_obj.animoffset - prev_obj.animoffset) * alpha
-
+        
         if alpha > 0.5: refobj = next_obj
         else: refobj = prev_obj
 

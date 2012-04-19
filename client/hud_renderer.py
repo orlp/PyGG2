@@ -16,11 +16,12 @@ class HudRenderer(object):
         renderer.hud_sprites.append(self.sprite)
 class HealthRenderer(HudRenderer):
 
-    def __init__(self, renderer, character):
+    def __init__(self, renderer, game, state, character):
         self.sprite_location = (10, renderer.view_height - 75) # Where is the location on screen of the sprite
-
-        self.class_number = str(function.convert_class(character))
-        self.hudsprite  = pygrafix.image.load("huds/characterhud/"+ self.class_number + ".png")
+        my_class_type = type(character)
+        my_class_number = str(function.convert_class(my_class_type))
+       
+        self.hudsprite = pygrafix.image.load("huds/characterhud/"+ my_class_number + ".png")
 
         self.health_box_background = None
         self.health_box = None
@@ -29,19 +30,21 @@ class HealthRenderer(HudRenderer):
         self.health_text.health_location = (56, renderer.view_height - 52)
         self.health_text.health_size = (36, 36)
 
-    def render(self, renderer, health, health_max):
+    def render(self, renderer, game, state, character):
         HudRenderer.render(self,renderer)
 
+        character_hp = character.hp
+        character_maxhp = character.maxhp
         #always have at least 1 percent, can't divide by zero!
-        health_percentage = max(0.01,(health / health_max))
+        health_percentage = max(0.01,(character_hp / character_maxhp))
 
         self.health_box_background = HealthBar() #background first
         self.health_box_background.health_location = (52, (renderer.view_height - 54))
         self.health_box_background.health_size = (40, 40)
         self.health_box_background.health_color = (0,0,0,1) # last is alpha
         renderer.hud_overlay.append(self.health_box_background)
-
-        self.health_text.text = str(health)
+        print(character_hp)
+        self.health_text.text = str(character_hp)
 
         self.health_box = HealthBar()
         self.health_box.health_location = (52, min ( (renderer.view_height - 14), (renderer.view_height - 54) + (40 - 40 * abs(health_percentage))) )
