@@ -14,11 +14,13 @@ class Player(object):
         self.down = False
         self.left = False
         self.right = False
+        self.last_right = False
+        self.last_left = False
         self.leftmouse = False
         self.middlemouse = False
         self.rightmouse = False
         self.aimdirection = 0
-
+        
         self.nextclass = character.Scout
         self.character_id = None
         self.respawntimer = 0
