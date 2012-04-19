@@ -11,16 +11,16 @@ import weapon
 import mask
 
 class Character(entity.MovingObject):
-    base_acceleration = 25.5
-    friction = 9.7138714992377222758124853299492e-15# friction factor per second of null movement
-                                                    # calculated directly from Gang Garrison 2
-                                                    
-    run_power = 1;                                  # overridden in each class
-    
+    base_acceleration = 765
+    # friction factor per second of null movement;calculated directly from Gang Garrison 2
+    friction = 9.7138714992377222758124853299492e-15
+    # overridden in each class
+    run_power = 1;
+
     def __init__(self, game, state, player_id):
         super(Character, self).__init__(game, state)
-        
-        
+
+
         self.player_id = player_id
 
         self.flip = False # are we flipped around?
@@ -32,7 +32,7 @@ class Character(entity.MovingObject):
 
         self.can_doublejump = False
         self.desired_direction = 0
-        
+
         self.issynced = True
 
     def step(self, game, state, frametime):
@@ -53,32 +53,41 @@ class Character(entity.MovingObject):
         # unlike the null movement in Source or the "preferred direction" that's
         # present in a lot of indie games (aigh)
         # rewrite acceptable if it makes it less shitload of code :[
-        apply_friction = False
-        if player.left and not player.last_left:    # left  movement
+        old_hspeed = self.hspeed;
+                                                    # left movement
+        if player.left and not player.last_left:
             self.desired_direction = -1
-        elif player.last_left and not player.left:  # right movement
+                                                    # right movement
+        elif player.last_left and not player.left:
             if player.right:
-                self.desired_direction =  1
-            else:                                   # null  movement
-                self.desired_direction =  0
-        if player.right and not player.last_right:  # right movement
-            self.desired_direction =  1
-        elif player.last_right and not player.right:# left  movement
+                self.desired_direction = 1
+                                                    # null movement
+            else:
+                self.desired_direction = 0
+                                                    # right movement
+        if player.right and not player.last_right:
+            self.desired_direction = 1
+                                                    # left movement
+        elif player.last_right and not player.right:
             if player.left:
                 self.desired_direction = -1
-            else:                                   # null  movement
-                self.desired_direction =  0
-            
-        if self.desired_direction == -1:            # left
+                                                    # null movement
+            else:
+                self.desired_direction = 0
+
+        print(self.hspeed, self.base_acceleration * self.run_power * frametime)
+
+        if self.desired_direction == -1:
+            # accelerate left
             if self.hspeed > 0:
                 self.hspeed *= self.friction  ** frametime
             self.hspeed -= self.base_acceleration * self.run_power * frametime
-        if self.desired_direction ==  1:            # right
+        if self.desired_direction ==  1:
+            # accelerate right
             if self.hspeed < 0:
                 self.hspeed *= self.friction  ** frametime
             self.hspeed += self.base_acceleration * self.run_power * frametime
-        self.hspeed *= self.friction  ** frametime
-        
+
         if abs(self.hspeed) < 10:
             self.hspeed = 0
 
@@ -93,18 +102,18 @@ class Character(entity.MovingObject):
         self.vspeed = min(800, self.vspeed)
         # note: air resistance might have awkward side effects if implemented "naturally".
         # Please consider resistance that's amplified at higher speeds & a threshold.
-        
+
         # hspeed limit
         self.hspeed = min(self.max_speed, max(-self.max_speed, self.hspeed))
-        
+
         self.hp+=self.hp_offset # test health change
         if self.hp < 0:
             self.hp_offset = 1
         if self.hp > self.maxhp:
             self.hp_offset = -1
-        
+
     def endstep(self, game, state, frametime):
-        
+
         player = self.get_player(game, state)
         # check if we are on the ground before moving (for walking over 1 unit walls)
         onground = True
@@ -142,7 +151,7 @@ class Character(entity.MovingObject):
                 self.y -= function.sign(self.vspeed)
 
             self.vspeed = 0
-            
+
         player.last_left = player.left;
         player.last_right = player.right;
 
@@ -154,7 +163,7 @@ class Character(entity.MovingObject):
         super(Character, self).interpolate(prev_obj, next_obj, alpha)
 
         self.animoffset = prev_obj.animoffset + (next_obj.animoffset - prev_obj.animoffset) * alpha
-        
+
         if alpha > 0.5: refobj = next_obj
         else: refobj = prev_obj
 
@@ -213,7 +222,7 @@ class Scout(Character):
     max_speed = 252
     maxhp = 100
     run_power = 1.4;
-    
+
     def __init__(self, game, state, player_id):
         Character.__init__(self, game, state, player_id)
 
@@ -252,7 +261,7 @@ class Soldier(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Rocketlauncher(game, state, self.id).id
-        
+
 class Demoman(Character):
     #TODO: this class
     # FIXME: width, height of heavy - rectangle collision
@@ -287,7 +296,7 @@ class Heavy(Character):
         Character.step(self, game, state, frametime)
         if self.get_player(game, state).leftmouse:
             self.hspeed = min(54, max(-54, self.hspeed))
-            
+
 class Medic(Character):
     # FIXME: width, height of Medic - rectangle collision
     # FIXME: offsets to be proper
@@ -300,7 +309,7 @@ class Medic(Character):
 
         self.hp = self.maxhp
         self.weapon = weapon.Medigun(game, state, self.id).id
-        
+
 class Engineer(Character):
     # FIXME: width, height of engineer - rectangle collision
     collision_mask = mask.Mask(12, 33, True)
